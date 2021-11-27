@@ -1,0 +1,130 @@
+Wildcard constraints in inputs are ignored.
+Wildcard constraints in inputs are ignored.
+Wildcard constraints in inputs are ignored.
+Wildcard constraints in inputs are ignored.
+Wildcard constraints in inputs are ignored.
+Wildcard constraints in inputs are ignored.
+Wildcard constraints in inputs are ignored.
+Building DAG of jobs...
+File path test/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//self_scan/mutations.tar.gz contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+File path test/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//self_scan/ankb_5YIS.pdb contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+File path test/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//self_scan/mutate_runfile_template.txt contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+File path test/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//self_scan/interface_runfile_template.txt contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+File path test/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//self_scan/repair_runfile_template.txt contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+File path test/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//self_scan/mutation_list.txt contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+File path test/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//self_scan/poslist.txt contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+File path test/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//self_scan/README_mutatex_run contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+File path test/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//self_scan/mutations.tar.gz contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+File path test/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//self_scan/ankb_5YIS.pdb contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+File path test/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//self_scan/mutate_runfile_template.txt contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+File path test/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//self_scan/interface_runfile_template.txt contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+File path test/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//self_scan/repair_runfile_template.txt contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+File path test/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//self_scan/mutation_list.txt contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+File path test/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//self_scan/poslist.txt contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+File path test/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//self_scan/README_mutatex_run contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+Using shell: /bin/bash
+Provided cores: 2
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	4	ala_scan
+	1	all
+	4	input_files
+	9
+
+[Mon Nov  1 13:18:37 2021]
+rule input_files:
+    input: ../../input_pdb/nixbb.pdb
+    output: test/cabsdock_nix_4WAAab_1-120_34-39/modelX/blind/ala_scan/nix_4WAA.pdb, test/cabsdock_nix_4WAAab_1-120_34-39/modelX/blind/ala_scan/mutate_runfile_template.txt, test/cabsdock_nix_4WAAab_1-120_34-39/modelX/blind/ala_scan/interface_runfile_template.txt, test/cabsdock_nix_4WAAab_1-120_34-39/modelX/blind/ala_scan/repair_runfile_template.txt, test/cabsdock_nix_4WAAab_1-120_34-39/modelX/blind/ala_scan/mutation_list.txt, test/cabsdock_nix_4WAAab_1-120_34-39/modelX/blind/ala_scan/poslist.txt, test/cabsdock_nix_4WAAab_1-120_34-39/modelX/blind/ala_scan/README_mutatex_run
+    jobid: 8
+    wildcards: method=cabsdock, slim_name=nix, PDB=4WAA, chain_protein=a, chain_peptide=b, aa_protein=1-120, aa_peptide=34-39, model_name=modelX, restraints=blind, scan=ala_scan
+
+[Mon Nov  1 13:18:37 2021]
+rule input_files:
+    input: ../../input_pdb/ankbbd.pdb
+    output: test/cabsdock_ankb_5YISab_1-120_1590-1602/modelX/blind/ala_scan/ankb_5YIS.pdb, test/cabsdock_ankb_5YISab_1-120_1590-1602/modelX/blind/ala_scan/mutate_runfile_template.txt, test/cabsdock_ankb_5YISab_1-120_1590-1602/modelX/blind/ala_scan/interface_runfile_template.txt, test/cabsdock_ankb_5YISab_1-120_1590-1602/modelX/blind/ala_scan/repair_runfile_template.txt, test/cabsdock_ankb_5YISab_1-120_1590-1602/modelX/blind/ala_scan/mutation_list.txt, test/cabsdock_ankb_5YISab_1-120_1590-1602/modelX/blind/ala_scan/poslist.txt, test/cabsdock_ankb_5YISab_1-120_1590-1602/modelX/blind/ala_scan/README_mutatex_run
+    jobid: 6
+    wildcards: method=cabsdock, slim_name=ankb, PDB=5YIS, chain_protein=a, chain_peptide=b, aa_protein=1-120, aa_peptide=1590-1602, model_name=modelX, restraints=blind, scan=ala_scan
+
+[Mon Nov  1 13:18:38 2021]
+Finished job 8.
+1 of 9 steps (11%) done
+[Mon Nov  1 13:18:38 2021]
+Finished job 6.
+2 of 9 steps (22%) done
+
+[Mon Nov  1 13:18:38 2021]
+rule ala_scan:
+    input: test/cabsdock_ankb_5YISab_1-120_1590-1602/modelX/blind/ala_scan/ankb_5YIS.pdb, test/cabsdock_ankb_5YISab_1-120_1590-1602/modelX/blind/ala_scan/mutate_runfile_template.txt, test/cabsdock_ankb_5YISab_1-120_1590-1602/modelX/blind/ala_scan/interface_runfile_template.txt, test/cabsdock_ankb_5YISab_1-120_1590-1602/modelX/blind/ala_scan/repair_runfile_template.txt, test/cabsdock_ankb_5YISab_1-120_1590-1602/modelX/blind/ala_scan/mutation_list.txt, test/cabsdock_ankb_5YISab_1-120_1590-1602/modelX/blind/ala_scan/poslist.txt, test/cabsdock_ankb_5YISab_1-120_1590-1602/modelX/blind/ala_scan/README_mutatex_run
+    output: test/cabsdock_ankb_5YISab_1-120_1590-1602/modelX/blind/ala_scan/mutations.tar.gz
+    jobid: 2
+    wildcards: method=cabsdock, slim_name=ankb, PDB=5YIS, chain_protein=a, chain_peptide=b, aa_protein=1-120, aa_peptide=1590-1602, model_name=modelX, restraints=blind, scan=ala_scan
+
+
+[Mon Nov  1 13:18:38 2021]
+rule ala_scan:
+    input: test/cabsdock_nix_4WAAab_1-120_34-39/modelX/blind/ala_scan/nix_4WAA.pdb, test/cabsdock_nix_4WAAab_1-120_34-39/modelX/blind/ala_scan/mutate_runfile_template.txt, test/cabsdock_nix_4WAAab_1-120_34-39/modelX/blind/ala_scan/interface_runfile_template.txt, test/cabsdock_nix_4WAAab_1-120_34-39/modelX/blind/ala_scan/repair_runfile_template.txt, test/cabsdock_nix_4WAAab_1-120_34-39/modelX/blind/ala_scan/mutation_list.txt, test/cabsdock_nix_4WAAab_1-120_34-39/modelX/blind/ala_scan/poslist.txt, test/cabsdock_nix_4WAAab_1-120_34-39/modelX/blind/ala_scan/README_mutatex_run
+    output: test/cabsdock_nix_4WAAab_1-120_34-39/modelX/blind/ala_scan/mutations.tar.gz
+    jobid: 4
+    wildcards: method=cabsdock, slim_name=nix, PDB=4WAA, chain_protein=a, chain_peptide=b, aa_protein=1-120, aa_peptide=34-39, model_name=modelX, restraints=blind, scan=ala_scan
+
+[Mon Nov  1 13:34:25 2021]
+Finished job 4.
+3 of 9 steps (33%) done
+
+[Mon Nov  1 13:34:25 2021]
+rule input_files:
+    input: ../../input_pdb/ankbac.pdb
+    output: test/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//self_scan/ankb_5YIS.pdb, test/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//self_scan/mutate_runfile_template.txt, test/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//self_scan/interface_runfile_template.txt, test/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//self_scan/repair_runfile_template.txt, test/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//self_scan/mutation_list.txt, test/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//self_scan/poslist.txt, test/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//self_scan/README_mutatex_run
+    jobid: 5
+    wildcards: method=cabsdock, slim_name=ankb, PDB=5YIS, chain_protein=a, chain_peptide=b, aa_protein=1-120, aa_peptide=1588-1613, model_name=modelX, restraints=, scan=self_scan
+
+[Mon Nov  1 13:34:25 2021]
+Finished job 5.
+4 of 9 steps (44%) done
+
+[Mon Nov  1 13:34:25 2021]
+rule ala_scan:
+    input: test/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//self_scan/ankb_5YIS.pdb, test/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//self_scan/mutate_runfile_template.txt, test/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//self_scan/interface_runfile_template.txt, test/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//self_scan/repair_runfile_template.txt, test/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//self_scan/mutation_list.txt, test/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//self_scan/poslist.txt, test/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//self_scan/README_mutatex_run
+    output: test/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//self_scan/mutations.tar.gz
+    jobid: 1
+    wildcards: method=cabsdock, slim_name=ankb, PDB=5YIS, chain_protein=a, chain_peptide=b, aa_protein=1-120, aa_peptide=1588-1613, model_name=modelX, restraints=, scan=self_scan
+
+[Mon Nov  1 13:34:31 2021]
+Finished job 2.
+5 of 9 steps (56%) done
+
+[Mon Nov  1 13:34:31 2021]
+rule input_files:
+    input: ../../input_pdb/nixaa.pdb
+    output: test/cabsdock_nix_4WAAab_1-120_33-39/modelX/blind/self_scan/nix_4WAA.pdb, test/cabsdock_nix_4WAAab_1-120_33-39/modelX/blind/self_scan/mutate_runfile_template.txt, test/cabsdock_nix_4WAAab_1-120_33-39/modelX/blind/self_scan/interface_runfile_template.txt, test/cabsdock_nix_4WAAab_1-120_33-39/modelX/blind/self_scan/repair_runfile_template.txt, test/cabsdock_nix_4WAAab_1-120_33-39/modelX/blind/self_scan/mutation_list.txt, test/cabsdock_nix_4WAAab_1-120_33-39/modelX/blind/self_scan/poslist.txt, test/cabsdock_nix_4WAAab_1-120_33-39/modelX/blind/self_scan/README_mutatex_run
+    jobid: 7
+    wildcards: method=cabsdock, slim_name=nix, PDB=4WAA, chain_protein=a, chain_peptide=b, aa_protein=1-120, aa_peptide=33-39, model_name=modelX, restraints=blind, scan=self_scan
+
+[Mon Nov  1 13:34:32 2021]
+Finished job 7.
+6 of 9 steps (67%) done
+
+[Mon Nov  1 13:34:32 2021]
+rule ala_scan:
+    input: test/cabsdock_nix_4WAAab_1-120_33-39/modelX/blind/self_scan/nix_4WAA.pdb, test/cabsdock_nix_4WAAab_1-120_33-39/modelX/blind/self_scan/mutate_runfile_template.txt, test/cabsdock_nix_4WAAab_1-120_33-39/modelX/blind/self_scan/interface_runfile_template.txt, test/cabsdock_nix_4WAAab_1-120_33-39/modelX/blind/self_scan/repair_runfile_template.txt, test/cabsdock_nix_4WAAab_1-120_33-39/modelX/blind/self_scan/mutation_list.txt, test/cabsdock_nix_4WAAab_1-120_33-39/modelX/blind/self_scan/poslist.txt, test/cabsdock_nix_4WAAab_1-120_33-39/modelX/blind/self_scan/README_mutatex_run
+    output: test/cabsdock_nix_4WAAab_1-120_33-39/modelX/blind/self_scan/mutations.tar.gz
+    jobid: 3
+    wildcards: method=cabsdock, slim_name=nix, PDB=4WAA, chain_protein=a, chain_peptide=b, aa_protein=1-120, aa_peptide=33-39, model_name=modelX, restraints=blind, scan=self_scan
+
+[Mon Nov  1 13:42:28 2021]
+Finished job 1.
+7 of 9 steps (78%) done
+[Mon Nov  1 13:42:36 2021]
+Finished job 3.
+8 of 9 steps (89%) done
+
+[Mon Nov  1 13:42:36 2021]
+localrule all:
+    input: test/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//self_scan/mutations.tar.gz, test/cabsdock_ankb_5YISab_1-120_1590-1602/modelX/blind/ala_scan/mutations.tar.gz, test/cabsdock_nix_4WAAab_1-120_33-39/modelX/blind/self_scan/mutations.tar.gz, test/cabsdock_nix_4WAAab_1-120_34-39/modelX/blind/ala_scan/mutations.tar.gz
+    jobid: 0
+
+[Mon Nov  1 13:42:36 2021]
+Finished job 0.
+9 of 9 steps (100%) done
+Complete log: /data/user/morlandi/mutatex_pipeline/SLIM-modeling/alanine_scanning/.snakemake/log/2021-11-01T131836.482735.snakemake.log

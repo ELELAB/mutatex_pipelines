@@ -1,0 +1,22 @@
+Wildcard constraints in inputs are ignored.
+Wildcard constraints in inputs are ignored.
+Wildcard constraints in inputs are ignored.
+Wildcard constraints in inputs are ignored.
+Wildcard constraints in inputs are ignored.
+Wildcard constraints in inputs are ignored.
+Wildcard constraints in inputs are ignored.
+Building DAG of jobs...
+File path test/ankb_5YISab_1-120_1588-1613/blind/self_scan//mutations.tar.gz contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+InputFunctionException in line 28 of /data/user/morlandi/mutatex_pipeline/SLIM-modeling/alanine_scanning/Snakefile:
+KeyError: "['cabsdockank' 'b' '5YIS' 'a' '1-120' '1590-1602' 'blind' 'ala_scan'\n 'modelX'] not in index"
+Wildcards:
+method=cabsdockank
+slim_name=b
+PDB=5YIS
+chain_protein=a
+chain_peptide=b
+aa_protein=1-120
+aa_peptide=1590-1602
+model_name=blind
+scan=ala_scan
+restraints=modelX

@@ -1,0 +1,21 @@
+Wildcard constraints in inputs are ignored.
+Wildcard constraints in inputs are ignored.
+Wildcard constraints in inputs are ignored.
+Wildcard constraints in inputs are ignored.
+Wildcard constraints in inputs are ignored.
+Wildcard constraints in inputs are ignored.
+Wildcard constraints in inputs are ignored.
+Building DAG of jobs...
+InputFunctionException in line 31 of /data/user/morlandi/mutatex_pipeline/SLIM-modeling/alanine_scanning/Snakefile:
+KeyError: ('ankb', 'cabsdock', '5YIS', 'a', '1-120', '1588-1613/modelX', 'blind', 'self_scan')
+Wildcards:
+slim_name=ankb
+method=cabsdock
+PDB=5YIS
+chain_protein=a
+chain_peptide=b
+aa_protein=1-120
+aa_peptide=1588-1613/modelX
+model_name=
+scan=self_scan
+restraints=blind

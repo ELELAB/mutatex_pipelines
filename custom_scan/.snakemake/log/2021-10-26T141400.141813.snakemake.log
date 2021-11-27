@@ -1,0 +1,4 @@
+Wildcard constraints in inputs are ignored.
+SyntaxError:
+Only input files can be specified as functions
+  File "/data/user/morlandi/mutatex_pipeline/SLIM-modeling/alanine_scanning/Snakefile", line 112, in <module>

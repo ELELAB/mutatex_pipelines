@@ -1,0 +1,28 @@
+Wildcard constraints in inputs are ignored.
+Wildcard constraints in inputs are ignored.
+Wildcard constraints in inputs are ignored.
+Wildcard constraints in inputs are ignored.
+Wildcard constraints in inputs are ignored.
+Wildcard constraints in inputs are ignored.
+Wildcard constraints in inputs are ignored.
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1 (use --cores to define parallelism)
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	4	ala_scan
+	1	all
+	4	input_files
+	9
+
+[Fri Oct 29 14:00:33 2021]
+rule input_files:
+    input: ../../input_pdb/ankbbd.pdb
+    output: test/cabsdock_ankb_5YISab_1-120_1590-1602/modelX/ala_scan/blind/ankb_5YIS.pdb, test/cabsdock_ankb_5YISab_1-120_1590-1602/modelX/ala_scan/blind/mutate_runfile_template.txt, test/cabsdock_ankb_5YISab_1-120_1590-1602/modelX/ala_scan/blind/interface_runfile_template.txt, test/cabsdock_ankb_5YISab_1-120_1590-1602/modelX/ala_scan/blind/repair_runfile_template.txt, test/cabsdock_ankb_5YISab_1-120_1590-1602/modelX/ala_scan/blind/mutation_list.txt, test/cabsdock_ankb_5YISab_1-120_1590-1602/modelX/ala_scan/blind/poslist.txt, test/cabsdock_ankb_5YISab_1-120_1590-1602/modelX/ala_scan/blind/README_mutatex_run
+    jobid: 6
+    wildcards: method=cabsdock, slim_name=ankb, PDB=5YIS, chain_protein=a, chain_peptide=b, aa_protein=1-120, aa_peptide=1590-1602, model_name=modelX, scan=ala_scan, restraints=blind
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /data/user/morlandi/mutatex_pipeline/SLIM-modeling/alanine_scanning/.snakemake/log/2021-10-29T140032.154442.snakemake.log

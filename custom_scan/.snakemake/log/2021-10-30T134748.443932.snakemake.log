@@ -1,0 +1,3 @@
+WildcardError in line 26 of /data/user/morlandi/mutatex_pipeline/SLIM-modeling/alanine_scanning/Snakefile:
+No values given for wildcard 'restraints,'.
+  File "/data/user/morlandi/mutatex_pipeline/SLIM-modeling/alanine_scanning/Snakefile", line 26, in <module>

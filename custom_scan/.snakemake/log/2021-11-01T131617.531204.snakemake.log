@@ -1,0 +1,14 @@
+Building DAG of jobs...
+InputFunctionException in line 28 of /data/user/morlandi/mutatex_pipeline/SLIM-modeling/alanine_scanning/Snakefile:
+KeyError: ('ankb', 'cabsdock', '5YIS', 'a', 'b', '1-120', '1588-1613', 'blindself_sca', 'modelX', 'n')
+Wildcards:
+method=cabsdock
+slim_name=ankb
+PDB=5YIS
+chain_protein=a
+chain_peptide=b
+aa_protein=1-120
+aa_peptide=1588-1613
+model_name=modelX
+restraints=blindself_sca
+scan=n

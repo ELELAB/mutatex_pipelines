@@ -1,0 +1,11 @@
+Wildcard constraints in inputs are ignored.
+Wildcard constraints in inputs are ignored.
+Wildcard constraints in inputs are ignored.
+Wildcard constraints in inputs are ignored.
+Wildcard constraints in inputs are ignored.
+Wildcard constraints in inputs are ignored.
+Wildcard constraints in inputs are ignored.
+Building DAG of jobs...
+MissingInputException in line 17 of /data/user/morlandi/mutatex_pipeline/custom_scan/stability_scan/Snakefile:
+Missing input files for rule all:
+output_folder/cabsdock_fyco1_PDBXa_1276:1294/modelX/blind/pep_scan/mutations.tar.gz

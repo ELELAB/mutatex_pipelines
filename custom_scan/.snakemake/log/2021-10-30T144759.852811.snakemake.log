@@ -1,0 +1,30 @@
+Wildcard constraints in inputs are ignored.
+Wildcard constraints in inputs are ignored.
+Wildcard constraints in inputs are ignored.
+Wildcard constraints in inputs are ignored.
+Wildcard constraints in inputs are ignored.
+Wildcard constraints in inputs are ignored.
+Wildcard constraints in inputs are ignored.
+Building DAG of jobs...
+File path test/cabsdock_ankb_5YISab_1-120_1590-1602blind//ala_scan/mutations.tar.gz contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+File path test/cabsdock_ankb_5YISab_1-120_1590-1602blind//ala_scan/ankb_5YIS.pdb contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+File path test/cabsdock_ankb_5YISab_1-120_1590-1602blind//ala_scan/mutate_runfile_template.txt contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+File path test/cabsdock_ankb_5YISab_1-120_1590-1602blind//ala_scan/interface_runfile_template.txt contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+File path test/cabsdock_ankb_5YISab_1-120_1590-1602blind//ala_scan/repair_runfile_template.txt contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+File path test/cabsdock_ankb_5YISab_1-120_1590-1602blind//ala_scan/mutation_list.txt contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+File path test/cabsdock_ankb_5YISab_1-120_1590-1602blind//ala_scan/poslist.txt contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+File path test/cabsdock_ankb_5YISab_1-120_1590-1602blind//ala_scan/README_mutatex_run contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+File path test/cabsdock_ankb_5YISab_1-120_1590-1602blind//ala_scan/mutations.tar.gz contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+InputFunctionException in line 30 of /data/user/morlandi/mutatex_pipeline/SLIM-modeling/alanine_scanning/Snakefile:
+KeyError: ('ankb', 'cabsdock', '5YIS', 'a', '1-120', '1590-1602blind', '', '', 'ala_scan')
+Wildcards:
+method=cabsdock
+slim_name=ankb
+PDB=5YIS
+chain_protein=a
+chain_peptide=b
+aa_protein=1-120
+aa_peptide=1590-1602blind
+restraints=
+model_name=
+scan=ala_scan

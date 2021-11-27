@@ -1,0 +1,62 @@
+Wildcard constraints in inputs are ignored.
+Wildcard constraints in inputs are ignored.
+Wildcard constraints in inputs are ignored.
+Wildcard constraints in inputs are ignored.
+Wildcard constraints in inputs are ignored.
+Wildcard constraints in inputs are ignored.
+Wildcard constraints in inputs are ignored.
+Building DAG of jobs...
+File path output_folder/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//pep_scan/mutations.tar.gz contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+File path output_folder/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//pep_scan/ankb_5YIS.pdb contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+File path output_folder/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//pep_scan/mutate_runfile_template.txt contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+File path output_folder/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//pep_scan/interface_runfile_template.txt contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+File path output_folder/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//pep_scan/repair_runfile_template.txt contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+File path output_folder/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//pep_scan/mutation_list.txt contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+File path output_folder/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//pep_scan/poslist.txt contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+File path output_folder/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//pep_scan/README_mutatex_run contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+File path output_folder/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//pep_scan/mutations.tar.gz contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+File path output_folder/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//pep_scan/ankb_5YIS.pdb contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+File path output_folder/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//pep_scan/mutate_runfile_template.txt contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+File path output_folder/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//pep_scan/interface_runfile_template.txt contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+File path output_folder/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//pep_scan/repair_runfile_template.txt contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+File path output_folder/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//pep_scan/mutation_list.txt contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+File path output_folder/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//pep_scan/poslist.txt contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+File path output_folder/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//pep_scan/README_mutatex_run contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+Using shell: /bin/bash
+Provided cores: 1 (use --cores to define parallelism)
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	1	input_files
+	1	mutatex_scan
+	3
+
+[Wed Nov  3 14:30:48 2021]
+rule input_files:
+    input: ../input_pdb/ankbac.pdb
+    output: output_folder/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//pep_scan/ankb_5YIS.pdb, output_folder/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//pep_scan/mutate_runfile_template.txt, output_folder/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//pep_scan/interface_runfile_template.txt, output_folder/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//pep_scan/repair_runfile_template.txt, output_folder/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//pep_scan/mutation_list.txt, output_folder/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//pep_scan/poslist.txt, output_folder/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//pep_scan/README_mutatex_run
+    jobid: 2
+    wildcards: method=cabsdock, slim_name=ankb, PDB=5YIS, chain_protein=a, chain_peptide=b, aa_protein=1-120, aa_peptide=1588-1613, model_name=modelX, restraints=, scan=pep_scan
+
+[Wed Nov  3 14:30:49 2021]
+Finished job 2.
+1 of 3 steps (33%) done
+
+[Wed Nov  3 14:30:49 2021]
+rule mutatex_scan:
+    input: output_folder/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//pep_scan/ankb_5YIS.pdb, output_folder/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//pep_scan/mutate_runfile_template.txt, output_folder/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//pep_scan/interface_runfile_template.txt, output_folder/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//pep_scan/repair_runfile_template.txt, output_folder/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//pep_scan/mutation_list.txt, output_folder/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//pep_scan/poslist.txt, output_folder/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//pep_scan/README_mutatex_run
+    output: output_folder/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//pep_scan/mutations.tar.gz
+    jobid: 1
+    wildcards: method=cabsdock, slim_name=ankb, PDB=5YIS, chain_protein=a, chain_peptide=b, aa_protein=1-120, aa_peptide=1588-1613, model_name=modelX, restraints=, scan=pep_scan
+
+Waiting at most 5 seconds for missing files.
+MissingOutputException in line 83 of /data/user/morlandi/mutatex_pipeline/pep_scan/Snakefile:
+Job completed successfully, but some output files are missing. Missing files after 5 seconds:
+output_folder/cabsdock_ankb_5YISab_1-120_1588-1613/modelX//pep_scan/mutations.tar.gz
+This might be due to filesystem latency. If that is the case, consider to increase the wait time with --latency-wait.
+  File "/usr/local/envs/py37/lib/python3.7/site-packages/snakemake/executors/__init__.py", line 544, in handle_job_success
+  File "/usr/local/envs/py37/lib/python3.7/site-packages/snakemake/executors/__init__.py", line 231, in handle_job_success
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /data/user/morlandi/mutatex_pipeline/pep_scan/.snakemake/log/2021-11-03T143048.308945.snakemake.log

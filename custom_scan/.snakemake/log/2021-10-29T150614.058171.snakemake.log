@@ -1,0 +1,2 @@
+SyntaxError in line 13 of /data/user/morlandi/mutatex_pipeline/SLIM-modeling/alanine_scanning/Snakefile:
+EOF in multi-line statement (Snakefile, line 13)

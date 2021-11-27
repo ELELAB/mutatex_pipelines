@@ -1,0 +1,91 @@
+Wildcard constraints in inputs are ignored.
+Wildcard constraints in inputs are ignored.
+Wildcard constraints in inputs are ignored.
+Wildcard constraints in inputs are ignored.
+Wildcard constraints in inputs are ignored.
+Wildcard constraints in inputs are ignored.
+Wildcard constraints in inputs are ignored.
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 3
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	3	input_files
+	3	mutatex_scan
+	7
+
+[Sat Nov 27 13:09:36 2021]
+rule input_files:
+    input: ../input_pdb/fyco1A.B99990001.pdb, ../input_csv/fyco1.csv
+    output: output_folder/cabsdock_fyco1_PDBXa_1276-1280/modelX/blind/pep_scan/fyco1_PDBX.pdb, output_folder/cabsdock_fyco1_PDBXa_1276-1280/modelX/blind/pep_scan/mutate_runfile_template.txt, output_folder/cabsdock_fyco1_PDBXa_1276-1280/modelX/blind/pep_scan/interface_runfile_template.txt, output_folder/cabsdock_fyco1_PDBXa_1276-1280/modelX/blind/pep_scan/repair_runfile_template.txt, output_folder/cabsdock_fyco1_PDBXa_1276-1280/modelX/blind/pep_scan/mutation_list.txt, output_folder/cabsdock_fyco1_PDBXa_1276-1280/modelX/blind/pep_scan/poslist.txt, output_folder/cabsdock_fyco1_PDBXa_1276-1280/modelX/blind/pep_scan/README_mutatex_run
+    jobid: 4
+    wildcards: method=cabsdock, protein_name=fyco1, PDB=PDBX, chain=a, aa_protein=1276-1280, model_name=modelX, restraints=blind, scan=pep_scan
+
+[Sat Nov 27 13:09:36 2021]
+rule input_files:
+    input: ../input_pdb/fyco1A.B99990001.pdb, ../input_csv/fyco2.csv
+    output: output_folder/cabsdock_fyco2_PDBXa_1276-1280/modelX/blind/pep_scan/fyco2_PDBX.pdb, output_folder/cabsdock_fyco2_PDBXa_1276-1280/modelX/blind/pep_scan/mutate_runfile_template.txt, output_folder/cabsdock_fyco2_PDBXa_1276-1280/modelX/blind/pep_scan/interface_runfile_template.txt, output_folder/cabsdock_fyco2_PDBXa_1276-1280/modelX/blind/pep_scan/repair_runfile_template.txt, output_folder/cabsdock_fyco2_PDBXa_1276-1280/modelX/blind/pep_scan/mutation_list.txt, output_folder/cabsdock_fyco2_PDBXa_1276-1280/modelX/blind/pep_scan/poslist.txt, output_folder/cabsdock_fyco2_PDBXa_1276-1280/modelX/blind/pep_scan/README_mutatex_run
+    jobid: 5
+    wildcards: method=cabsdock, protein_name=fyco2, PDB=PDBX, chain=a, aa_protein=1276-1280, model_name=modelX, restraints=blind, scan=pep_scan
+
+[Sat Nov 27 13:09:36 2021]
+rule input_files:
+    input: ../input_pdb/fyco1A.B99990001.pdb, ../input_csv/fyco3.csv
+    output: output_folder/cabsdock_fyco3_PDBXa_1276-1280/modelX/blind/pep_scan/fyco3_PDBX.pdb, output_folder/cabsdock_fyco3_PDBXa_1276-1280/modelX/blind/pep_scan/mutate_runfile_template.txt, output_folder/cabsdock_fyco3_PDBXa_1276-1280/modelX/blind/pep_scan/interface_runfile_template.txt, output_folder/cabsdock_fyco3_PDBXa_1276-1280/modelX/blind/pep_scan/repair_runfile_template.txt, output_folder/cabsdock_fyco3_PDBXa_1276-1280/modelX/blind/pep_scan/mutation_list.txt, output_folder/cabsdock_fyco3_PDBXa_1276-1280/modelX/blind/pep_scan/poslist.txt, output_folder/cabsdock_fyco3_PDBXa_1276-1280/modelX/blind/pep_scan/README_mutatex_run
+    jobid: 6
+    wildcards: method=cabsdock, protein_name=fyco3, PDB=PDBX, chain=a, aa_protein=1276-1280, model_name=modelX, restraints=blind, scan=pep_scan
+
+[Sat Nov 27 13:09:37 2021]
+Finished job 6.
+1 of 7 steps (14%) done
+[Sat Nov 27 13:09:37 2021]
+Finished job 5.
+2 of 7 steps (29%) done
+[Sat Nov 27 13:09:37 2021]
+Finished job 4.
+3 of 7 steps (43%) done
+
+[Sat Nov 27 13:09:37 2021]
+rule mutatex_scan:
+    input: output_folder/cabsdock_fyco2_PDBXa_1276-1280/modelX/blind/pep_scan/fyco2_PDBX.pdb, output_folder/cabsdock_fyco2_PDBXa_1276-1280/modelX/blind/pep_scan/mutate_runfile_template.txt, output_folder/cabsdock_fyco2_PDBXa_1276-1280/modelX/blind/pep_scan/interface_runfile_template.txt, output_folder/cabsdock_fyco2_PDBXa_1276-1280/modelX/blind/pep_scan/repair_runfile_template.txt, output_folder/cabsdock_fyco2_PDBXa_1276-1280/modelX/blind/pep_scan/mutation_list.txt, output_folder/cabsdock_fyco2_PDBXa_1276-1280/modelX/blind/pep_scan/poslist.txt, output_folder/cabsdock_fyco2_PDBXa_1276-1280/modelX/blind/pep_scan/README_mutatex_run
+    output: output_folder/cabsdock_fyco2_PDBXa_1276-1280/modelX/blind/pep_scan/mutations.tar.gz
+    jobid: 2
+    wildcards: method=cabsdock, protein_name=fyco2, PDB=PDBX, chain=a, aa_protein=1276-1280, model_name=modelX, restraints=blind, scan=pep_scan
+
+
+[Sat Nov 27 13:09:37 2021]
+rule mutatex_scan:
+    input: output_folder/cabsdock_fyco1_PDBXa_1276-1280/modelX/blind/pep_scan/fyco1_PDBX.pdb, output_folder/cabsdock_fyco1_PDBXa_1276-1280/modelX/blind/pep_scan/mutate_runfile_template.txt, output_folder/cabsdock_fyco1_PDBXa_1276-1280/modelX/blind/pep_scan/interface_runfile_template.txt, output_folder/cabsdock_fyco1_PDBXa_1276-1280/modelX/blind/pep_scan/repair_runfile_template.txt, output_folder/cabsdock_fyco1_PDBXa_1276-1280/modelX/blind/pep_scan/mutation_list.txt, output_folder/cabsdock_fyco1_PDBXa_1276-1280/modelX/blind/pep_scan/poslist.txt, output_folder/cabsdock_fyco1_PDBXa_1276-1280/modelX/blind/pep_scan/README_mutatex_run
+    output: output_folder/cabsdock_fyco1_PDBXa_1276-1280/modelX/blind/pep_scan/mutations.tar.gz
+    jobid: 1
+    wildcards: method=cabsdock, protein_name=fyco1, PDB=PDBX, chain=a, aa_protein=1276-1280, model_name=modelX, restraints=blind, scan=pep_scan
+
+
+[Sat Nov 27 13:09:37 2021]
+rule mutatex_scan:
+    input: output_folder/cabsdock_fyco3_PDBXa_1276-1280/modelX/blind/pep_scan/fyco3_PDBX.pdb, output_folder/cabsdock_fyco3_PDBXa_1276-1280/modelX/blind/pep_scan/mutate_runfile_template.txt, output_folder/cabsdock_fyco3_PDBXa_1276-1280/modelX/blind/pep_scan/interface_runfile_template.txt, output_folder/cabsdock_fyco3_PDBXa_1276-1280/modelX/blind/pep_scan/repair_runfile_template.txt, output_folder/cabsdock_fyco3_PDBXa_1276-1280/modelX/blind/pep_scan/mutation_list.txt, output_folder/cabsdock_fyco3_PDBXa_1276-1280/modelX/blind/pep_scan/poslist.txt, output_folder/cabsdock_fyco3_PDBXa_1276-1280/modelX/blind/pep_scan/README_mutatex_run
+    output: output_folder/cabsdock_fyco3_PDBXa_1276-1280/modelX/blind/pep_scan/mutations.tar.gz
+    jobid: 3
+    wildcards: method=cabsdock, protein_name=fyco3, PDB=PDBX, chain=a, aa_protein=1276-1280, model_name=modelX, restraints=blind, scan=pep_scan
+
+[Sat Nov 27 13:10:47 2021]
+Finished job 1.
+4 of 7 steps (57%) done
+[Sat Nov 27 13:12:08 2021]
+Finished job 2.
+5 of 7 steps (71%) done
+[Sat Nov 27 13:12:11 2021]
+Finished job 3.
+6 of 7 steps (86%) done
+
+[Sat Nov 27 13:12:11 2021]
+localrule all:
+    input: output_folder/cabsdock_fyco1_PDBXa_1276-1280/modelX/blind/pep_scan/mutations.tar.gz, output_folder/cabsdock_fyco2_PDBXa_1276-1280/modelX/blind/pep_scan/mutations.tar.gz, output_folder/cabsdock_fyco3_PDBXa_1276-1280/modelX/blind/pep_scan/mutations.tar.gz
+    jobid: 0
+
+[Sat Nov 27 13:12:11 2021]
+Finished job 0.
+7 of 7 steps (100%) done
+Complete log: /data/user/morlandi/mutatex_pipeline/custom_scan/stability_scan/.snakemake/log/2021-11-27T130936.003571.snakemake.log

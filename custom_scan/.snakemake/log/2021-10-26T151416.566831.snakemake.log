@@ -1,0 +1,8 @@
+Building DAG of jobs...
+MissingInputException in line 13 of /data/user/morlandi/mutatex_pipeline/SLIM-modeling/alanine_scanning/Snakefile:
+Missing input files for rule all:
+test/ankb/cabsdock/ankb_5YISab_1-120_1590-1602/modelX/ala_scan/blind/results
+test/ankb/cabsdock/ankb_5YISab_1-120_1588-1613/modelX/self_scan/blind/results
+test/nix/cabsdock/nix_4WAAab_1-120_33-39/modelX/self_scan/blind/results
+ciao
+test/nix/cabsdock/nix_4WAAab_1-120_34-39/modelX/ala_scan/blind/results

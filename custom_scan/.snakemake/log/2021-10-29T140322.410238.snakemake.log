@@ -1,0 +1,52 @@
+Wildcard constraints in inputs are ignored.
+Wildcard constraints in inputs are ignored.
+Wildcard constraints in inputs are ignored.
+Wildcard constraints in inputs are ignored.
+Wildcard constraints in inputs are ignored.
+Wildcard constraints in inputs are ignored.
+Wildcard constraints in inputs are ignored.
+Building DAG of jobs...
+File path test/cabsdock_ankb_5YISab_1-120_1590-1602//ala_scan/blind/mutations.tar.gz contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+File path test/cabsdock_ankb_5YISab_1-120_1590-1602//ala_scan/blind/ankb_5YIS.pdb contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+File path test/cabsdock_ankb_5YISab_1-120_1590-1602//ala_scan/blind/mutate_runfile_template.txt contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+File path test/cabsdock_ankb_5YISab_1-120_1590-1602//ala_scan/blind/interface_runfile_template.txt contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+File path test/cabsdock_ankb_5YISab_1-120_1590-1602//ala_scan/blind/repair_runfile_template.txt contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+File path test/cabsdock_ankb_5YISab_1-120_1590-1602//ala_scan/blind/mutation_list.txt contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+File path test/cabsdock_ankb_5YISab_1-120_1590-1602//ala_scan/blind/poslist.txt contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+File path test/cabsdock_ankb_5YISab_1-120_1590-1602//ala_scan/blind/README_mutatex_run contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+File path test/cabsdock_ankb_5YISab_1-120_1590-1602//ala_scan/blind/mutations.tar.gz contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+File path test/cabsdock_ankb_5YISab_1-120_1590-1602//ala_scan/blind/ankb_5YIS.pdb contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+File path test/cabsdock_ankb_5YISab_1-120_1590-1602//ala_scan/blind/mutate_runfile_template.txt contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+File path test/cabsdock_ankb_5YISab_1-120_1590-1602//ala_scan/blind/interface_runfile_template.txt contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+File path test/cabsdock_ankb_5YISab_1-120_1590-1602//ala_scan/blind/repair_runfile_template.txt contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+File path test/cabsdock_ankb_5YISab_1-120_1590-1602//ala_scan/blind/mutation_list.txt contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+File path test/cabsdock_ankb_5YISab_1-120_1590-1602//ala_scan/blind/poslist.txt contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+File path test/cabsdock_ankb_5YISab_1-120_1590-1602//ala_scan/blind/README_mutatex_run contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
+Using shell: /bin/bash
+Provided cores: 1 (use --cores to define parallelism)
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	4	ala_scan
+	1	all
+	4	input_files
+	9
+
+[Fri Oct 29 14:03:23 2021]
+rule input_files:
+    input: ../../input_pdb/ankbbd.pdb
+    output: test/cabsdock_ankb_5YISab_1-120_1590-1602//ala_scan/blind/ankb_5YIS.pdb, test/cabsdock_ankb_5YISab_1-120_1590-1602//ala_scan/blind/mutate_runfile_template.txt, test/cabsdock_ankb_5YISab_1-120_1590-1602//ala_scan/blind/interface_runfile_template.txt, test/cabsdock_ankb_5YISab_1-120_1590-1602//ala_scan/blind/repair_runfile_template.txt, test/cabsdock_ankb_5YISab_1-120_1590-1602//ala_scan/blind/mutation_list.txt, test/cabsdock_ankb_5YISab_1-120_1590-1602//ala_scan/blind/poslist.txt, test/cabsdock_ankb_5YISab_1-120_1590-1602//ala_scan/blind/README_mutatex_run
+    jobid: 6
+    wildcards: method=cabsdock, slim_name=ankb, PDB=5YIS, chain_protein=a, chain_peptide=b, aa_protein=1-120, aa_peptide=1590-1602, model_name=, scan=ala_scan, restraints=blind
+
+[Fri Oct 29 14:03:24 2021]
+Finished job 6.
+1 of 9 steps (11%) done
+
+[Fri Oct 29 14:03:24 2021]
+rule ala_scan:
+    input: test/cabsdock_ankb_5YISab_1-120_1590-1602//ala_scan/blind/ankb_5YIS.pdb, test/cabsdock_ankb_5YISab_1-120_1590-1602//ala_scan/blind/mutate_runfile_template.txt, test/cabsdock_ankb_5YISab_1-120_1590-1602//ala_scan/blind/interface_runfile_template.txt, test/cabsdock_ankb_5YISab_1-120_1590-1602//ala_scan/blind/repair_runfile_template.txt, test/cabsdock_ankb_5YISab_1-120_1590-1602//ala_scan/blind/mutation_list.txt, test/cabsdock_ankb_5YISab_1-120_1590-1602//ala_scan/blind/poslist.txt, test/cabsdock_ankb_5YISab_1-120_1590-1602//ala_scan/blind/README_mutatex_run
+    output: test/cabsdock_ankb_5YISab_1-120_1590-1602//ala_scan/blind/mutations.tar.gz
+    jobid: 2
+    wildcards: method=cabsdock, slim_name=ankb, PDB=5YIS, chain_protein=a, chain_peptide=b, aa_protein=1-120, aa_peptide=1590-1602, model_name=, scan=ala_scan, restraints=blind
+

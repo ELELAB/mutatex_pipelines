@@ -1,0 +1,6 @@
+AttributeError in line 27 of /data/user/morlandi/mutatex_pipeline/SLIM-modeling/alanine_scanning/Snakefile:
+'str' object has no attribute '*'
+  File "/data/user/morlandi/mutatex_pipeline/SLIM-modeling/alanine_scanning/Snakefile", line 27, in <module>
+  File "/usr/lib/python3.7/string.py", line 190, in vformat
+  File "/usr/lib/python3.7/string.py", line 230, in _vformat
+  File "/usr/lib/python3.7/string.py", line 301, in get_field

@@ -1,0 +1,3 @@
+NameError in line 13 of /data/user/morlandi/mutatex_pipeline/custom_scan/stability_scan/Snakefile:
+name 'wildcards' is not defined
+  File "/data/user/morlandi/mutatex_pipeline/custom_scan/stability_scan/Snakefile", line 13, in <module>

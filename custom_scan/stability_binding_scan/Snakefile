@@ -1,0 +1,105 @@
+import pandas as pd
+import numpy as np
+import glob
+import os
+import logging
+import mutatex
+import shutil
+
+configfile: 'config.yaml'
+models = pd.read_csv(config['models'], keep_default_na=False)
+
+assert all(list(map(os.path.isfile,config["csv_dir"]+"/"+models["protein_name"]+models["chain_protein"]+models["chain_peptide"]+".csv"))), "Each pdb must have a CSV mutations table associated. Its file name must contain the following wildcards: protein_name, chain_protein and chain_peptide (e.g., lc3bab.csv)."
+
+rule all:
+    input:
+        expand("%s/{method}_{protein_name}_{PDB}{chain_protein}{chain_peptide}_{aa_protein}_{aa_peptide}/{model_name}/{restraints}/{scan}/mutations.tar.gz" %config["out_dir"],
+                    zip,
+                    protein_name=models["protein_name"],
+                    PDB=models["PDB"],
+                    chain_protein=models["chain_protein"],
+                    chain_peptide=models["chain_peptide"],
+                    aa_protein=models["aa_protein"],
+                    aa_peptide=models["aa_peptide"],
+                    method=models["method"],
+                    model_name=models["model_name"],
+                    scan=models["scan"],
+                    restraints=models["restraints"])
+
+rule input_files:
+    input:
+        pdb=lambda wcs: config["in_dir"]+"/"+models.set_index(["protein_name","method","PDB","chain_protein","chain_peptide","aa_protein","aa_peptide","restraints","model_name","scan"]).loc[(wcs.protein_name,wcs.method,wcs.PDB,wcs.chain_protein,wcs.chain_peptide,wcs.aa_protein,wcs.aa_peptide,wcs.restraints,wcs.model_name,wcs.scan), "pdb_file"],
+        csv=lambda wcs: config["csv_dir"]+"/"+wcs.protein_name+wcs.chain_protein+wcs.chain_peptide+".csv"
+    output:
+        link_pdb="%s/{method}_{protein_name}_{PDB}{chain_protein}{chain_peptide}_{aa_protein}_{aa_peptide}/{model_name,.*}/{restraints,.*}/{scan,.*}/{protein_name}_{PDB}.pdb" %config["out_dir"],
+        mutate="%s/{method}_{protein_name}_{PDB}{chain_protein}{chain_peptide}_{aa_protein}_{aa_peptide}/{model_name,.*}/{restraints,.*}/{scan,.*}/mutate_runfile_template.txt" %config["out_dir"],
+        interface="%s/{method}_{protein_name}_{PDB}{chain_protein}{chain_peptide}_{aa_protein}_{aa_peptide}/{model_name,.*}/{restraints,.*}/{scan,.*}/interface_runfile_template.txt" %config["out_dir"],
+        repair="%s/{method}_{protein_name}_{PDB}{chain_protein}{chain_peptide}_{aa_protein}_{aa_peptide}/{model_name,.*}/{restraints,.*}/{scan,.*}/repair_runfile_template.txt" %config["out_dir"],
+        mutation_list="%s/{method}_{protein_name}_{PDB}{chain_protein}{chain_peptide}_{aa_protein}_{aa_peptide}/{model_name,.*}/{restraints,.*}/{scan,.*}/mutation_list.txt" %config["out_dir"],
+        poslist="%s/{method}_{protein_name}_{PDB}{chain_protein}{chain_peptide}_{aa_protein}_{aa_peptide}/{model_name,.*}/{restraints,.*}/{scan,.*}/poslist.txt" %config["out_dir"],
+        readme="%s/{method}_{protein_name}_{PDB}{chain_protein}{chain_peptide}_{aa_protein}_{aa_peptide}/{model_name,.*}/{restraints,.*}/{scan,.*}/README_mutatex_run" %config["out_dir"]
+    params:
+        workflow_dir=os.path.abspath(os.path.dirname(workflow.snakefile)),
+        chain_mut=lambda wcs: models.set_index(["protein_name","method","PDB","chain_protein","chain_peptide","aa_protein","aa_peptide","restraints","model_name","scan"]).loc[(wcs.protein_name,wcs.method,wcs.PDB,wcs.chain_protein,wcs.chain_peptide,wcs.aa_protein,wcs.aa_peptide,wcs.restraints,wcs.model_name,wcs.scan), "chain_mut"],
+        range_mut=lambda wcs: wcs.aa_protein if models.set_index(["protein_name","method","PDB","chain_protein","chain_peptide","aa_protein","aa_peptide","restraints","model_name","scan"]).loc[(wcs.protein_name,wcs.method,wcs.PDB,wcs.chain_protein,wcs.chain_peptide,wcs.aa_protein,wcs.aa_peptide,wcs.restraints,wcs.model_name,wcs.scan), "chain_mut"] == wcs.chain_protein else wcs.aa_peptide
+    run:
+        out_dir=f"""{config["out_dir"]}/{wildcards.method}_{wildcards.protein_name}_{wildcards.PDB}{wildcards.chain_protein}{wildcards.chain_peptide}_{wildcards.aa_protein}_{wildcards.aa_peptide}/{wildcards.model_name}/{wildcards.restraints}/{wildcards.scan}"""
+        shutil.copy2(input.pdb, out_dir)
+        os.symlink(os.path.abspath(glob.glob(out_dir+"/*.pdb")[0]), output.link_pdb)
+        with open(output.mutate,'w') as mutate:
+            mutate.write(config["mutate_runfile"])
+        with open(output.interface,'w') as interface:
+            interface.write(config["interface_runfile"])
+        with open(output.repair,'w') as repair:
+            repair.write(config["repair_runfile"])
+        csv=pd.read_csv(input.csv)
+        if pd.Series(["WT residue", "Position", "Mutated residue"]).isin(csv.columns).all() == True:
+            my_col=csv[["WT residue", "Position", "Mutated residue"]].set_index("Position").loc[int(params.range_mut.rpartition("-")[0]):int(params.range_mut.rpartition("-")[2])].dropna().reset_index().apply(lambda x: '%s%s%s' % (x["WT residue"], int(x["Position"]), x["Mutated residue"]),axis=1)
+        else:
+            my_col=csv[csv["Mutation"].str.contains('|'.join(str(i) for i in range(int(params.range_mut.rpartition("-")[0]),int(params.range_mut.rpartition("-")[2])+1)),na=False)]["Mutation"].str.replace("p","")
+        mutlist=my_col.apply(lambda x: "%s" % (x[-1:])).drop_duplicates().to_csv(output.mutation_list, index=False, header=False)
+        poslist=my_col.apply(lambda x: "%s%s%s" % (x[0],params.chain_mut.upper(),x[1:-1])).drop_duplicates().to_csv(output.poslist, index=False, header=False)
+
+        read_content=f"""# This directory contains a custom scanning run performed with mutatex. This directory was generated by the following Snakemake pipeline:
+
+# {params.workflow_dir}
+
+# The input PDB file has been copied from:
+
+# {input.pdb}
+
+# In order to run it, the following steps are required:
+# source virtual environment
+. /usr/local/envs/mutatex/bin/activate
+
+# A symbolic link is also required to avoid problems with files having multiple dots in the filename
+ln -s {input.pdb} {output.link_pdb}
+
+"""
+        with open(output.readme, "w") as readme:
+            readme.write(read_content)
+ 
+rule mutatex_scan:
+    input:
+        link_pdb="%s/{method}_{protein_name}_{PDB}{chain_protein}{chain_peptide}_{aa_protein}_{aa_peptide}/{model_name,.*}/{restraints,.*}/{scan,.*}/{protein_name}_{PDB}.pdb" %config["out_dir"],
+        mutate="%s/{method}_{protein_name}_{PDB}{chain_protein}{chain_peptide}_{aa_protein}_{aa_peptide}/{model_name,.*}/{restraints,.*}/{scan,.*}/mutate_runfile_template.txt" %config["out_dir"],
+        interface="%s/{method}_{protein_name}_{PDB}{chain_protein}{chain_peptide}_{aa_protein}_{aa_peptide}/{model_name,.*}/{restraints,.*}/{scan,.*}/interface_runfile_template.txt" %config["out_dir"],
+        repair="%s/{method}_{protein_name}_{PDB}{chain_protein}{chain_peptide}_{aa_protein}_{aa_peptide}/{model_name,.*}/{restraints,.*}/{scan,.*}/repair_runfile_template.txt" %config["out_dir"],
+        mutation_list="%s/{method}_{protein_name}_{PDB}{chain_protein}{chain_peptide}_{aa_protein}_{aa_peptide}/{model_name,.*}/{restraints,.*}/{scan,.*}/mutation_list.txt" %config["out_dir"],
+        poslist="%s/{method}_{protein_name}_{PDB}{chain_protein}{chain_peptide}_{aa_protein}_{aa_peptide}/{model_name,.*}/{restraints,.*}/{scan,.*}/poslist.txt" %config["out_dir"],
+        readme="%s/{method}_{protein_name}_{PDB}{chain_protein}{chain_peptide}_{aa_protein}_{aa_peptide}/{model_name,.*}/{restraints,.*}/{scan,.*}/README_mutatex_run" %config["out_dir"]
+    output:
+        "%s/{method}_{protein_name}_{PDB}{chain_protein}{chain_peptide}_{aa_protein}_{aa_peptide}/{model_name,.*}/{restraints,.*}/{scan,.*}/mutations.tar.gz" %config["out_dir"]
+    params:
+        foldx_exe=config["mutatex"]["foldx_exe"],
+        skip_repair="-S" if config["mutatex"]["skip_repair"] == True else "",
+    threads:
+        1
+    shell:
+        """
+        set +u; source /usr/local/envs/mutatex/bin/activate; set -u
+        cd {config[out_dir]}/{wildcards.method}_{wildcards.protein_name}_{wildcards.PDB}{wildcards.chain_protein}{wildcards.chain_peptide}_{wildcards.aa_protein}_{wildcards.aa_peptide}/{wildcards.model_name}/{wildcards.restraints}/{wildcards.scan}/
+        echo -e "# mutatex command\nmutatex $(basename {input.link_pdb}) -q $(basename {input.poslist}) {params.skip_repair} -m $(basename {input.mutation_list}) --foldx-version=suite5 --np {threads} -x {params.foldx_exe} -B -C deep -v -L -c -l >& log &" >> $(basename {input.readme})
+        mutatex $(basename {input.link_pdb}) -q $(basename {input.poslist}) {params.skip_repair} -m $(basename {input.mutation_list}) --foldx-version=suite5 --np {threads} -x {params.foldx_exe} -B -C deep -v -L -c -l >& log 
+        
+        """

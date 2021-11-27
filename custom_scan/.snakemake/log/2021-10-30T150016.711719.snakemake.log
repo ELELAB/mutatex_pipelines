@@ -1,5 +1,0 @@
-Building DAG of jobs...
-File path test/cabsdock_ankb_5YISab_1-120_1590-1602_blind//ala_scan/mutations.tar.gz contains double '/'. This is likely unintended. It can also lead to inconsistent results of the file-matching approach used by Snakemake.
-MissingInputException in line 15 of /data/user/morlandi/mutatex_pipeline/SLIM-modeling/alanine_scanning/Snakefile:
-Missing input files for rule all:
-test/cabsdock_ankb_5YISab_1-120_1590-1602_blind//ala_scan/mutations.tar.gz

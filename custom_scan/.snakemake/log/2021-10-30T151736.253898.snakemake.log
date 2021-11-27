@@ -1,3 +1,0 @@
-SyntaxError:
-Not all output, log and benchmark files of rule input_files contain the same wildcards. This is crucial though, in order to avoid that two or more jobs write to the same file.
-  File "/data/user/morlandi/mutatex_pipeline/SLIM-modeling/alanine_scanning/Snakefile", line 46, in <module>

@@ -1,5 +1,0 @@
-Building DAG of jobs...
-InputFunctionException in line 13 of /data/user/morlandi/mutatex_pipeline/SLIM-modeling/alanine_scanning/Snakefile:
-TypeError: <lambda>() missing 1 required positional argument: 'input'
-Wildcards:
-

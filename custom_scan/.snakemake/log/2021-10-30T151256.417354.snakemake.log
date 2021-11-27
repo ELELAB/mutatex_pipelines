@@ -1,3 +1,0 @@
-NameError in line 32 of /data/user/morlandi/mutatex_pipeline/SLIM-modeling/alanine_scanning/Snakefile:
-name 'wildcards' is not defined
-  File "/data/user/morlandi/mutatex_pipeline/SLIM-modeling/alanine_scanning/Snakefile", line 32, in <module>

@@ -1,3 +1,0 @@
-TypeError in line 90 of /data/user/morlandi/mutatex_pipeline/SLIM-modeling/alanine_scanning/Snakefile:
-can only concatenate str (not "list") to str
-  File "/data/user/morlandi/mutatex_pipeline/SLIM-modeling/alanine_scanning/Snakefile", line 90, in <module>

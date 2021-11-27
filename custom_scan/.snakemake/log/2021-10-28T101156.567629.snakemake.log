@@ -1,4 +1,0 @@
-ValueError in line 23 of /data/user/morlandi/mutatex_pipeline/SLIM-modeling/alanine_scanning/Snakefile:
-The truth value of a Series is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
-  File "/data/user/morlandi/mutatex_pipeline/SLIM-modeling/alanine_scanning/Snakefile", line 23, in <module>
-  File "/usr/local/envs/py37/lib/python3.7/site-packages/pandas/core/generic.py", line 1538, in __nonzero__

@@ -1,4 +1,0 @@
-Building DAG of jobs...
-MissingInputException in line 30 of /data/user/morlandi/mutatex_pipeline/SLIM-modeling/alanine_scanning/Snakefile:
-Missing input files for rule input_files:
-../../input_pdbankbac.pdb

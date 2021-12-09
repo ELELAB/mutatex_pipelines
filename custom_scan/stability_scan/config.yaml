@@ -1,7 +1,7 @@
 reference: "references.csv"
 
-pdb_dir: "../../input_pdb"
-csv_dir: "../../input_csv"
+pdb_dir: "input_pdb_folder"
+csv_dir: "input_csv_folder"
 out_dir: "output_folder"
 
 mutatex:

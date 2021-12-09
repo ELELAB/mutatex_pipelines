@@ -1,4 +1,4 @@
 protein_name,method,PDB,chain,aa_protein,restraints,model_name,scan,pdb_file
-fyco1,cabsdock,PDBX,a,1276-1280,blind,modelX,pep_scan,fyco2A.B99990001.pdb
-fyco2,cabsdock,PDBX,a,1276-1280,blind,modelX,pep_scan,fyco2A.B99990001.pdb
-fyco3,cabsdock,PDBX,a,1276-1280,blind,modelX,pep_scan,fyco2A.B99990001.pdb
+ankb,cabsdock,PDBX,b,1588-1590,blind,modelX,pep_scan,ankbab.pdb
+ankb,cabsdock,PDBX,c,1588-1590,blind,modelX,pep_scan,ankbac.pdb
+ankb,cabsdock,PDBX,d,1588-1590,,,,ankbad.pdb

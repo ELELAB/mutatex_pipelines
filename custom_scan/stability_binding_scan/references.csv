@@ -1,0 +1,4 @@
+protein_name,method,PDB,chain_protein,chain_peptide,aa_protein,aa_peptide,restraints,model_name,scan,pdb_file
+ankb,cabsdock,PDBX,a,b,1-120,1588-1590,blind,modelX,pep_scan,ankbab.pdb
+ankb,cabsdock,PDBX,a,c,1-120,1588-1590,blind,modelX,pep_scan,ankbac.pdb
+ankb,cabsdock,PDBX,a,d,1-120,1588-1590,,,,ankbad.pdb

@@ -1,5 +1,0 @@
-command=RepairPDB
-pdb=ankb_PDBX_model0_checked.pdb
-temperature=298
-water=-CRYSTAL
-complexWithDNA=true

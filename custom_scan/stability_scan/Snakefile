@@ -7,26 +7,26 @@ import mutatex
 import shutil
 
 configfile: 'config.yaml'
-reference = pd.read_csv(config['reference'], keep_default_na=False)
+models = pd.read_csv(config['models'], keep_default_na=False)
 
-assert all(list(map(os.path.isfile,config["csv_dir"]+"/"+reference["protein_name"]+reference["chain"]+".csv"))), "Each pdb must have a CSV mutations table associated. The table name must contain the following wildcards: protein_name and chain (e.g., ankbb.csv)."
+assert all(list(map(os.path.isfile,config["csv_dir"]+"/"+models["protein_name"]+models["chain"]+".csv"))), "Each pdb must have a CSV mutations table associated. Its file name must contain the following wildcards: protein_name and chain (e.g., ankbb.csv)."
 
 rule all:
     input:
         expand("%s/{method}_{protein_name}_{PDB}{chain}_{aa_protein}/{model_name}/{restraints}/{scan}/mutations.tar.gz" %config["out_dir"],
                     zip,
-                    protein_name=reference["protein_name"],
-                    PDB=reference["PDB"],
-                    chain=reference["chain"],
-                    aa_protein=reference["aa_protein"],
-                    method=reference["method"],
-                    model_name=reference["model_name"],
-                    scan=reference["scan"],
-                    restraints=reference["restraints"])
+                    protein_name=models["protein_name"],
+                    PDB=models["PDB"],
+                    chain=models["chain"],
+                    aa_protein=models["aa_protein"],
+                    method=models["method"],
+                    model_name=models["model_name"],
+                    scan=models["scan"],
+                    restraints=models["restraints"])
 
 rule input_files:
     input:
-        pdb=lambda wcs: config["pdb_dir"]+"/"+reference.set_index(["protein_name","method","PDB","chain","chain","aa_protein","restraints","model_name","scan"]).loc[(wcs.protein_name,wcs.method,wcs.PDB,wcs.chain,wcs.chain,wcs.aa_protein,wcs.restraints,wcs.model_name,wcs.scan), "pdb_file"],
+        pdb=lambda wcs: config["pdb_dir"]+"/"+models.set_index(["protein_name","method","PDB","chain","chain","aa_protein","restraints","model_name","scan"]).loc[(wcs.protein_name,wcs.method,wcs.PDB,wcs.chain,wcs.chain,wcs.aa_protein,wcs.restraints,wcs.model_name,wcs.scan), "pdb_file"],
         csv=lambda wcs: config["csv_dir"]+"/"+wcs.protein_name+wcs.chain+".csv"
     output:
         link_pdb="%s/{method}_{protein_name}_{PDB}{chain}_{aa_protein}/{model_name,.*}/{restraints,.*}/{scan,.*}/{protein_name}_{PDB}.pdb" %config["out_dir"],
@@ -39,7 +39,7 @@ rule input_files:
     params:
         workflow_dir=os.path.abspath(os.path.dirname(workflow.snakefile))
     run:
-        out_dir=config["out_dir"]+"/"+wildcards.method+"_"+wildcards.protein_name+"_"+wildcards.PDB+""+wildcards.chain+"_"+wildcards.aa_protein+"/"+wildcards.model_name+"/"+wildcards.restraints+"/"+wildcards.scan+"/"
+        out_dir=f"""{config["out_dir"]}/{wildcards.method}_{wildcards.protein_name}_{wildcards.PDB}{wildcards.chain}_{wildcards.aa_protein}/{wildcards.model_name}/{wildcards.restraints}/{wildcards.scan}"""
         shutil.copy2(input.pdb, out_dir)
         os.symlink(os.path.abspath(glob.glob(out_dir+"/*.pdb")[0]), output.link_pdb)
         with open(output.mutate,'w') as mutate:
@@ -48,10 +48,11 @@ rule input_files:
             interface.write(config["interface_runfile"])
         with open(output.repair,'w') as repair:
             repair.write(config["repair_runfile"])
-        if "WT residue" in pd.read_csv(input.csv) and "Position" in pd.read_csv(input.csv) and "Mutated residue" in pd.read_csv(input.csv): 
-            my_col=pd.read_csv(input.csv)[["WT residue", "Position", "Mutated residue"]].set_index("Position").loc[int(wildcards.aa_protein.rpartition("-")[0]):int(wildcards.aa_protein.rpartition("-")[2])].dropna().reset_index().apply(lambda x: '%s%s%s' % (x["WT residue"], int(x["Position"]), x["Mutated residue"]),axis=1)
+        csv=pd.read_csv(input.csv)
+        if pd.Series(["WT residue", "Position", "Mutated residue"]).isin(csv.columns).all() == True: 
+            my_col=csv[["WT residue", "Position", "Mutated residue"]].set_index("Position").loc[int(wildcards.aa_protein.rpartition("-")[0]):int(wildcards.aa_protein.rpartition("-")[2])].dropna().reset_index().apply(lambda x: '%s%s%s' % (x["WT residue"], int(x["Position"]), x["Mutated residue"]),axis=1)
         else:
-            my_col=pd.read_csv(input.csv)[pd.read_csv(input.csv)["Mutation"].str.contains('|'.join(str(i) for i in range(int(wildcards.aa_protein.rpartition("-")[0]),int(wildcards.aa_protein.rpartition("-")[2])+1)))]["Mutation"].str.replace("p","")
+            my_col=csv[csv["Mutation"].str.contains('|'.join(str(i) for i in range(int(wildcards.aa_protein.rpartition("-")[0]),int(wildcards.aa_protein.rpartition("-")[2])+1)))]["Mutation"].str.replace("p","")
         mutlist=my_col.apply(lambda x: "%s" % (x[-1:])).drop_duplicates().to_csv(output.mutation_list, index=False, header=False)
         poslist=my_col.apply(lambda x: "%s%s%s" % (x[0],wildcards.chain.upper(),x[1:-1])).drop_duplicates().to_csv(output.poslist, index=False, header=False)
 

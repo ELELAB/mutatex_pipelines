@@ -1,17 +1,12 @@
-reference: "references.csv"
+models: "models.csv"
 
-pdb_dir: "input_pdb_folder"
-csv_dir: "input_csv_folder"
+pdb_dir: "input_pdb" #"input_pdb_folder"
+csv_dir: "input_csv" #"input_csv_folder"
 out_dir: "output_folder"
 
 mutatex:
     skip_repair: False
     foldx_exe: "/usr/local/foldx5_2021/foldx"
-
-mutation_list: |
-        N
-        A
-        C
 
 mutate_runfile: |
         command=BuildModel

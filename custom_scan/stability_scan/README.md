@@ -47,7 +47,7 @@ and contains the following columns that are used by the pipeline:
 |`Position`|Single-letter residue type of the mutant variant|94|
 
 The other supported format is a csv file with a `Mutation` column which contains mutations in
-the HGVS protein mutation syntax: 
+the HGVS protein substitution mutation syntax: 
 
 ...
 

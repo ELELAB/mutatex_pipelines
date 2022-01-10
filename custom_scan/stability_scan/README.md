@@ -1,7 +1,8 @@
 ## Overview
 
-This directory contains a snakemake-based pipeline for peptide mutation scanning runs with `MutateX`[^Tiberti]. It has been designed to study the stability of protein chains. 
-This protocol predicts changes of stability free energies in such chains upon mutation of each residue according to a list of mutations provided as input.
+This directory contains a snakemake-based pipeline for peptide mutation scanning runs with `MutateX`[^Tiberti].
+This protocol predicts changes of folding free energy upon mutation for each residue of a given list of mutations provided as input. 
+Each residue is mutated to a list of residue types depending on the mutations found in the corresponding input dataset.
 
 ## Description of the directory content:
 
@@ -30,7 +31,27 @@ provide the correct input pdbs to `MutateX`.
 |`pdb_file`|Name of the pdb file to be provided in input|ankb.pdb|
 
 N.B., The `restraints`, `model_name` and `scan` columns can be left empty if needed.
- 
+
+Additionally, the pipeline requires one csv file per row of the `models.csv` file, named
+
+{protein_name}{chain}.csv
+
+these files contain the mutations that we are interested investigating,
+one per row. One is consistent with the output of the cancermuts software,
+and contains the following columns that are used by the pipeline:
+
+|Column|Meaning|Example|
+|---|---|---|
+|`Position`|1-numbered position of the mutation site in the primary Uniprot main sequence|94|
+|`WT residue`|Single-letter residue type in the canonical wild-type sequence (as per Position)|94|
+|`Position`|Single-letter residue type of the mutant variant|94|
+
+The other supported format is a csv file with a `Mutation` column which contains mutations in
+the HGVS protein mutation syntax: 
+
+...
+
+
 ### Configuration file
 
 The `config.yaml` is the configuration file through which is possible to specify for:

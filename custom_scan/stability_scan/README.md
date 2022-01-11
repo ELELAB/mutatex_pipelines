@@ -30,6 +30,26 @@ provide the correct input pdbs to `MutateX`.
 |`pdb_file`|Name of the pdb file to be provided in input|ankb.pdb|
 
 N.B., The `restraints`, `model_name` and `scan` columns can be left empty if needed.
+
+Additionally, the pipeline requires one csv file per row of the `models.csv` file, named: 
+
+`{protein_name}{chain}.csv`
+
+These files contain the mutations that we are interested investigating, one per row. One is consistent with the output of the cancermuts software, and contains the following columns that are used by the pipeline:
+
+
+|Column|Meaning|Example|
+|---|---|---|
+|`Position`|1-numbered position of the mutation site in the primary Uniprot main sequence|94|
+|`WT residue`|Single-letter residue type in the canonical wild-type sequence (as per Position)|94|
+|`Position`|Single-letter residue type of the mutant variant|94|
+
+The other supported format is a csv file with a `Mutation` column which contains mutations in
+the HGVS-like protein substitution mutation syntax. In this case, the mutation column will report (i) the amino acid WT in single letter, (ii) the position in the sequence and (iii) the mutation in single letter. As in the HGVS nomenclature, the three notations listed above can be proceeded from a prefix "p".
+
+|Column|Meaning|Example|
+|---|---|---|
+|`Mutation`| "prefix""amino_acid""position""new_amino_acid"|pR54S|
  
 ### Configuration file
 

@@ -1,5 +1,4 @@
 ,Position,Phosphorylation site,Methylation site,Ubiquitination site,Caspase cleavage site,S-Nitrosylation site,Acetylation site,Sumoylation site,OGalNAc site,OGlcNAc site,Structural disorder,Residue part of a linear motif,Structure,WT residue,Mutated residue,Sources,Cancer study,Cancer type,Genomic coordinates,Genomic mutation,Revel score,Cancer site,Cancer histology,exome.gnomAD,genome.gnomAD
-,,,,,,,,,,,,,,,,,,,,,,,,,
 ,1588,,,,,,,,,,,,,V,P,"cBioPortal,COSMIC","ucec_tcga, ucec_tcga_pan_can_atlas_2018, ucec_tcga_pub","Endometrial Carcinoma, carcinoma","hg19,chr3:46026399-46026399, hg38,chr3:45984907-45984907","hg19,chr3:46026399C>G, hg38,chr3:45984907C>G",0.176,,,,
 ,1589,,,,,,,,,,,,,E,G,"cBioPortal,COSMIC",brca_tcga_pan_can_atlas_2018,"Invasive Breast Carcinoma, carcinoma","hg19,chr3:46026395-46026395, hg38,chr3:45984903-45984903","hg19,chr3:46026395G>C, hg38,chr3:45984903G>C",0.173,,,,
 ,1590,,,,,,,,,,,,,E,M,,,,,,,,,,

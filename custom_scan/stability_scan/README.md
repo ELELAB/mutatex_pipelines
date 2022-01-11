@@ -1,7 +1,8 @@
 ## Overview
 
-This directory contains a snakemake-based pipeline for peptide mutation scanning runs with `MutateX`[^Tiberti]. It has been designed to study the stability of protein chains. 
-This protocol predicts changes of stability free energies in such chains upon mutation of each residue according to a list of mutations provided as input.
+This directory contains a snakemake-based pipeline for peptide mutation scanning runs with `MutateX`[^Tiberti].
+This protocol predicts changes of folding free energy upon mutation for each residue of a given list of mutations provided as input. 
+Each residue is mutated to a list of residue types depending on the mutations found in the corresponding input dataset.
 
 ## Description of the directory content:
 
@@ -36,7 +37,6 @@ Additionally, the pipeline requires one csv file per row of the `models.csv` fil
 `{protein_name}{chain}.csv`
 
 These files contain the mutations that we are interested investigating, one per row. One is consistent with the output of the cancermuts software, and contains the following columns that are used by the pipeline:
-
 
 |Column|Meaning|Example|
 |---|---|---|

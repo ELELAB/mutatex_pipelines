@@ -40,12 +40,11 @@ These files contain the mutations that we are interested investigating, one per 
 
 |Column|Meaning|Example|
 |---|---|---|
-|`Position`|1-numbered position of the mutation site in the primary Uniprot main sequence|94|
-|`WT residue`|Single-letter residue type in the canonical wild-type sequence (as per Position)|94|
+|`Position`|1-numbered position of the mutation site in the primary Uniprot main sequence|R|
+|`WT residue`|Single-letter residue type in the canonical wild-type sequence (as per Position)|A|
 |`Position`|Single-letter residue type of the mutant variant|94|
 
-The other supported format is a csv file with a `Mutation` column which contains mutations in
-the HGVS-like protein substitution mutation syntax. In this case, the mutation column will report (i) the amino acid WT in single letter, (ii) the position in the sequence and (iii) the mutation in single letter. As in the HGVS nomenclature, the three notations listed above can be proceeded from a prefix "p".
+The other supported format is a csv file with a `Mutation` column. It will report (i) the amino acid WT in single letter, (ii) the position in the sequence and (iii) the mutation in single letter. The three notations listed above can be preceded from a prefix "p".
 
 |Column|Meaning|Example|
 |---|---|---|

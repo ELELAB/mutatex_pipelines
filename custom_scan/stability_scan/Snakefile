@@ -5,11 +5,23 @@ import os
 import logging
 import mutatex
 import shutil
+from Bio import PDB
 
 configfile: 'config.yaml'
 models = pd.read_csv(config['models'], keep_default_na=False)
 
-assert all(list(map(os.path.isfile,config["csv_dir"]+"/"+models["protein_name"]+models["chain"]+".csv"))), "Each pdb must have a CSV mutations table associated. Its file name must contain the following wildcards: protein_name and chain (e.g., ankbb.csv)."
+assert all(list(map(os.path.isfile,config["csv_dir"]+"/"+models["protein_name"]+models["chain"]+".csv"))), "Each pdb must have a CSV mutations table associated. Its file name must contain the following wildcards: protein_name and chain (e.g., lc3ba.csv)."
+
+pdb_list=list(config["pdb_dir"]+"/"+models["pdb_file"])
+parser = PDB.PDBParser()
+for pdb in pdb_list:
+    structure = parser.get_structure(pdb, pdb)
+    for model in structure:
+        n_chains = []
+        for chains in model:
+            n_chains.append(chains.id)
+        assert len(n_chains) == 1, "The pdbs must be single chain."
+            
 
 rule all:
     input:
@@ -52,7 +64,7 @@ rule input_files:
         if pd.Series(["WT residue", "Position", "Mutated residue"]).isin(csv.columns).all() == True: 
             my_col=csv[["WT residue", "Position", "Mutated residue"]].set_index("Position").loc[int(wildcards.aa_protein.rpartition("-")[0]):int(wildcards.aa_protein.rpartition("-")[2])].dropna().reset_index().apply(lambda x: '%s%s%s' % (x["WT residue"], int(x["Position"]), x["Mutated residue"]),axis=1)
         else:
-            my_col=csv[csv["Mutation"].str.contains('|'.join(str(i) for i in range(int(wildcards.aa_protein.rpartition("-")[0]),int(wildcards.aa_protein.rpartition("-")[2])+1)))]["Mutation"].str.replace("p","")
+            my_col=csv[csv["Mutation"].str.contains('|'.join(str(i) for i in range(int(wildcards.aa_protein.rpartition("-")[0]),int(wildcards.aa_protein.rpartition("-")[2])+1)),na=False)]["Mutation"].str.replace("p","")
         mutlist=my_col.apply(lambda x: "%s" % (x[-1:])).drop_duplicates().to_csv(output.mutation_list, index=False, header=False)
         poslist=my_col.apply(lambda x: "%s%s%s" % (x[0],wildcards.chain.upper(),x[1:-1])).drop_duplicates().to_csv(output.poslist, index=False, header=False)
 

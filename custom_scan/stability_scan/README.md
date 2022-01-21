@@ -20,15 +20,15 @@ provide the correct input pdbs to `MutateX`.
 
 |Entry|Meaning|Example|
 |---|---|---|
-|`protein_name`|Name of the protein chain|p62|
-|`mathod`|Method by which the structures were generated|cabsdock|
-|`PDB`|PDB ID of original complex|5YIS|
+|`protein_name`|Name of the protein chain|lc3b|
+|`mathod`|Method by which the structures were generated|xray|
+|`PDB`|PDB ID of original complex|1V49|
 |`aa_protein`|First-last sequence residue numbers corresponding to the residues in the FASTA sequence of the protein|1-120|
 |`chain`|Chain identifier of the protein|a|
 |`restraints`|Restraints applied to the generation of the pdb structure (if any)|blind|
 |`model_name`|Name of the structure model that was used as a starting structure for final model generation|model0|
-|`scan`|Type of scanning to be performed with mutatex|custom_scan|
-|`pdb_file`|Name of the pdb file to be provided in input|ankb.pdb|
+|`scan`|Type of scanning to be performed with mutatex|cancermuts|
+|`pdb_file`|Name of the pdb file to be provided in input|lc3b.pdb|
 
 N.B., The `restraints`, `model_name` and `scan` columns can be left empty if needed.
 

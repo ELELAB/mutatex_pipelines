@@ -1,4 +1,4 @@
-protein_name,method,PDB,chain_protein,chain_peptide,aa_protein,aa_peptide,restraints,model_name,scan,pdb_file
-ankb,cabsdock,PDBX,a,b,1-120,1588-1590,blind,modelX,pep_scan,ankbab.pdb
-ankb,cabsdock,PDBX,a,c,1-120,1588-1590,blind,modelX,pep_scan,ankbac.pdb
-ankb,cabsdock,PDBX,a,d,1-120,1588-1590,,,,ankbad.pdb
+protein_name,method,PDB,chain_protein,chain_peptide,aa_protein,aa_peptide,restraints,model_name,scan,pdb_file,chain_mut
+lc3b-format1,xray,2ZJD,a,b,1-120,335-344,blind,model0,cancermuts,lc3b_p62_2zjdab.pdb,a
+lc3b-format2,xray,2ZJD,a,b,1-120,335-344,blind,model0,cancermuts,lc3b_p62_2zjdab.pdb,a
+lc3b-format3,xray,2ZJD,a,b,1-120,335-344,blind,model0,cancermuts,lc3b_p62_2zjdab.pdb,a

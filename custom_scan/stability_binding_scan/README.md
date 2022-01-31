@@ -1,7 +1,7 @@
 ## Overview
 
 This directory contains a snakemake-based pipeline for peptide mutation scanning runs with `MutateX`[^Tiberti].
-This protocol predicts changes of folding free energy and binding upon mutation for each residue of a given list of mutations provided as input. 
+This protocol predicts changes of folding and binding free energy upon mutation for each residue of a given list of mutations provided as input. 
 Each residue is mutated to a list of residue types depending on the mutations found in the corresponding input dataset.
 
 ## Description of the directory content:
@@ -20,17 +20,18 @@ provide the correct input pdbs to `MutateX`.
 
 |Entry|Meaning|Example|
 |---|---|---|
-|`protein_name`|Name of the protein chain|p62|
-|`mathod`|Method by which the structures were generated|cabsdock|
-|`PDB`|PDB ID of original complex|5YIS|
+|`protein_name`|Name of the protein chain|lc3b|
+|`mathod`|Method by which the structures were generated|xray|
+|`PDB`|PDB ID of original complex|2ZJD|
 |`aa_protein`|First-last sequence residue numbers corresponding to the residues in the FASTA sequence of the protein|1-120|
-|`aa_peptide`|First-last sequence residue numbers corresponding to the residues in the FASTA sequence of the peptide|1588-1590|
+|`aa_peptide`|First-last sequence residue numbers corresponding to the residues in the FASTA sequence of the peptide|335-344|
 |`chain_protein`|Chain identifier of the protein|a|
 |`chain_peptide`|Chain identifier of the peptide|b|
 |`restraints`|Restraints applied to the generation of the pdb structure (if any)|blind|
 |`model_name`|Name of the structure model that was used as a starting structure for final model generation|model0|
-|`scan`|Type of scanning to be performed with mutatex|pep_scan|
-|`pdb_file`|Name of the pdb file to be provided in input|ankb.pdb|
+|`scan`|Type of scanning to be performed with mutatex|cancermuts|
+|`pdb_file`|Name of the pdb file to be provided in input|lc3b.pdb|
+|`chain_mut`|Name of the chain to be mutated|a|
 
 N.B., The `restraints`, `model_name` and `scan` columns can be left empty if needed.
 
@@ -46,7 +47,7 @@ These files contain the mutations that we are interested investigating, one per 
 |`WT residue`|Single-letter residue type in the canonical wild-type sequence (as per Position)|A|
 |`Position`|Single-letter residue type of the mutant variant|94|
 
-The other supported format is a csv file with a `Mutation` column. It will report (i) the amino acid WT in single letter, (ii) the position in the sequence and (iii) the mutation in single letter. The three notations listed above can be preceded from a prefix "p".
+The other supported format is a csv file with a `Mutation` column. It will report (i) the amino acid WT in single letter, (ii) the position in the sequence and (iii) the mutation in single letter. The three notations listed above can be preceded from a prefix "p", even though it's not a strict requirement.
 
 |Column|Meaning|Example|
 |---|---|---|

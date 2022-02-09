@@ -6,7 +6,7 @@ out_dir: "output_folder"
 
 mutatex:
     skip_repair: False
-    foldx_exe: "/usr/local/foldx5_2021/foldx"
+    foldx_exe: "/usr/local/foldx5_2022/foldx"
 
 mutate_runfile: |
         command=BuildModel

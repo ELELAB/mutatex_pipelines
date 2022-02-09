@@ -16,12 +16,7 @@ pdb_list=list(config["pdb_dir"]+"/"+models["pdb_file"])
 parser = PDB.PDBParser()
 for pdb in pdb_list:
     structure = parser.get_structure(pdb, pdb)
-    for model in structure:
-        n_chains = []
-        for chains in model:
-            n_chains.append(chains.id)
-        assert len(n_chains) == 1, "The pdbs must be single chain."
-            
+    assert len(list(structure[0].get_chains())) == 1, "The pdbs must be single chain."
 
 rule all:
     input:

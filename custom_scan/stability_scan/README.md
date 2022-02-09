@@ -40,15 +40,15 @@ These files contain the mutations that we are interested investigating, one per 
 
 |Column|Meaning|Example|
 |---|---|---|
-|`Position`|1-numbered position of the mutation site in the primary Uniprot main sequence|R|
-|`WT residue`|Single-letter residue type in the canonical wild-type sequence (as per Position)|A|
-|`Mutated residue`|Single-letter residue type of the mutant variant|P|
+|`Position`|1-numbered position of the mutation site in the primary Uniprot main sequence|56|
+|`WT residue`|Single-letter residue type in the canonical wild-type sequence (as per Position)|D|
+|`Mutated residue`|Single-letter residue type of the mutant variant|N|
 
 The other supported format is a csv file with a `Mutation` column. It will report (i) the amino acid WT in single letter, (ii) the position in the sequence and (iii) the mutation in single letter. The three notations listed above can be preceded from a prefix "p", even though it's not a strict requirement.
 
 |Column|Meaning|Example|
 |---|---|---|
-|`Mutation`| "prefix""amino_acid""position""new_amino_acid"|pR54S|
+|`Mutation`| "prefix""amino_acid""position""new_amino_acid"|pD56N|
  
 ### Configuration file
 

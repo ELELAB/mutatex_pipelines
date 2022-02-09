@@ -21,7 +21,7 @@ provide the correct input pdbs to `MutateX`.
 |Entry|Meaning|Example|
 |---|---|---|
 |`protein_name`|Name of the protein chain|lc3b|
-|`mathod`|Method by which the structures were generated|xray|
+|`method`|Method by which the structures were generated|xray|
 |`PDB`|PDB ID of original complex|2ZJD|
 |`aa_protein`|First-last sequence residue numbers corresponding to the residues in the FASTA sequence of the protein|1-120|
 |`aa_peptide`|First-last sequence residue numbers corresponding to the residues in the FASTA sequence of the peptide|335-344|
@@ -43,15 +43,15 @@ These files contain the mutations that we are interested investigating, one per 
 
 |Column|Meaning|Example|
 |---|---|---|
-|`Position`|1-numbered position of the mutation site in the primary Uniprot main sequence|R|
-|`WT residue`|Single-letter residue type in the canonical wild-type sequence (as per Position)|A|
-|`Position`|Single-letter residue type of the mutant variant|94|
+|`Position`|1-numbered position of the mutation site in the primary Uniprot main sequence|56|
+|`WT residue`|Single-letter residue type in the canonical wild-type sequence (as per Position)|D|
+|`Mutated residue`|Single-letter residue type of the mutant variant|N|
 
 The other supported format is a csv file with a `Mutation` column. It will report (i) the amino acid WT in single letter, (ii) the position in the sequence and (iii) the mutation in single letter. The three notations listed above can be preceded from a prefix "p", even though it's not a strict requirement.
 
 |Column|Meaning|Example|
 |---|---|---|
-|`Mutation`| "prefix""amino_acid""position""new_amino_acid"|pR54S|
+|`Mutation`| "prefix""amino_acid""position""new_amino_acid"|pD56R|
  
 ### Configuration file
 

@@ -1,0 +1,36 @@
+models: "models.csv"
+
+pdb_dir: "input_pdb" #"input_pdb_folder"
+csv_dir: "input_csv" #"input_csv_folder"
+out_dir: "output_folder"
+
+mutatex:
+    skip_repair: False
+    foldx_exe: "/usr/local/foldx5_2022/foldx"
+
+mutate_runfile: |
+        command=BuildModel
+        pdb=$PDBS$
+        mutant-file=individual_list.txt
+        water=-CRYSTAL
+        numberOfRuns=$NRUNS$
+        complexWithDNA=true
+
+repair_runfile: |
+        command=RepairPDB
+        pdb=$PDBS$
+        temperature=298
+        water=-CRYSTAL
+        complexWithDNA=true
+
+interface_runfile: |
+        command=AnalyseComplex
+        pdb-list=$PDBLIST$
+        water=-CRYSTAL
+        temperature=298
+        pH=7
+        ionStrength=0.050
+        vdwDesign=2
+        pdbHydrogens=false
+
+

@@ -1,0 +1,4 @@
+protein_name,method,PDB,chain,aa_protein,restraints,model_name,scan,pdb_file
+lc3b-format1,xray,1V49,a,1-120,blind,model0,cancermuts,lc3b.pdb
+lc3b-format2,xray,1V49,a,1-120,blind,model0,cancermuts,lc3b.pdb
+lc3b-format3,xray,1V49,a,1-120,blind,model0,cancermuts,lc3b.pdb

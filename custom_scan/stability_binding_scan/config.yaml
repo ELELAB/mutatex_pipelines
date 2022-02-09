@@ -1,7 +1,7 @@
 models: "models.csv"
 
-pdb_dir: "input_pdb" #"input_pdb_folder"
-csv_dir: "input_csv" #"input_csv_folder"
+in_dir: "input_pdb"
+csv_dir: "input_csv"
 out_dir: "output_folder"
 
 mutatex:

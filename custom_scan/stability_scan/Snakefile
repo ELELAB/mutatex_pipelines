@@ -94,7 +94,7 @@ rule mutatex_scan:
         poslist="%s/{method}_{protein_name}_{PDB}{chain}_{aa_protein}/{model_name,.*}/{restraints,.*}/{scan,.*}/poslist.txt" %config["out_dir"],
         readme="%s/{method}_{protein_name}_{PDB}{chain}_{aa_protein}/{model_name,.*}/{restraints,.*}/{scan,.*}/README_mutatex_run" %config["out_dir"]
     output:
-        "%s/{method}_{protein_name}_{PDB}{chain}_{aa_protein}/{model_name,.*}/{restraints,.*}/{scan,.*}/mutations.tar.gz" %config["out_dir"]
+        directory("%s/{method}_{protein_name}_{PDB}{chain}_{aa_protein}/{model_name,.*}/{restraints,.*}/{scan,.*}/results/mutation_ddgs/{protein_name}_{PDB}_model0_checked_Repair" %config["out_dir"])
     params:
         foldx_exe=config["mutatex"]["foldx_exe"],
         skip_repair="-S" if config["mutatex"]["skip_repair"] == True else "",
@@ -112,7 +112,8 @@ rule mut_summary:
     input:
         mutation_list="%s/{method}_{protein_name}_{PDB}{chain}_{aa_protein}/{model_name,.*}/{restraints,.*}/{scan,.*}/mutation_list.txt" %config["out_dir"],
         readme="%s/{method}_{protein_name}_{PDB}{chain}_{aa_protein}/{model_name,.*}/{restraints,.*}/{scan,.*}/README_mutatex_run" %config["out_dir"],
-        mutation_summary="%s/{method}_{protein_name}_{PDB}{chain}_{aa_protein}/{model_name,.*}/{restraints,.*}/{scan,.*}/mutation_summary.txt" %config["out_dir"]
+        mutation_summary="%s/{method}_{protein_name}_{PDB}{chain}_{aa_protein}/{model_name,.*}/{restraints,.*}/{scan,.*}/mutation_summary.txt" %config["out_dir"],
+        repair="%s/{method}_{protein_name}_{PDB}{chain}_{aa_protein}/{model_name,.*}/{restraints,.*}/{scan,.*}/results/mutation_ddgs/{protein_name}_{PDB}_model0_checked_Repair" %config["out_dir"]
     output:
         "%s/{method}_{protein_name}_{PDB}{chain}_{aa_protein}/{model_name,.*}/{restraints,.*}/{scan,.*}/summary.txt" %config["out_dir"]
     shell:
@@ -120,5 +121,5 @@ rule mut_summary:
         set +u; source /usr/local/envs/mutatex/bin/activate; set -u
         cd {config[out_dir]}/{wildcards.method}_{wildcards.protein_name}_{wildcards.PDB}{wildcards.chain}_{wildcards.aa_protein}/{wildcards.model_name}/{wildcards.restraints}/{wildcards.scan}/
         echo -e "\n# summary.txt file command\nddg2summary -p {wildcards.protein_name}_{wildcards.PDB}_model0_checked.pdb -d results/mutation_ddgs/{wildcards.protein_name}_{wildcards.PDB}_model0_checked_Repair -l $(basename {input.mutation_list}) -L $(basename {input.mutation_summary})" >> $(basename {input.readme})
-        ddg2summary -p {wildcards.protein_name}_{wildcards.PDB}_model0_checked.pdb -d results/mutation_ddgs/{wildcards.protein_name}_{wildcards.PDB}_model0_checked_Repair -l $(basename {input.mutation_list}) -L $(basename {input.mutation_summary})
+        ddg2summary -p {wildcards.protein_name}_{wildcards.PDB}_model0_checked.pdb -d results/mutation_ddgs/$(basename {input.repair}) -l $(basename {input.mutation_list}) -L $(basename {input.mutation_summary})
         """

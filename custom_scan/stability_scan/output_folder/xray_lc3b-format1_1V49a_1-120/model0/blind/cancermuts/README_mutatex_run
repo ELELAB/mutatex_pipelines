@@ -15,3 +15,6 @@ ln -s ../../../input_pdb/lc3b.pdb output_folder/xray_lc3b-format1_1V49a_1-120/mo
 
 # mutatex command
 mutatex lc3b-format1_1V49.pdb -q poslist.txt  -m mutation_list.txt --foldx-version=suite5 --np 1 -x /usr/local/foldx5_2021/foldx -C deep -v -L -c -l >& log &
+
+# summary.txt file command
+ddg2summary -p lc3b-format1_1V49_model0_checked.pdb -d results/mutation_ddgs/lc3b-format1_1V49_model0_checked_Repair -l mutation_list.txt -L mutation_summary.txt

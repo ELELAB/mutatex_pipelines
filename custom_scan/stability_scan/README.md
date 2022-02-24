@@ -79,6 +79,13 @@ It is possible to change the maximum number of processes that each `MutateX` run
 
 The maximum number of processes used by each `MutateX` run cannot exceed the number of provided cores.
 
+## Summary of interesting mutations
+
+Among the output files of a typical MutateX run, a `summary.txt` file is created using the `ddg2summary` tool embedded in MutateX itself. It reports the average ΔΔG values of mutations specified in the `mutation_summary.txt` file in the following form:
+
+`[WT residue][chain][residue number][mutant residue]`
+
+
 
 ### References
 

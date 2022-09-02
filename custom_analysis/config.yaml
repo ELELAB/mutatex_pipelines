@@ -1,0 +1,21 @@
+models: "models.csv"
+
+plot_params:
+        n_res_plot: 25
+
+        font_size: 8
+
+        heatmap:
+                min_energy: -3.0
+                max_energy: 5.0
+
+        distribution_plots:
+                min_energy: -5.0
+                max_energy: 20.0
+
+        logo_plot:
+                stabilizing_threshold: -1.2
+                destabilizing_threshold: 1.2
+
+mutatex:
+        env:  "set +u; . /usr/local/envs/mutatex/bin/activate; set -u"

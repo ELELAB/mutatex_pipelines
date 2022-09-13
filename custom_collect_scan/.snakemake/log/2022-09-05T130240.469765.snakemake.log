@@ -1,0 +1,4 @@
+Building DAG of jobs...
+MissingInputException in line 35 of /data/user/albertopettenella/stability_scan/Snakefile:
+Missing input files for rule input_pdb:
+Hspb1/structure selection/AF/P14602_trimmed.pdb

@@ -1,0 +1,259 @@
+import pandas as pd 
+
+configfile: "config.yaml"
+
+models = pd.read_csv(config['models'], keep_default_na=False)
+
+rule all:
+    input:
+        expand("{gene}/stability/mutatex_analyses/{database}_{range}/model_{version}/saturation/{prot_model}_heatmap_truncated", zip, gene=models['coding_gene'], database=models['database'], range=models['residue_range'], version=models['version'], prot_model=models['prot_id']),
+        expand("{gene}/stability/mutatex_analyses/{database}_{range}/model_{version}/saturation/{prot_model}_heatmap", zip, gene=models['coding_gene'], database=models['database'], range=models['residue_range'], version=models['version'], prot_model=models['prot_id']),
+        expand("{gene}/stability/mutatex_analyses/{database}_{range}/model_{version}/saturation/{prot_model}_boxplot", zip, gene=models['coding_gene'], database=models['database'], range=models['residue_range'], version=models['version'], prot_model=models['prot_id']),
+        expand("{gene}/stability/mutatex_analyses/{database}_{range}/model_{version}/saturation/{prot_model}_violinplot", zip, gene=models['coding_gene'], database=models['database'], range=models['residue_range'], version=models['version'], prot_model=models['prot_id']),
+        expand("{gene}/stability/mutatex_analyses/{database}_{range}/model_{version}/saturation/{prot_model}_averageplot", zip, gene=models['coding_gene'], database=models['database'], range=models['residue_range'], version=models['version'], prot_model=models['prot_id']),
+        expand("{gene}/stability/mutatex_analyses/{database}_{range}/model_{version}/saturation/{prot_model}_scatterplot", zip, gene=models['coding_gene'], database=models['database'], range=models['residue_range'], version=models['version'], prot_model=models['prot_id']),
+        expand("{gene}/stability/mutatex_analyses/{database}_{range}/model_{version}/saturation/{prot_model}_logoplot", zip, gene=models['coding_gene'], database=models['database'], range=models['residue_range'], version=models['version'], prot_model=models['prot_id']),
+        expand("{gene}/stability/mutatex_analyses/{database}_{range}/model_{version}/saturation/{prot_model}_density", zip, gene=models['coding_gene'], database=models['database'], range=models['residue_range'], version=models['version'], prot_model=models['prot_id']),
+        expand("{gene}/stability/mutatex_analyses/{database}_{range}/model_{version}/saturation/{prot_model}_table", zip, gene=models['coding_gene'], database=models['database'], range=models['residue_range'], version=models['version'], prot_model=models['prot_id'])
+
+rule get_input_mutations:
+    input:
+        "{gene}/stability/mutatex_runs/{database}_{range}/model_{version}/saturation/mutation_list.txt",
+        "{gene}/stability/mutatex_runs/{database}_{range}/model_{version}/saturation/results/mutation_ddgs/final_averages"
+    output:
+        "{gene}/stability/mutatex_analyses/{database}_{range}/model_{version}/saturation/mutation_list.txt",
+        directory("{gene}/stability/mutatex_analyses/{database}_{range}/model_{version}/saturation/final_averages")
+    shell:
+        """
+        working_dir={wildcards.gene}/stability/mutatex_analyses/{wildcards.database}_{wildcards.range}/model_{wildcards.version}/saturation
+        mkdir -p $working_dir
+	    cd $working_dir
+
+        ln -s ../../../../mutatex_runs/{wildcards.database}_{wildcards.range}/model_{wildcards.version}/saturation/mutation_list.txt
+        ln -s ../../../../mutatex_runs/{wildcards.database}_{wildcards.range}/model_{wildcards.version}/saturation/results/mutation_ddgs/final_averages
+        """
+
+rule get_input_pdb:
+    input:
+        "{gene}/stability/mutatex_runs/{database}_{range}/model_{version}/saturation/{prot_model}_trimmed_model0_checked.pdb",
+	"{gene}/stability/mutatex_analyses/{database}_{range}/model_{version}/saturation/mutation_list.txt",
+        "{gene}/stability/mutatex_analyses/{database}_{range}/model_{version}/saturation/final_averages"
+    output:
+        "{gene}/stability/mutatex_analyses/{database}_{range}/model_{version}/saturation/{prot_model}_trimmed_model0_checked.pdb"
+    shell:
+        """
+        working_dir={wildcards.gene}/stability/mutatex_analyses/{wildcards.database}_{wildcards.range}/model_{wildcards.version}/saturation
+        mkdir -p $working_dir
+            cd $working_dir
+
+        ln -s ../../../../mutatex_runs/{wildcards.database}_{wildcards.range}/model_{wildcards.version}/saturation/{wildcards.prot_model}_trimmed_model0_checked.pdb
+        """
+
+rule plot_heatmap:
+    input:
+        "{gene}/stability/mutatex_analyses/{database}_{range}/model_{version}/saturation/{prot_model}_trimmed_model0_checked.pdb"
+    params:
+        font_size=config['plot_params']['font_size'],
+        n_res=config['plot_params']['n_res_plot']
+    output:
+        directory("{gene}/stability/mutatex_analyses/{database}_{range}/model_{version}/saturation/{prot_model}_heatmap")
+    shell:
+        """
+        working_dir={wildcards.gene}/stability/mutatex_analyses/{wildcards.database}_{wildcards.range}/model_{wildcards.version}/saturation/{wildcards.prot_model}_heatmap
+        mkdir -p $working_dir
+	    cd $working_dir
+		
+        {config[mutatex][env]}
+        ddg2heatmap -p ../{wildcards.prot_model}_trimmed_model0_checked.pdb\
+            -l ../mutation_list.txt\
+            -d ../final_averages\
+            -c viridis\
+            -f {params.font_size}\
+	        -s {params.n_res}
+        """
+rule plot_heatmap_truncated:
+    input:
+        "{gene}/stability/mutatex_analyses/{database}_{range}/model_{version}/saturation/{prot_model}_trimmed_model0_checked.pdb"
+    params:
+        font_size=config['plot_params']['font_size'],
+        n_res=config['plot_params']['n_res_plot'],
+        min_energy=config['plot_params']['heatmap']['min_energy'],
+        max_energy=config['plot_params']['heatmap']['max_energy']
+    output:
+        directory("{gene}/stability/mutatex_analyses/{database}_{range}/model_{version}/saturation/{prot_model}_heatmap_truncated")
+    shell:
+        """
+        working_dir={wildcards.gene}/stability/mutatex_analyses/{wildcards.database}_{wildcards.range}/model_{wildcards.version}/saturation/{wildcards.prot_model}_heatmap_truncated
+        mkdir -p $working_dir
+	    cd $working_dir
+
+        {config[mutatex][env]}
+        ddg2heatmap -p ../{wildcards.prot_model}_trimmed_model0_checked.pdb\
+            -l ../mutation_list.txt\
+            -d ../final_averages\
+            -c viridis\
+            -f {params.font_size}\
+            -s {params.n_res} -n {params.min_energy} -x {params.max_energy}
+
+	"""
+
+rule plot_box:
+    input:
+	"{gene}/stability/mutatex_analyses/{database}_{range}/model_{version}/saturation/{prot_model}_trimmed_model0_checked.pdb"
+    params:
+        n_res=config['plot_params']['n_res_plot'],
+        min_energy=config['plot_params']['distribution_plots']['min_energy'],
+        max_energy=config['plot_params']['distribution_plots']['max_energy']
+    output:
+        directory("{gene}/stability/mutatex_analyses/{database}_{range}/model_{version}/saturation/{prot_model}_boxplot")
+    shell:
+        """
+        working_dir={wildcards.gene}/stability/mutatex_analyses/{wildcards.database}_{wildcards.range}/model_{wildcards.version}/saturation/{wildcards.prot_model}_boxplot
+	    mkdir -p $working_dir        
+	    cd $working_dir
+		
+        {config[mutatex][env]}
+        ddg2distribution -p ../{wildcards.prot_model}_trimmed_model0_checked.pdb\
+                    -l ../mutation_list.txt\
+                    -d ../final_averages\
+                    -s {params.n_res} -n {params.min_energy} -x {params.max_energy}\
+                    -T box\
+		            -u 20
+        """
+
+rule plot_violin:
+    input:
+        "{gene}/stability/mutatex_analyses/{database}_{range}/model_{version}/saturation/{prot_model}_trimmed_model0_checked.pdb"
+    params:
+        n_res=config['plot_params']['n_res_plot'],
+        min_energy=config['plot_params']['distribution_plots']['min_energy'],
+        max_energy=config['plot_params']['distribution_plots']['max_energy']
+    output:
+        directory("{gene}/stability/mutatex_analyses/{database}_{range}/model_{version}/saturation/{prot_model}_violinplot")
+    shell:
+        """
+        working_dir={wildcards.gene}/stability/mutatex_analyses/{wildcards.database}_{wildcards.range}/model_{wildcards.version}/saturation/{wildcards.prot_model}_violinplot
+        mkdir -p $working_dir
+	    cd $working_dir
+		
+        {config[mutatex][env]}
+        ddg2distribution -p ../{wildcards.prot_model}_trimmed_model0_checked.pdb\
+                    -l ../mutation_list.txt\
+                    -d ../final_averages\
+                    -s {params.n_res} -n {params.min_energy} -x {params.max_energy}\
+                    -T violin\
+		            -u 20
+        """
+
+rule plot_average:
+    input:
+        "{gene}/stability/mutatex_analyses/{database}_{range}/model_{version}/saturation/{prot_model}_trimmed_model0_checked.pdb"
+    params:
+        n_res=config['plot_params']['n_res_plot'],
+        min_energy=config['plot_params']['distribution_plots']['min_energy'],
+        max_energy=config['plot_params']['distribution_plots']['max_energy']
+    output:
+        directory("{gene}/stability/mutatex_analyses/{database}_{range}/model_{version}/saturation/{prot_model}_averageplot")
+    shell:
+        """
+        working_dir={wildcards.gene}/stability/mutatex_analyses/{wildcards.database}_{wildcards.range}/model_{wildcards.version}/saturation/{wildcards.prot_model}_averageplot
+        mkdir -p $working_dir
+	    cd $working_dir
+		
+        {config[mutatex][env]}
+        ddg2distribution -p ../{wildcards.prot_model}_trimmed_model0_checked.pdb\
+                    -l ../mutation_list.txt\
+                    -d ../final_averages\
+                    -s {params.n_res} -n {params.min_energy} -x {params.max_energy}\
+                    -T average\
+		            -u 20
+        """
+
+rule plot_scatter:
+    input:
+        "{gene}/stability/mutatex_analyses/{database}_{range}/model_{version}/saturation/{prot_model}_trimmed_model0_checked.pdb"
+    params:
+        n_res=config['plot_params']['n_res_plot'],
+        min_energy=config['plot_params']['distribution_plots']['min_energy'],
+        max_energy=config['plot_params']['distribution_plots']['max_energy']
+    output:
+        directory("{gene}/stability/mutatex_analyses/{database}_{range}/model_{version}/saturation/{prot_model}_scatterplot")
+    shell:
+        """
+        working_dir={wildcards.gene}/stability/mutatex_analyses/{wildcards.database}_{wildcards.range}/model_{wildcards.version}/saturation/{wildcards.prot_model}_scatterplot
+        mkdir -p $working_dir
+	    cd $working_dir
+		
+        {config[mutatex][env]}
+        ddg2distribution -p ../{wildcards.prot_model}_trimmed_model0_checked.pdb\
+                    -l ../mutation_list.txt\
+                    -d ../final_averages\
+                    -s {params.n_res} -n {params.min_energy} -x {params.max_energy}\
+                    -T scatter\
+		            -u 20
+        """
+rule plot_logo:
+    input:
+        "{gene}/stability/mutatex_analyses/{database}_{range}/model_{version}/saturation/{prot_model}_trimmed_model0_checked.pdb"
+    params:
+        font_size=config['plot_params']['font_size'],
+        n_res=config['plot_params']['n_res_plot'],
+        threshold=config['plot_params']['logo_plot']['destabilizing_threshold']
+    output:
+        directory("{gene}/stability/mutatex_analyses/{database}_{range}/model_{version}/saturation/{prot_model}_logoplot")
+    shell:
+        """
+        working_dir={wildcards.gene}/stability/mutatex_analyses/{wildcards.database}_{wildcards.range}/model_{wildcards.version}/saturation/{wildcards.prot_model}_logoplot
+        mkdir -p $working_dir
+	    cd $working_dir
+		
+        {config[mutatex][env]}
+        ddg2logo -p ../{wildcards.prot_model}_trimmed_model0_checked.pdb\
+                    -l ../mutation_list.txt\
+                    -d ../final_averages\
+                    -s {params.n_res}\
+		            -f {params.font_size}\
+                    -t {params.threshold}\
+		            -x 10
+        """
+    
+rule plot_density:
+    input:
+        "{gene}/stability/mutatex_analyses/{database}_{range}/model_{version}/saturation/{prot_model}_trimmed_model0_checked.pdb"
+    output:
+        directory("{gene}/stability/mutatex_analyses/{database}_{range}/model_{version}/saturation/{prot_model}_density")
+    shell:
+        """
+        working_dir={wildcards.gene}/stability/mutatex_analyses/{wildcards.database}_{wildcards.range}/model_{wildcards.version}/saturation/{wildcards.prot_model}_density
+        mkdir -p $working_dir
+	    cd $working_dir
+		
+        {config[mutatex][env]}
+        ddg2density -p ../{wildcards.prot_model}_trimmed_model0_checked.pdb\
+                    -l ../mutation_list.txt\
+                    -d ../final_averages
+        """
+
+rule write_table:
+    input:
+        "{gene}/stability/mutatex_analyses/{database}_{range}/model_{version}/saturation/{prot_model}_trimmed_model0_checked.pdb"
+    output:
+        directory("{gene}/stability/mutatex_analyses/{database}_{range}/model_{version}/saturation/{prot_model}_table")
+    shell:
+        """
+        working_dir={wildcards.gene}/stability/mutatex_analyses/{wildcards.database}_{wildcards.range}/model_{wildcards.version}/saturation/{wildcards.prot_model}_table
+        mkdir -p $working_dir
+	    cd $working_dir
+		
+        {config[mutatex][env]}
+        ddg2excel -p ../{wildcards.prot_model}_trimmed_model0_checked.pdb\
+                    -l ../mutation_list.txt\
+                    -d ../final_averages
+        
+	    ddg2excel -p ../{wildcards.prot_model}_trimmed_model0_checked.pdb\
+                    -l ../mutation_list.txt\
+                    -d ../final_averages\
+		            -F csv
+        """
+
+

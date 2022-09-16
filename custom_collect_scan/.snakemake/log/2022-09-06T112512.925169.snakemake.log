@@ -1,0 +1,5 @@
+KeyError in line 12 of /data/user/albertopettenella/stability_scan/Snakefile:
+'residue_range'
+  File "/data/user/albertopettenella/stability_scan/Snakefile", line 12, in <module>
+  File "/usr/local/envs/py37/lib/python3.7/site-packages/pandas/core/frame.py", line 3455, in __getitem__
+  File "/usr/local/envs/py37/lib/python3.7/site-packages/pandas/core/indexes/base.py", line 3363, in get_loc

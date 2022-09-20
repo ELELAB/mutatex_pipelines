@@ -21,11 +21,12 @@ The `models.csv` file is a comma separated file containing all the information n
 |Entry|Meaning|Example|
 |---|---|---|
 |`coding_gene`|Name of the gene coding for the peptide of interest|Hspb1|
-|`prot_id`|Protein identifier|P14602|
-|`database`|Database from which the protein structure was downloaded|AF|
+|`prot_id`|Uniprot ID|P14602|
+|`identifier`|Protein identifier (may refer to database from which the structure was downloaded)|AF|
 |`start_res`|First residue to consider during the scan|88|
 |`end_res`|Last residue to consider during the scan|177|
-|`version`|Protein structure release|v3|
+|`model`|Protein model type (i.e. exp = experimental structure, model_<version> = protein structure release from AF Database)|model_v3|
+|`trimmed`|Boolean value to specify whether the structure has been trimmed by the user|NO|
 
 The example file provided was retrieved from AlphaFold Protein Structure Database. The N and C terminal regions were trimmed in order to consider only the higher-confidence and structured portions of the protein.
 

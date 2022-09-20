@@ -1,2 +1,2 @@
-coding_gene,prot_id,database,start_res,end_res,version
-Hspb1,P14602,AF,88,177,v3
+coding_gene,prot_id,identifier,start_res,end_res,model,trimmed
+Hspb1,P14602,AF,88,177,model_v3,NO

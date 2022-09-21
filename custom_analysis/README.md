@@ -27,9 +27,10 @@ provide the correct input files to `MutateX` processing tools.
 |---|---|---|
 |`coding_gene`|Name of the gene coding for the peptide of interest|Hspb1|
 |`prot_id`|Protein identifier|P14602|
-|`database`|Database from which the protein structure was downloaded|AF|
-|`residue_range`|Range of residues over which the stability scan was run|88-177|
-|`version`|Protein structure release|v3|
+|`method`|Method by whoich the structure was obtained|AF|
+|`start_res`|First residue to consider during the analysis|88|
+|`end_res`|Last residue to consider during the analysis|177|
+|`model`|Protein model type (i.e. exp = experimental structure, model_ = protein structure release from AF Database)|model_v3|
 
 The example file provided was retrieved from AlphaFold Protein Structure Database. The N and C terminal regions were trimmed in order to consider only the higher-confidence and structured portions of the protein.
 

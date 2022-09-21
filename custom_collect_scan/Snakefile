@@ -99,7 +99,7 @@ rule mutatex_scan:
     input:
         "{gene}/free/stability/mutatex_runs/{method}_{start_res}-{end_res}/{model}/saturation/{prot_id}_trimmed.pdb"
     output:
-        "{gene}/free/stability/mutatex_runs/{method}_{start_res}-{end_res}/{model}/saturation/results/{prot_id}_trimmed_model0_checked.pdb"
+        "{gene}/free/stability/mutatex_runs/{method}_{start_res}-{end_res}/{model}/saturation/{prot_id}_trimmed_model0_checked.pdb"
     params:
         mutatex_env=config["mutatex"]["env"],
         foldx_exe=config["mutatex"]["foldx_exe"],
@@ -128,7 +128,7 @@ rule mutatex_scan:
 
 rule write_table:
     input:
-        "{gene}/free/stability/mutatex_runs/{method}_{start_res}-{end_res}/{model}/saturation/results/{prot_id}_trimmed_model0_checked.pdb"
+        "{gene}/free/stability/mutatex_runs/{method}_{start_res}-{end_res}/{model}/saturation/{prot_id}_trimmed_model0_checked.pdb"
     output:
         "{gene}/free/stability/mutatex_runs/{method}_{start_res}-{end_res}/{model}/saturation/{prot_id}_energies.csv"
     params:
@@ -140,7 +140,7 @@ rule write_table:
         cd $working_dir
 
         {params.mutatex_env}
-        ddg2excel -p results/{wildcards.prot_id}_trimmed_model0_checked.pdb\
+        ddg2excel -p {wildcards.prot_id}_trimmed_model0_checked.pdb\
                   -l mutation_list.txt \
                   -d results/mutation_ddgs/final_averages\
                   -F csv

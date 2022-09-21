@@ -7,8 +7,8 @@ This directory contains a snakemake-based pipeline to analyse the output of pept
 ### {coding_gene} folder
 
 This is an example folder hosting the output of the pipeline. 
-The underlying assumption for using the pipeline is that the `stability\_scan` pipeline has been run and the same filetree is produced for `{coding\_gene}/free/stability/mutatex\_runs`.
-The pipeline will automatically create a soft link to the input files contained in `{coding\_gene}/free/stability/mutatex\_runs/{database}\_{range}/model\_{version}/saturation` inside the folder `{coding\_gene}/free/stability/mutatex\_analyses/{database}\_{range}/model\_{version}/saturation` in order to run the analysis.
+The underlying assumption for using the pipeline is that the `stability_scan` pipeline has been run and the same filetree is produced for `{coding_gene}/free/stability/mutatex_runs`.
+The pipeline will automatically create a soft link to the input files contained in `{coding_gene}/free/stability/mutatex_runs/{database}_{range}/model_{version}/saturation` inside the folder `{coding_gene}/free/stability/mutatex_analyses/{database}_{range}/model_{version}/saturation` in order to run the analysis.
 
 
 ### Snakefile

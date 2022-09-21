@@ -88,8 +88,9 @@ rule input_pdb:
         cp ../../../../../../structure_selection/{wildcards.method}/{wildcards.prot_id}.pdb {wildcards.prot_id}_trimmed.pdb
 
         if [ {params.trimmed} == "NO" ]; then
+            mv {wildcards.prot_id}_trimmed.pdb {wildcards.prot_id}.pdb
             {params.env}
-            pdb_selres -{wildcards.start_res}:{wildcards.end_res} {wildcards.prot_id}_trimmed.pdb
+            pdb_selres -{wildcards.start_res}:{wildcards.end_res} {wildcards.prot_id}.pdb > {wildcards.prot_id}_trimmed.pdb
         fi
 
         """

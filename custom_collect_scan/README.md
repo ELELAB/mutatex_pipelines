@@ -22,7 +22,7 @@ The `models.csv` file is a comma separated file containing all the information n
 |---|---|---|
 |`coding_gene`|Name of the gene coding for the peptide of interest|Hspb1|
 |`prot_id`|Uniprot ID|P14602|
-|`identifier`|Protein identifier (may refer to database from which the structure was downloaded)|AF|
+|`method`|Method by which the structure was obtained|AF|
 |`start_res`|First residue to consider during the scan|88|
 |`end_res`|Last residue to consider during the scan|177|
 |`model`|Protein model type (i.e. exp = experimental structure, model_<version> = protein structure release from AF Database)|model_v3|

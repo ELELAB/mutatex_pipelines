@@ -6,26 +6,26 @@ models = pd.read_csv(config['models'], keep_default_na=False)
 
 rule all:
     input:
-        expand("{gene}/free/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{prot_id}_heatmap_truncated", zip, gene=models['coding_gene'], method=models['method'], start_res=models['start_res'], end_res=models['end_res'], model=models['model'], prot_id=models['prot_id']),
-        expand("{gene}/free/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{prot_id}_heatmap", zip, gene=models['coding_gene'], method=models['method'], start_res=models['start_res'], end_res=models['end_res'], model=models['model'], prot_id=models['prot_id']),
-        expand("{gene}/free/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{prot_id}_boxplot", zip, gene=models['coding_gene'], method=models['method'], start_res=models['start_res'], end_res=models['end_res'], model=models['model'], prot_id=models['prot_id']),
-        expand("{gene}/free/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{prot_id}_violinplot", zip, gene=models['coding_gene'], method=models['method'], start_res=models['start_res'], end_res=models['end_res'], model=models['model'], prot_id=models['prot_id']),
-        expand("{gene}/free/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{prot_id}_averageplot", zip, gene=models['coding_gene'], method=models['method'], start_res=models['start_res'], end_res=models['end_res'], model=models['model'], prot_id=models['prot_id']),
-        expand("{gene}/free/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{prot_id}_scatterplot", zip, gene=models['coding_gene'], method=models['method'], start_res=models['start_res'], end_res=models['end_res'], model=models['model'], prot_id=models['prot_id']),
-        expand("{gene}/free/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{prot_id}_logoplot", zip, gene=models['coding_gene'], method=models['method'], start_res=models['start_res'], end_res=models['end_res'], model=models['model'], prot_id=models['prot_id']),
-        expand("{gene}/free/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{prot_id}_density", zip, gene=models['coding_gene'], method=models['method'], start_res=models['start_res'], end_res=models['end_res'], model=models['model'], prot_id=models['prot_id']),
-        expand("{gene}/free/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{prot_id}_table", zip, gene=models['coding_gene'], method=models['method'], start_res=models['start_res'], end_res=models['end_res'], model=models['model'], prot_id=models['prot_id'])
+        expand("{gene}/{status}/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{pdb_filename}_heatmap_truncated", zip, gene=models['coding_gene'], method=models['method'], start_res=models['start_res'], end_res=models['end_res'], model=models['model'], pdb_filename=models['pdb_filename']),
+        expand("{gene}/{status}/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{pdb_filename}_heatmap", zip, gene=models['coding_gene'], method=models['method'], start_res=models['start_res'], end_res=models['end_res'], model=models['model'], pdb_filename=models['pdb_filename']),
+        expand("{gene}/{status}/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{pdb_filename}_boxplot", zip, gene=models['coding_gene'], method=models['method'], start_res=models['start_res'], end_res=models['end_res'], model=models['model'], pdb_filename=models['pdb_filename']),
+        expand("{gene}/{status}/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{pdb_filename}_violinplot", zip, gene=models['coding_gene'], method=models['method'], start_res=models['start_res'], end_res=models['end_res'], model=models['model'], pdb_filename=models['pdb_filename']),
+        expand("{gene}/{status}/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{pdb_filename}_averageplot", zip, gene=models['coding_gene'], method=models['method'], start_res=models['start_res'], end_res=models['end_res'], model=models['model'], pdb_filename=models['pdb_filename']),
+        expand("{gene}/{status}/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{pdb_filename}_scatterplot", zip, gene=models['coding_gene'], method=models['method'], start_res=models['start_res'], end_res=models['end_res'], model=models['model'], pdb_filename=models['pdb_filename']),
+        expand("{gene}/{status}/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{pdb_filename}_logoplot", zip, gene=models['coding_gene'], method=models['method'], start_res=models['start_res'], end_res=models['end_res'], model=models['model'], pdb_filename=models['pdb_filename']),
+        expand("{gene}/{status}/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{pdb_filename}_density", zip, gene=models['coding_gene'], method=models['method'], start_res=models['start_res'], end_res=models['end_res'], model=models['model'], pdb_filename=models['pdb_filename']),
+        expand("{gene}/{status}/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{pdb_filename}_table", zip, gene=models['coding_gene'], method=models['method'], start_res=models['start_res'], end_res=models['end_res'], model=models['model'], pdb_filename=models['pdb_filename'])
 
 rule get_input_mutations:
     input:
-        "{gene}/free/stability/mutatex_runs/{method}_{start_res}-{end_res}/{model}/saturation/mutation_list.txt",
-        "{gene}/free/stability/mutatex_runs/{method}_{start_res}-{end_res}/{model}/saturation/results/mutation_ddgs/final_averages"
+        "{gene}/{status}/stability/mutatex_runs/{method}_{start_res}-{end_res}/{model}/saturation/mutation_list.txt",
+        "{gene}/{status}/stability/mutatex_runs/{method}_{start_res}-{end_res}/{model}/saturation/results/mutation_ddgs/final_averages"
     output:
-        "{gene}/free/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/mutation_list.txt",
-        directory("{gene}/free/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/final_averages")
+        "{gene}/{status}/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/mutation_list.txt",
+        directory("{gene}/{status}/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/final_averages")
     shell:
         """
-        working_dir={wildcards.gene}/free/stability/mutatex_analyses/{wildcards.method}_{wildcards.start_res}-{wildcards.end_res}/{wildcards.model}/saturation
+        working_dir={wildcards.gene}/{wildcards.status}/stability/mutatex_analyses/{wildcards.method}_{wildcards.start_res}-{wildcards.end_res}/{wildcards.model}/saturation
         mkdir -p $working_dir
 	    cd $working_dir
 
@@ -35,36 +35,36 @@ rule get_input_mutations:
 
 rule get_input_pdb:
     input:
-        "{gene}/free/stability/mutatex_runs/{method}_{start_res}-{end_res}/{model}/saturation/{prot_id}_trimmed_model0_checked.pdb",
-        "{gene}/free/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/mutation_list.txt",
-        "{gene}/free/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/final_averages"
+        "{gene}/{status}/stability/mutatex_runs/{method}_{start_res}-{end_res}/{model}/saturation/{pdb_filename}_model0_checked.pdb",
+        "{gene}/{status}/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/mutation_list.txt",
+        "{gene}/{status}/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/final_averages"
     output:
-        "{gene}/free/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{prot_id}_trimmed_model0_checked.pdb"
+        "{gene}/{status}/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{pdb_filename}_model0_checked.pdb"
     shell:
         """
-        working_dir={wildcards.gene}/free/stability/mutatex_analyses/{wildcards.method}_{wildcards.start_res}-{wildcards.end_res}/{wildcards.model}/saturation
+        working_dir={wildcards.gene}/{wildcards.status}/stability/mutatex_analyses/{wildcards.method}_{wildcards.start_res}-{wildcards.end_res}/{wildcards.model}/saturation
         mkdir -p $working_dir
             cd $working_dir
 
-        ln -s ../../../../mutatex_runs/{wildcards.method}_{wildcards.start_res}-{wildcards.end_res}/{wildcards.model}/saturation/{wildcards.prot_id}_trimmed_model0_checked.pdb
+        ln -s ../../../../mutatex_runs/{wildcards.method}_{wildcards.start_res}-{wildcards.end_res}/{wildcards.model}/saturation/{wildcards.pdb_filename}_model0_checked.pdb
         """
 
 rule plot_heatmap:
     input:
-        "{gene}/free/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{prot_id}_trimmed_model0_checked.pdb"
+        "{gene}/{status}/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{pdb_filename}_model0_checked.pdb"
     params:
         font_size=config['plot_params']['font_size'],
         n_res=config['plot_params']['n_res_plot']
     output:
-        directory("{gene}/free/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{prot_id}_heatmap")
+        directory("{gene}/{status}/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{pdb_filename}_heatmap")
     shell:
         """
-        working_dir={wildcards.gene}/free/stability/mutatex_analyses/{wildcards.method}_{wildcards.start_res}-{wildcards.end_res}/{wildcards.model}/saturation/{wildcards.prot_id}_heatmap
+        working_dir={wildcards.gene}/{wildcards.status}/stability/mutatex_analyses/{wildcards.method}_{wildcards.start_res}-{wildcards.end_res}/{wildcards.model}/saturation/{wildcards.pdb_filename}_heatmap
         mkdir -p $working_dir
 	    cd $working_dir
 		
         {config[mutatex][env]}
-        ddg2heatmap -p ../{wildcards.prot_id}_trimmed_model0_checked.pdb\
+        ddg2heatmap -p ../{wildcards.pdb_filename}_model0_checked.pdb\
             -l ../mutation_list.txt\
             -d ../final_averages\
             -c viridis\
@@ -73,22 +73,22 @@ rule plot_heatmap:
         """
 rule plot_heatmap_truncated:
     input:
-        "{gene}/free/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{prot_id}_trimmed_model0_checked.pdb"
+        "{gene}/{status}/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{pdb_filename}_model0_checked.pdb"
     params:
         font_size=config['plot_params']['font_size'],
         n_res=config['plot_params']['n_res_plot'],
         min_energy=config['plot_params']['heatmap']['min_energy'],
         max_energy=config['plot_params']['heatmap']['max_energy']
     output:
-        directory("{gene}/free/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{prot_id}_heatmap_truncated")
+        directory("{gene}/{status}/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{pdb_filename}_heatmap_truncated")
     shell:
         """
-        working_dir={wildcards.gene}/free/stability/mutatex_analyses/{wildcards.method}_{wildcards.start_res}-{wildcards.end_res}/{wildcards.model}/saturation/{wildcards.prot_id}_heatmap_truncated
+        working_dir={wildcards.gene}/{wildcards.status}/stability/mutatex_analyses/{wildcards.method}_{wildcards.start_res}-{wildcards.end_res}/{wildcards.model}/saturation/{wildcards.pdb_filename}_heatmap_truncated
         mkdir -p $working_dir
 	    cd $working_dir
 
         {config[mutatex][env]}
-        ddg2heatmap -p ../{wildcards.prot_id}_trimmed_model0_checked.pdb\
+        ddg2heatmap -p ../{wildcards.pdb_filename}_model0_checked.pdb\
             -l ../mutation_list.txt\
             -d ../final_averages\
             -c viridis\
@@ -99,21 +99,21 @@ rule plot_heatmap_truncated:
 
 rule plot_box:
     input:
-	"{gene}/free/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{prot_id}_trimmed_model0_checked.pdb"
+	"{gene}/{status}/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{pdb_filename}_model0_checked.pdb"
     params:
         n_res=config['plot_params']['n_res_plot'],
         min_energy=config['plot_params']['distribution_plots']['min_energy'],
         max_energy=config['plot_params']['distribution_plots']['max_energy']
     output:
-        directory("{gene}/free/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{prot_id}_boxplot")
+        directory("{gene}/{status}/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{pdb_filename}_boxplot")
     shell:
         """
-        working_dir={wildcards.gene}/free/stability/mutatex_analyses/{wildcards.method}_{wildcards.start_res}-{wildcards.end_res}/{wildcards.model}/saturation/{wildcards.prot_id}_boxplot
+        working_dir={wildcards.gene}/{wildcards.status}/stability/mutatex_analyses/{wildcards.method}_{wildcards.start_res}-{wildcards.end_res}/{wildcards.model}/saturation/{wildcards.pdb_filename}_boxplot
 	    mkdir -p $working_dir        
 	    cd $working_dir
 		
         {config[mutatex][env]}
-        ddg2distribution -p ../{wildcards.prot_id}_trimmed_model0_checked.pdb\
+        ddg2distribution -p ../{wildcards.pdb_filename}_model0_checked.pdb\
                     -l ../mutation_list.txt\
                     -d ../final_averages\
                     -s {params.n_res} -n {params.min_energy} -x {params.max_energy}\
@@ -123,21 +123,21 @@ rule plot_box:
 
 rule plot_violin:
     input:
-        "{gene}/free/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{prot_id}_trimmed_model0_checked.pdb"
+        "{gene}/{status}/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{pdb_filename}_model0_checked.pdb"
     params:
         n_res=config['plot_params']['n_res_plot'],
         min_energy=config['plot_params']['distribution_plots']['min_energy'],
         max_energy=config['plot_params']['distribution_plots']['max_energy']
     output:
-        directory("{gene}/free/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{prot_id}_violinplot")
+        directory("{gene}/{status}/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{pdb_filename}_violinplot")
     shell:
         """
-        working_dir={wildcards.gene}/free/stability/mutatex_analyses/{wildcards.method}_{wildcards.start_res}-{wildcards.end_res}/{wildcards.model}/saturation/{wildcards.prot_id}_violinplot
+        working_dir={wildcards.gene}/{wildcards.status}/stability/mutatex_analyses/{wildcards.method}_{wildcards.start_res}-{wildcards.end_res}/{wildcards.model}/saturation/{wildcards.pdb_filename}_violinplot
         mkdir -p $working_dir
 	    cd $working_dir
 		
         {config[mutatex][env]}
-        ddg2distribution -p ../{wildcards.prot_id}_trimmed_model0_checked.pdb\
+        ddg2distribution -p ../{wildcards.pdb_filename}_model0_checked.pdb\
                     -l ../mutation_list.txt\
                     -d ../final_averages\
                     -s {params.n_res} -n {params.min_energy} -x {params.max_energy}\
@@ -147,21 +147,21 @@ rule plot_violin:
 
 rule plot_average:
     input:
-        "{gene}/free/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{prot_id}_trimmed_model0_checked.pdb"
+        "{gene}/{status}/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{pdb_filename}_model0_checked.pdb"
     params:
         n_res=config['plot_params']['n_res_plot'],
         min_energy=config['plot_params']['distribution_plots']['min_energy'],
         max_energy=config['plot_params']['distribution_plots']['max_energy']
     output:
-        directory("{gene}/free/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{prot_id}_averageplot")
+        directory("{gene}/{status}/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{pdb_filename}_averageplot")
     shell:
         """
-        working_dir={wildcards.gene}/free/stability/mutatex_analyses/{wildcards.method}_{wildcards.start_res}-{wildcards.end_res}/{wildcards.model}/saturation/{wildcards.prot_id}_averageplot
+        working_dir={wildcards.gene}/{wildcards.status}/stability/mutatex_analyses/{wildcards.method}_{wildcards.start_res}-{wildcards.end_res}/{wildcards.model}/saturation/{wildcards.pdb_filename}_averageplot
         mkdir -p $working_dir
 	    cd $working_dir
 		
         {config[mutatex][env]}
-        ddg2distribution -p ../{wildcards.prot_id}_trimmed_model0_checked.pdb\
+        ddg2distribution -p ../{wildcards.pdb_filename}_model0_checked.pdb\
                     -l ../mutation_list.txt\
                     -d ../final_averages\
                     -s {params.n_res} -n {params.min_energy} -x {params.max_energy}\
@@ -171,21 +171,21 @@ rule plot_average:
 
 rule plot_scatter:
     input:
-        "{gene}/free/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{prot_id}_trimmed_model0_checked.pdb"
+        "{gene}/{status}/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{pdb_filename}_model0_checked.pdb"
     params:
         n_res=config['plot_params']['n_res_plot'],
         min_energy=config['plot_params']['distribution_plots']['min_energy'],
         max_energy=config['plot_params']['distribution_plots']['max_energy']
     output:
-        directory("{gene}/free/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{prot_id}_scatterplot")
+        directory("{gene}/{status}/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{pdb_filename}_scatterplot")
     shell:
         """
-        working_dir={wildcards.gene}/free/stability/mutatex_analyses/{wildcards.method}_{wildcards.start_res}-{wildcards.end_res}/{wildcards.model}/saturation/{wildcards.prot_id}_scatterplot
+        working_dir={wildcards.gene}/{wildcards.status}/stability/mutatex_analyses/{wildcards.method}_{wildcards.start_res}-{wildcards.end_res}/{wildcards.model}/saturation/{wildcards.pdb_filename}_scatterplot
         mkdir -p $working_dir
 	    cd $working_dir
 		
         {config[mutatex][env]}
-        ddg2distribution -p ../{wildcards.prot_id}_trimmed_model0_checked.pdb\
+        ddg2distribution -p ../{wildcards.pdb_filename}_model0_checked.pdb\
                     -l ../mutation_list.txt\
                     -d ../final_averages\
                     -s {params.n_res} -n {params.min_energy} -x {params.max_energy}\
@@ -194,21 +194,21 @@ rule plot_scatter:
         """
 rule plot_logo:
     input:
-        "{gene}/free/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{prot_id}_trimmed_model0_checked.pdb"
+        "{gene}/{status}/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{pdb_filename}_model0_checked.pdb"
     params:
         font_size=config['plot_params']['font_size'],
         n_res=config['plot_params']['n_res_plot'],
         threshold=config['plot_params']['logo_plot']['destabilizing_threshold']
     output:
-        directory("{gene}/free/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{prot_id}_logoplot")
+        directory("{gene}/{status}/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{pdb_filename}_logoplot")
     shell:
         """
-        working_dir={wildcards.gene}/free/stability/mutatex_analyses/{wildcards.method}_{wildcards.start_res}-{wildcards.end_res}/{wildcards.model}/saturation/{wildcards.prot_id}_logoplot
+        working_dir={wildcards.gene}/{wildcards.status}/stability/mutatex_analyses/{wildcards.method}_{wildcards.start_res}-{wildcards.end_res}/{wildcards.model}/saturation/{wildcards.pdb_filename}_logoplot
         mkdir -p $working_dir
 	    cd $working_dir
 		
         {config[mutatex][env]}
-        ddg2logo -p ../{wildcards.prot_id}_trimmed_model0_checked.pdb\
+        ddg2logo -p ../{wildcards.pdb_filename}_model0_checked.pdb\
                     -l ../mutation_list.txt\
                     -d ../final_averages\
                     -s {params.n_res}\
@@ -219,38 +219,38 @@ rule plot_logo:
     
 rule plot_density:
     input:
-        "{gene}/free/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{prot_id}_trimmed_model0_checked.pdb"
+        "{gene}/{status}/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{pdb_filename}_model0_checked.pdb"
     output:
-        directory("{gene}/free/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{prot_id}_density")
+        directory("{gene}/{status}/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{pdb_filename}_density")
     shell:
         """
-        working_dir={wildcards.gene}/free/stability/mutatex_analyses/{wildcards.method}_{wildcards.start_res}-{wildcards.end_res}/{wildcards.model}/saturation/{wildcards.prot_id}_density
+        working_dir={wildcards.gene}/{wildcards.status}/stability/mutatex_analyses/{wildcards.method}_{wildcards.start_res}-{wildcards.end_res}/{wildcards.model}/saturation/{wildcards.pdb_filename}_density
         mkdir -p $working_dir
 	    cd $working_dir
 		
         {config[mutatex][env]}
-        ddg2density -p ../{wildcards.prot_id}_trimmed_model0_checked.pdb\
+        ddg2density -p ../{wildcards.pdb_filename}_model0_checked.pdb\
                     -l ../mutation_list.txt\
                     -d ../final_averages
         """
 
 rule write_table:
     input:
-        "{gene}/free/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{prot_id}_trimmed_model0_checked.pdb"
+        "{gene}/{status}/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{pdb_filename}_model0_checked.pdb"
     output:
-        directory("{gene}/free/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{prot_id}_table")
+        directory("{gene}/{status}/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation/{pdb_filename}_table")
     shell:
         """
-        working_dir={wildcards.gene}/free/stability/mutatex_analyses/{wildcards.method}_{wildcards.start_res}-{wildcards.end_res}/{wildcards.model}/saturation/{wildcards.prot_id}_table
+        working_dir={wildcards.gene}/{wildcards.status}/stability/mutatex_analyses/{wildcards.method}_{wildcards.start_res}-{wildcards.end_res}/{wildcards.model}/saturation/{wildcards.pdb_filename}_table
         mkdir -p $working_dir
 	    cd $working_dir
 		
         {config[mutatex][env]}
-        ddg2excel -p ../{wildcards.prot_id}_trimmed_model0_checked.pdb\
+        ddg2excel -p ../{wildcards.pdb_filename}_model0_checked.pdb\
                     -l ../mutation_list.txt\
                     -d ../final_averages
         
-	    ddg2excel -p ../{wildcards.prot_id}_trimmed_model0_checked.pdb\
+	    ddg2excel -p ../{wildcards.pdb_filename}_model0_checked.pdb\
                     -l ../mutation_list.txt\
                     -d ../final_averages\
 		            -F csv

@@ -7,8 +7,8 @@ This directory contains a snakemake-based pipeline to analyse the output of pept
 ### {coding_gene} folder
 
 This is an example folder hosting the output of the pipeline. 
-The underlying assumption for using the pipeline is that the `stability_scan` pipeline has been run and the same filetree is produced for `{coding_gene}/free/stability/mutatex_runs`.
-The pipeline will automatically create a soft link to the input files contained in `{coding_gene}/free/stability/mutatex_runs/{database}_{range}/model_{version}/saturation` inside the folder `{coding_gene}/free/stability/mutatex_analyses/{database}_{range}/model_{version}/saturation` in order to run the analysis.
+The underlying assumption for using the pipeline is that the `stability_scan` pipeline has been run and the same filetree is produced for `{coding_gene}/{status}/stability/mutatex_runs`.
+The pipeline will automatically create a soft link to the input files contained in `{coding_gene}/{status}/stability/mutatex_runs/{method}_{start_res}-{end_res}/{model}/saturation` inside the folder `{coding_gene}/{status}/stability/mutatex_analyses/{method}_{start_res}-{end_res}/{model}/saturation` in order to run the analysis.
 
 
 ### Snakefile
@@ -25,12 +25,14 @@ provide the correct input files to `MutateX` processing tools.
 
 |Entry|Meaning|Example|
 |---|---|---|
-|`coding_gene`|Name of the gene coding for the peptide of interest|Hspb1|
+|`pdb_filename`|Name of the input PDB file for the scan|P14602|
+|`coding_gene`|Name of the gene coding for the peptide of interest|HSPB1|
 |`prot_id`|Protein identifier|P14602|
 |`method`|Method by whoich the structure was obtained|AF|
 |`start_res`|First residue to consider during the analysis|88|
 |`end_res`|Last residue to consider during the analysis|177|
 |`model`|Protein model type (i.e. exp = experimental structure, model_ = protein structure release from AF Database)|model_v3|
+|`status`|Protein structure status (i.e. free = not bound by cofactors)|free|
 
 The example file provided was retrieved from AlphaFold Protein Structure Database. The N and C terminal regions were trimmed in order to consider only the higher-confidence and structured portions of the protein.
 

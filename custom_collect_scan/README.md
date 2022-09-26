@@ -20,15 +20,21 @@ The `models.csv` file is a comma separated file containing all the information n
 
 |Entry|Meaning|Example|
 |---|---|---|
-|`coding_gene`|Name of the gene coding for the peptide of interest|Hspb1|
+|`pdb_filename`|Name of the input PDB file for the scan|P14602|
+|`coding_gene`|Name of the gene coding for the peptide of interest|HSPB1|
 |`prot_id`|Uniprot ID|P14602|
 |`method`|Method by which the structure was obtained|AF|
 |`start_res`|First residue to consider during the scan|88|
 |`end_res`|Last residue to consider during the scan|177|
 |`model`|Protein model type (i.e. exp = experimental structure, model_<version> = protein structure release from AF Database)|model_v3|
-|`trimmed`|Boolean value to specify whether the structure has been trimmed by the user|NO|
+|`status`|Protein structure status (i.e. free = not bound by cofactors)|free|
+|`trimmed`|Boolean value to specify whether the structure has been trimmed by the user (if NO, the pipeline will perform the trimming based on start_res and end_res)|NO|
 
 The example file provided was retrieved from AlphaFold Protein Structure Database. The N and C terminal regions were trimmed in order to consider only the higher-confidence and structured portions of the protein.
+
+NOTE: the pdb_filename is supposed to be written in either of the following two forms:
+- `{filename}` (i.e. filename = Uniprot ID)
+- `{filename}_{feature}` (i.e. feature = noHOH)
 
 ### Configuration file
 

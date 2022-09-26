@@ -1,2 +1,3 @@
-coding_gene,prot_id,method,start_res,end_res,model,trimmed
-Hspb1,P14602,AF,88,177,model_v3,NO
+pdb_filename,coding_gene,prot_id,method,start_res,end_res,model,status,trimmed
+P14602,Hspb1,P14602,AF,88,177,model_v3,free,NO
+P01040,CSTA,P01040,exp,7,88,NMR,free,YES

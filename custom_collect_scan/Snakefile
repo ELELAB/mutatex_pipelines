@@ -27,7 +27,6 @@ rule input_txt:
         readme="{gene}/{status}/stability/mutatex_runs/{method}_{start_res}-{end_res}/{model}/saturation/README.txt"
     params:
         workflow_dir=os.path.abspath(os.path.dirname(workflow.snakefile)),
-        pdb_filename=models["pdb_filename"]
     run:
         with open(output.mutate,'w') as mutate:
             mutate.write(config["mutate_runfile"])
@@ -47,12 +46,12 @@ The following files were provided as input to perform the scan with MutateX:
 - {output.mutate}
 - {output.repair}
 - {output.mutation_list}
-The input {params.pdb_filename}.pdb file can be found in the folder:
+The input .pdb file can be found in the folder:
 {wildcards.gene}/{wildcards.status}/structure_selection/{wildcards.method}
                         
 The pipeline can be summarized as follows:
 1. Generate input .txt files and create a consistent input directory structure
-2. Copy, if provided by the user, or download from AF Protein Structure method, the {params.pdb_filename}.pdb file 
+2. Copy, if provided by the user, or download from AF Protein Structure method, the input .pdb file 
 from {wildcards.gene}/structure_selection into {wildcards.gene}/{wildcards.status}/stability/mutatex_runs/{wildcards.method}_{wildcards.start_res}-{wildcards.end_res}/{wildcards.model}/saturation
 3. Trim the .pdb file by using pdb_selres tool to consider only the user-specified residues if required by the user 
 4. Run MutateX and generate a consistent output directory structure

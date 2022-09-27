@@ -94,8 +94,7 @@ rule input_pdb:
         if [ {params.trimmed} == "NO" ]; then
             {params.env}
             pdb_selres -{wildcards.start_res}:{wildcards.end_res} {wildcards.pdb_filename}.pdb > {wildcards.pdb_filename}_selected.pdb
-            mv {wildcards.pdb_filename}_selected.pdb > {wildcards.pdb_filename}.pdb 
-            rm {wildcards.pdb_filename}_selected.pdb
+            mv {wildcards.pdb_filename}_selected.pdb {wildcards.pdb_filename}.pdb 
         fi
 
         """

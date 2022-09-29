@@ -27,6 +27,7 @@ rule input_txt:
         readme="{gene}/{status}/stability/mutatex_runs/{method}_{start_res}-{end_res}/{model}/saturation/README.txt"
     params:
         workflow_dir=os.path.abspath(os.path.dirname(workflow.snakefile)),
+        mutatex_env=config["mutatex"]["env"],
         foldx_exe=config["mutatex"]["foldx_exe"],
         foldx_suite=config["mutatex"]["foldx_suite"]
     run:
@@ -50,7 +51,8 @@ The following files were provided as input to perform the scan with MutateX:
 - {output.mutation_list}
 The input .pdb file can be found in the folder:
 {wildcards.gene}/{wildcards.status}/structure_selection/{wildcards.method}
-The following command is run to perform the stability scan with MutateX:
+The following commands are run to perform the stability scan with MutateX:
+{params.mutatex_env}
 mutatex input.pdb -p 4 -m mutation_list.txt -x {params.foldx_exe} -f {params.foldx_suite} -R repair_runfile.txt -M mutate_runfile.txt -C partial -l -L -c -v
 
 The pipeline can be summarized as follows:

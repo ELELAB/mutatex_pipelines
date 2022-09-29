@@ -25,16 +25,20 @@ provide the correct input files to `MutateX` processing tools.
 
 |Entry|Meaning|Example|
 |---|---|---|
-|`pdb_filename`|Name of the input PDB file for the scan|P14602|
+|`pdb_file`|Name of input .pdb file|P14602.pdb|
 |`coding_gene`|Name of the gene coding for the peptide of interest|HSPB1|
 |`prot_id`|Protein identifier|P14602|
+|`protein_name`|Name of `custom_collect_scan` outputs|P14602|
 |`method`|Method by whoich the structure was obtained|AF|
 |`start_res`|First residue to consider during the analysis|88|
 |`end_res`|Last residue to consider during the analysis|177|
 |`model`|Protein model type (i.e. exp = experimental structure, model_ = protein structure release from AF Database)|model_v3|
 |`status`|Protein structure status (i.e. free = not bound by cofactors)|free|
+|`trimmed`|Whether the structure has been trimmed by the user|NO|
 
 The example file provided was retrieved from AlphaFold Protein Structure Database. The N and C terminal regions were trimmed in order to consider only the higher-confidence and structured portions of the protein.
+
+Note: with respect to `custom_collect_scan`, the .csv file does not require the `pdb_file`, `prot_id` and `trimmed` attributes.
 
 ### Configuration file
 

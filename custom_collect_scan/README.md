@@ -20,9 +20,10 @@ The `models.csv` file is a comma separated file containing all the information n
 
 |Entry|Meaning|Example|
 |---|---|---|
-|`pdb_filename`|Name of the input PDB file for the scan|P14602|
+|`pdb_file`|Name of the input PDB file for the scan (Note: must be provided even when retrieving the structure from AF Protein Structure Database)|P14602.pdb|
 |`coding_gene`|Name of the gene coding for the peptide of interest|HSPB1|
 |`prot_id`|Uniprot ID|P14602|
+|`protein_name`|Name of desiderd output files|P14602|
 |`method`|Method by which the structure was obtained|AF|
 |`start_res`|First residue to consider during the scan|88|
 |`end_res`|Last residue to consider during the scan|177|
@@ -32,9 +33,9 @@ The `models.csv` file is a comma separated file containing all the information n
 
 The example file provided was retrieved from AlphaFold Protein Structure Database. The N and C terminal regions were trimmed in order to consider only the higher-confidence and structured portions of the protein.
 
-NOTE: the pdb_filename is supposed to be written in either of the following two forms:
-- `{filename}` (i.e. filename = Uniprot ID)
-- `{filename}_{feature}` (i.e. feature = noHOH)
+NOTE: the `protein_name` is supposed to be written in either of the following two forms:
+- `{protein_name}` (i.e. protein_name = Uniprot ID)
+- `{protein_name}_{feature}` (i.e. feature = noHOH)
 
 ### Configuration file
 

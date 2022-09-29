@@ -6,7 +6,7 @@ models = pd.read_csv(config["models"], keep_default_na=False)
 
 rule all:
     input:
-        expand("{gene}/{status}/stability/mutatex_runs/{method}_{start_res}-{end_res}/{model}/saturation/{pdb_filename}_energies.csv",
+        expand("{gene}/{status}/stability/mutatex_runs/{method}_{start_res}-{end_res}/{model}/saturation/{protein_name}_energies.csv",
                     zip,
                     gene=models["coding_gene"],
                     status=models["status"],
@@ -14,7 +14,7 @@ rule all:
                     start_res=models["start_res"],
                     end_res=models["end_res"],
                     model=models["model"],
-                    pdb_filename=models["pdb_filename"]
+                    protein_name=models["protein_name"]
                     )
 
 rule input_txt:
@@ -27,7 +27,7 @@ rule input_txt:
         readme="{gene}/{status}/stability/mutatex_runs/{method}_{start_res}-{end_res}/{model}/saturation/README.txt"
     params:
         workflow_dir=os.path.abspath(os.path.dirname(workflow.snakefile)),
-        mutatex_env=config["mutatex"]["env"],
+        env=config["mutatex"]["env"],
         foldx_exe=config["mutatex"]["foldx_exe"],
         foldx_suite=config["mutatex"]["foldx_suite"]
     run:
@@ -49,10 +49,10 @@ The following files were provided as input to perform the scan with MutateX:
 - {output.mutate}
 - {output.repair}
 - {output.mutation_list}
-The input .pdb file can be found in the folder:
+The input.pdb file can be found in the folder:
 {wildcards.gene}/{wildcards.status}/structure_selection/{wildcards.method}
-The following commands are run to perform the stability scan with MutateX:
-{params.mutatex_env}
+The following command is run to perform the stability scan with MutateX:
+{params.env}
 mutatex input.pdb -p 4 -m mutation_list.txt -x {params.foldx_exe} -f {params.foldx_suite} -R repair_runfile.txt -M mutate_runfile.txt -C partial -l -L -c -v
 
 The pipeline can be summarized as follows:
@@ -74,20 +74,21 @@ rule input_pdb:
         mutation_list="{gene}/{status}/stability/mutatex_runs/{method}_{start_res}-{end_res}/{model}/saturation/mutation_list.txt",
         readme="{gene}/{status}/stability/mutatex_runs/{method}_{start_res}-{end_res}/{model}/saturation/README.txt"
     output:
-        pdb_out="{gene}/{status}/stability/mutatex_runs/{method}_{start_res}-{end_res}/{model}/saturation/{pdb_filename}.pdb"
+        pdb_out="{gene}/{status}/stability/mutatex_runs/{method}_{start_res}-{end_res}/{model}/saturation/{protein_name}.pdb"
     wildcard_constraints:
-        pdb_filename="([a-zA-Z0-9]+_[a-zA-Z0-9]+|[a-zA-Z0-9]+)"
+        protein_name="([a-zA-Z0-9]+_[a-zA-Z0-9]+|[a-zA-Z0-9]+)"
     params:
         env=config["pdb_selres_env"],
-        prot_id=lambda wildcards: models.loc[models["pdb_filename"] == wildcards.pdb_filename].prot_id.item(),
-        trimmed=lambda wildcards: models.loc[models["pdb_filename"] == wildcards.pdb_filename].trimmed.item()
+        prot_id=lambda wildcards: models.loc[models["protein_name"] == wildcards.protein_name].prot_id.item(),
+        trimmed=lambda wildcards: models.loc[models["protein_name"] == wildcards.protein_name].trimmed.item(),
+        pdb_file=lambda wildcards: models.loc[models["protein_name"] == wildcards.protein_name].pdb_file.item()
     shell:
         """
         if [ {wildcards.method} == "AF" ]; then
             mkdir -p {wildcards.gene}/structure_selection/AF
             cd {wildcards.gene}/structure_selection/AF
             wget https://alphafold.ebi.ac.uk/files/AF-{params.prot_id}-F1-{wildcards.model}.pdb
-            mv AF-{params.prot_id}-F1-{wildcards.model}.pdb {wildcards.pdb_filename}.pdb
+            mv AF-{params.prot_id}-F1-{wildcards.model}.pdb {params.pdb_file}
             cd ../../..
         fi
 
@@ -95,21 +96,23 @@ rule input_pdb:
         mkdir -p $input_dir
         cd $input_dir
 
-        cp ../../../../../../structure_selection/{wildcards.method}/{wildcards.pdb_filename}.pdb .
+        cp ../../../../../../structure_selection/{wildcards.method}/{params.pdb_file} .
 
         if [ {params.trimmed} == "NO" ]; then
             {params.env}
-            pdb_selres -{wildcards.start_res}:{wildcards.end_res} {wildcards.pdb_filename}.pdb > {wildcards.pdb_filename}_selected.pdb
-            mv {wildcards.pdb_filename}_selected.pdb {wildcards.pdb_filename}.pdb 
+            pdb_selres -{wildcards.start_res}:{wildcards.end_res} {params.pdb_file} > {params.prot_id}_selected.pdb
+            mv {params.prot_id}_selected.pdb {params.pdb_file}
         fi
+
+        mv {params.pdb_file} {wildcards.protein_name}.pdb
 
         """
 
 rule mutatex_scan:
     input:
-        "{gene}/{status}/stability/mutatex_runs/{method}_{start_res}-{end_res}/{model}/saturation/{pdb_filename}.pdb"
+        "{gene}/{status}/stability/mutatex_runs/{method}_{start_res}-{end_res}/{model}/saturation/{protein_name}.pdb"
     output:
-        "{gene}/{status}/stability/mutatex_runs/{method}_{start_res}-{end_res}/{model}/saturation/{pdb_filename}_model0_checked.pdb"
+        "{gene}/{status}/stability/mutatex_runs/{method}_{start_res}-{end_res}/{model}/saturation/{protein_name}_model0_checked.pdb"
     params:
         mutatex_env=config["mutatex"]["env"],
         foldx_exe=config["mutatex"]["foldx_exe"],
@@ -121,7 +124,7 @@ rule mutatex_scan:
         cd $working_dir
 
         {params.mutatex_env}
-        mutatex {wildcards.pdb_filename}.pdb \
+        mutatex {wildcards.protein_name}.pdb \
             -p 4 \
             -m mutation_list.txt \
             -x {params.foldx_exe} \
@@ -138,9 +141,9 @@ rule mutatex_scan:
 
 rule write_table:
     input:
-        "{gene}/{status}/stability/mutatex_runs/{method}_{start_res}-{end_res}/{model}/saturation/{pdb_filename}_model0_checked.pdb"
+        "{gene}/{status}/stability/mutatex_runs/{method}_{start_res}-{end_res}/{model}/saturation/{protein_name}_model0_checked.pdb"
     output:
-        "{gene}/{status}/stability/mutatex_runs/{method}_{start_res}-{end_res}/{model}/saturation/{pdb_filename}_energies.csv"
+        "{gene}/{status}/stability/mutatex_runs/{method}_{start_res}-{end_res}/{model}/saturation/{protein_name}_energies.csv"
     params:
         mutatex_env=config["mutatex"]["env"],
     shell:
@@ -150,12 +153,14 @@ rule write_table:
         cd $working_dir
 
         {params.mutatex_env}
-        ddg2excel -p {wildcards.pdb_filename}_model0_checked.pdb\
+        ddg2excel -p {wildcards.protein_name}_model0_checked.pdb\
                   -l mutation_list.txt \
                   -d results/mutation_ddgs/final_averages\
                   -F csv
 
-        mv energies.csv {wildcards.pdb_filename}_energies.csv
+        mv energies.csv {wildcards.protein_name}_energies.csv
 
         """
         
+
+

@@ -131,7 +131,7 @@ rule write_table:
         "{gene}/free/stability/mutatex_runs/{database}_{start_res}-{end_res}/model_{version}/saturation/{prot_id}_table/energies.csv"
     shell:
         """
-        working_dir={wildcards.gene}/free/stability/mutatex_runs/{wildcards.database}_{wildcards.start_res}-{wildwildcards.end_res}/model_{wildcards.version}/saturation/{wildcards.prot_id}_table
+        working_dir={wildcards.gene}/free/stability/mutatex_runs/{wildcards.database}_{wildcards.start_res}-{wildcards.end_res}/model_{wildcards.version}/saturation/{wildcards.prot_id}_table
         mkdir -p $working_dir
         cd $working_dir
 

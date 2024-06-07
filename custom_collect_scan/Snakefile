@@ -116,7 +116,7 @@ rule mutatex_scan:
             -f {params.foldx_suite} \
             -R ../../../../../mutatex_input_preparation/{wildcards.database}_{wildcards.start_res}-{wildcards.end_res}/model_{wildcards.version}/saturation/repair_runfile.txt \
             -M ../../../../../mutatex_input_preparation/{wildcards.database}_{wildcards.start_res}-{wildcards.end_res}/model_{wildcards.version}/saturation/mutate_runfile.txt \
-            -C partial \
+            -C deep \
             -l \
             -L \
             -c \

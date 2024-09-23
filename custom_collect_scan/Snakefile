@@ -62,17 +62,25 @@ from {wildcards.gene}/structure_selection into {wildcards.gene}/free/stability/m
 
 rule download_pdb:
     output:
-        pdb="structure_selection/{database}/{prot_id}_{version}.pdb"
-    shell:
-        """
-        mkdir -p structure_selection/{wildcards.database}
-        cd structure_selection/{wildcards.database}
-        wget -q https://alphafold.ebi.ac.uk/files/AF-{wildcards.prot_id}-F1-model_{wildcards.version}.pdb -O {wildcards.prot_id}_{wildcards.version}.pdb
-        """
+        pdb="{gene}/structure_selection/{database}/{prot_id}_{version}.pdb"
+    run:
+        pdb_file = models.set_index(['coding_gene', 'database',  'prot_id', 'version']).loc[
+            (wildcards.gene, wildcards.database, wildcards.prot_id, wildcards.version), 'pdb_file']
+        print(f"pdb_file: {pdb_file}")
+        if pdb_file:
+            shell(f"mkdir -p {wildcards.gene}/structure_selection/{wildcards.database}")
+            shell(f"cp {pdb_file} {wildcards.gene}/structure_selection/{wildcards.database}/{wildcards.prot_id}_{wildcards.version}.pdb")
+        else:
+            shell(f"""
+                mkdir -p {wildcards.gene}/structure_selection/{wildcards.database}
+                cd {wildcards.gene}/structure_selection/{wildcards.database}
+                wget -q https://alphafold.ebi.ac.uk/files/AF-{wildcards.prot_id}-F1-model_{wildcards.version}.pdb -O {wildcards.prot_id}_{wildcards.version}.pdb
+            """)
+
 
 rule input_pdb:
     input:
-        pdb="structure_selection/{database}/{prot_id}_{version}.pdb",
+        pdb="{gene}/structure_selection/{database}/{prot_id}_{version}.pdb",
         mutate="{gene}/free/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/saturation/mutate_runfile.txt",
         repair="{gene}/free/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/saturation/repair_runfile.txt",
         mutation_list="{gene}/free/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/saturation/mutation_list.txt",
@@ -88,7 +96,7 @@ rule input_pdb:
         cp {input.pdb} $input_dir/{wildcards.prot_id}.pdb
 
         cd $input_dir
-        {params.env}
+        #{params.env}
         pdb_selres -{wildcards.start_res}:{wildcards.end_res} {wildcards.prot_id}.pdb > {wildcards.prot_id}_trimmed.pdb
         """
 

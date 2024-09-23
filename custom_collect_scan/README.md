@@ -6,7 +6,7 @@ This directory contains a snakemake-based pipeline for peptide mutation scanning
 
 ### {coding_gene} folder
 
-This is an example folder hosting the output of the pipeline. The prerequisite to run the pipeline is to fill the attributes of the template `.csv` file with the instances related to the protein of interest. In case the scan is to be performed on a model from AlphaFold Protein Structure Database, the pipeline will automatically download and prepare the file for the subsequent scan, otherwise, the user is required to provide the input `.pdb` file inside the directory: `{gene}/structure_selection/{database}`.
+This is an example folder hosting the output of the pipeline. The prerequisite to run the pipeline is to fill the attributes of the template `.csv` file with the instances related to the protein of interest. In case the scan is to be performed on a model from AlphaFold Protein Structure Database, the pipeline will automatically download and prepare the file for the subsequent scan, otherwise, the user is required to provide the input `.pdb` file inside the working directory: `{gene}/structure_selection/{database}`.
 
 ### Snakefile
 
@@ -26,6 +26,7 @@ The `models.csv` file is a comma separated file containing all the information n
 |`start_res`|First residue to consider during the scan|88|
 |`end_res`|Last residue to consider during the scan|177|
 |`version`|Protein structure release|v3|
+|`pdb_file`|PDB namefile (optional)||
 
 The example file provided was retrieved from AlphaFold Protein Structure Database. The N and C terminal regions were trimmed in order to consider only the higher-confidence and structured portions of the protein.
 
@@ -48,7 +49,7 @@ The user must have `Snakemake` [^Mölder2021] and `python` v3.7 or higher instal
 
 ## Commands to run the pipeline:
 
-`module load python/3.7`
+`module load python/3.10`
  
 `snakemake --cores 4`
 

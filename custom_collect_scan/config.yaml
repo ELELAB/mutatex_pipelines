@@ -1,6 +1,6 @@
 models: "models.csv"
 
-pdb_selres_env: "module load python/3.10/modulefile"
+pdb_selres_env: ". /usr/local/envs/py310/bin/activate"
 
 mutatex:
     env:  "set +u; . /usr/local/envs/mutatex/bin/activate; set -u"

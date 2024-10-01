@@ -3,6 +3,14 @@ import os
 
 configfile: "config.yaml"
 models = pd.read_csv(config["models"], keep_default_na=False)
+models_check = models.iloc[:, :6]
+
+empty_string_mask = models_check.applymap(lambda x: x == '')
+if empty_string_mask.values.any():
+    empty_string_loc = empty_string_mask[empty_string_mask].stack()
+
+    error_details = [(row_idx + 2, col_name) for (row_idx, col_name) in empty_string_loc.index]
+    raise ValueError(f"Found empty strings in the following cells of the input: \n{error_details}")
 
 rule all:
     input:

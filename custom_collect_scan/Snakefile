@@ -3,13 +3,13 @@ import os
 
 configfile: "config.yaml"
 models = pd.read_csv(config["models"], keep_default_na=False)
-models_check = models.iloc[:, :6]
+models_check = models.drop(columns= "pdb_file")
 
-empty_string_mask = models_check.applymap(lambda x: x == '')
+empty_string_mask = models_check.replace('', None).isna()
 if empty_string_mask.values.any():
     empty_string_loc = empty_string_mask[empty_string_mask].stack()
 
-    error_details = [(row_idx + 2, col_name) for (row_idx, col_name) in empty_string_loc.index]
+    error_details = [(models_check.loc[row_idx, 'coding_gene'], col_name) for (row_idx, col_name) in empty_string_loc.index]
     raise ValueError(f"Found empty strings in the following cells of the input: \n{error_details}")
 
 rule all:
@@ -71,13 +71,41 @@ from {wildcards.gene}/structure_selection into {wildcards.gene}/free/stability/m
 rule download_pdb:
     output:
         pdb="{gene}/structure_selection/{database}/{prot_id}_{version}.pdb"
+    params:
+        pdb=lambda wcs: models.loc[
+            (models['database'] == wcs.database) &
+            (models['prot_id'] == wcs.prot_id) &
+            (models['version'] == wcs.version), 
+            'pdb_file'
+        ]
     run:
-        pdb_file = models.set_index(['coding_gene', 'database',  'prot_id', 'version']).loc[
-            (wildcards.gene, wildcards.database, wildcards.prot_id, wildcards.version), 'pdb_file']
-        print(f"pdb_file: {pdb_file}")
-        if pdb_file:
+        start_res = models.loc[
+            (models['database'] == wildcards.database) &
+            (models['prot_id'] == wildcards.prot_id) &
+            (models['version'] == wildcards.version), 
+            'start_res'
+        ].values[0]
+        
+        end_res = models.loc[
+            (models['database'] == wildcards.database) &
+            (models['prot_id'] == wildcards.prot_id) &
+            (models['version'] == wildcards.version), 
+            'end_res'
+        ].values[0]
+
+        pdb = models.loc[
+            (models['coding_gene'] == wildcards.gene) &
+            (models['database'] == wildcards.database) &
+            (models['prot_id'] == wildcards.prot_id) &
+            (models['version'] == wildcards.version) &
+            (models['start_res'] <= start_res) &
+            (models['end_res'] >= end_res),
+            'pdb_file'
+        ]
+        if not pdb.empty:
+            pdb = pdb.values[0]
             shell(f"mkdir -p {wildcards.gene}/structure_selection/{wildcards.database}")
-            shell(f"cp {pdb_file} {wildcards.gene}/structure_selection/{wildcards.database}/{wildcards.prot_id}_{wildcards.version}.pdb")
+            shell(f"cp {pdb} {wildcards.gene}/structure_selection/{wildcards.database}/{wildcards.prot_id}_{wildcards.version}.pdb")
         else:
             shell(f"""
                 mkdir -p {wildcards.gene}/structure_selection/{wildcards.database}
@@ -104,7 +132,7 @@ rule input_pdb:
         cp {input.pdb} $input_dir/{wildcards.prot_id}.pdb
 
         cd $input_dir
-        #{params.env}
+        {params.env}
         pdb_selres -{wildcards.start_res}:{wildcards.end_res} {wildcards.prot_id}.pdb > {wildcards.prot_id}_trimmed.pdb
         """
 

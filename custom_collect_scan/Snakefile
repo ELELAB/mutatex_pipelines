@@ -70,53 +70,48 @@ from {wildcards.gene}/structure_selection into {wildcards.gene}/free/stability/m
 
 rule download_pdb:
     output:
-        pdb="{gene}/structure_selection/{database}/{prot_id}_{version}.pdb"
+        pdb="structure_selection/{database}/{prot_id}_{start_res}_{end_res}.pdb"
     params:
         pdb=lambda wcs: models.loc[
-            (models['database'] == wcs.database) &
             (models['prot_id'] == wcs.prot_id) &
-            (models['version'] == wcs.version), 
+            (models['start_res'] == wcs.start_res) &
+            (models['end_res'] == wcs.end_res) , 
             'pdb_file'
         ]
     run:
         start_res = models.loc[
             (models['database'] == wildcards.database) &
-            (models['prot_id'] == wildcards.prot_id) &
-            (models['version'] == wildcards.version), 
+            (models['prot_id'] == wildcards.prot_id) , 
             'start_res'
         ].values[0]
         
         end_res = models.loc[
             (models['database'] == wildcards.database) &
-            (models['prot_id'] == wildcards.prot_id) &
-            (models['version'] == wildcards.version), 
+            (models['prot_id'] == wildcards.prot_id), 
             'end_res'
         ].values[0]
 
         pdb = models.loc[
-            (models['coding_gene'] == wildcards.gene) &
-            (models['database'] == wildcards.database) &
             (models['prot_id'] == wildcards.prot_id) &
-            (models['version'] == wildcards.version) &
             (models['start_res'] <= start_res) &
             (models['end_res'] >= end_res),
             'pdb_file'
         ]
         if not pdb.empty:
             pdb = pdb.values[0]
-            shell(f"mkdir -p {wildcards.gene}/structure_selection/{wildcards.database}")
-            shell(f"cp {pdb} {wildcards.gene}/structure_selection/{wildcards.database}/{wildcards.prot_id}_{wildcards.version}.pdb")
+            shell(f"mkdir -p structure_selection/{wildcards.database}")
+            shell(f"cp {pdb} structure_selection/{wildcards.database}/{wildcards.prot_id}_{start_res}_{end_res}.pdb")
         else:
             shell(f"""
-                mkdir -p {wildcards.gene}/structure_selection/{wildcards.database}
-                cd {wildcards.gene}/structure_selection/{wildcards.database}
+                mkdir -p structure_selection/{wildcards.database}
+                cd structure_selection/{wildcards.database}
                 wget -q https://alphafold.ebi.ac.uk/files/AF-{wildcards.prot_id}-F1-model_{wildcards.version}.pdb -O {wildcards.prot_id}_{wildcards.version}.pdb
             """)
 
 
 rule input_pdb:
     input:
-        pdb="{gene}/structure_selection/{database}/{prot_id}_{version}.pdb",
+        pdb="structure_selection/{database}/{prot_id}_{start_res}_{end_res}.pdb",
         mutate="{gene}/free/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/saturation/mutate_runfile.txt",
         repair="{gene}/free/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/saturation/repair_runfile.txt",
         mutation_list="{gene}/free/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/saturation/mutation_list.txt",

@@ -72,40 +72,19 @@ rule download_pdb:
     output:
         pdb="structure_selection/{database}/{prot_id}_{start_res}_{end_res}.pdb"
     params:
-        pdb=lambda wcs: models.loc[
+        pdb=lambda wcs: models[
             (models['prot_id'] == wcs.prot_id) &
-            (models['start_res'] == wcs.start_res) &
-            (models['end_res'] == wcs.end_res) , 
-            'pdb_file'
-        ]
+            (models['start_res'] == int(wcs.start_res)) &
+            (models['end_res'] == int(wcs.end_res))]['pdb_file'].values[0]
     run:
-        start_res = models.loc[
-            (models['database'] == wildcards.database) &
-            (models['prot_id'] == wildcards.prot_id) , 
-            'start_res'
-        ].values[0]
-        
-        end_res = models.loc[
-            (models['database'] == wildcards.database) &
-            (models['prot_id'] == wildcards.prot_id), 
-            'end_res'
-        ].values[0]
-
-        pdb = models.loc[
-            (models['prot_id'] == wildcards.prot_id) &
-            (models['start_res'] <= start_res) &
-            (models['end_res'] >= end_res),
-            'pdb_file'
-        ]
-        if not pdb.empty:
-            pdb = pdb.values[0]
+        if params.pdb:
             shell(f"mkdir -p structure_selection/{wildcards.database}")
-            shell(f"cp {pdb} structure_selection/{wildcards.database}/{wildcards.prot_id}_{start_res}_{end_res}.pdb")
+            shell(f"cp {params.pdb} structure_selection/{wildcards.database}/{wildcards.prot_id}_{wildcards.start_res}_{wildcards.end_res}.pdb")
         else:
             shell(f"""
                 mkdir -p structure_selection/{wildcards.database}
                 cd structure_selection/{wildcards.database}
-                wget -q https://alphafold.ebi.ac.uk/files/AF-{wildcards.prot_id}-F1-model_{wildcards.version}.pdb -O {wildcards.prot_id}_{wildcards.version}.pdb
+                wget -q https://alphafold.ebi.ac.uk/files/AF-{wildcards.prot_id}-F1-model_v4.pdb -O {wildcards.prot_id}_{wildcards.start_res}_{wildcards.end_res}.pdb
             """)
 
 

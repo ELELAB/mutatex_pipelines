@@ -4,7 +4,7 @@ pdb_selres_env: ". /usr/local/envs/py310/bin/activate"
 
 mutatex:
     env:  "set +u; . /usr/local/envs/mutatex/bin/activate; set -u"
-    foldx_exe: "/usr/local/foldx5_2024/foldx"
+    foldx_exe: "/usr/local/foldx5/foldx"
     foldx_suite: "suite5"
 
 mutate_runfile: |

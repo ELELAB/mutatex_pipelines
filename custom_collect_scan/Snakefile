@@ -4,6 +4,7 @@ import os
 configfile: "config.yaml"
 models = pd.read_csv(config["models"], keep_default_na=False)
 models_check = models.drop(columns= "pdb_file")
+models.loc[models["version"].eq(""), "version"] = "v6"
 
 empty_string_mask = models_check.replace('', None).isna()
 if empty_string_mask.values.any():
@@ -75,7 +76,11 @@ rule download_pdb:
         pdb=lambda wcs: models[
             (models['prot_id'] == wcs.prot_id) &
             (models['start_res'] == int(wcs.start_res)) &
-            (models['end_res'] == int(wcs.end_res))]['pdb_file'].values[0]
+            (models['end_res'] == int(wcs.end_res))]['pdb_file'].values[0],
+	af_version=lambda wcs: models[
+	    (models['prot_id'] == wcs.prot_id) &
+	    (models['start_res'] == int(wcs.start_res)) &
+	    (models['end_res'] == int(wcs.end_res))]['version'].values[0]
     run:
         if params.pdb:
             shell(f"mkdir -p structure_selection/{wildcards.database}")
@@ -84,7 +89,7 @@ rule download_pdb:
             shell(f"""
                 mkdir -p structure_selection/{wildcards.database}
                 cd structure_selection/{wildcards.database}
-                wget -q https://alphafold.ebi.ac.uk/files/AF-{wildcards.prot_id}-F1-model_v4.pdb -O {wildcards.prot_id}_{wildcards.start_res}_{wildcards.end_res}.pdb
+                wget -q https://alphafold.ebi.ac.uk/files/AF-{wildcards.prot_id}-F1-model_{params.af_version}.pdb -O {wildcards.prot_id}_{wildcards.start_res}_{wildcards.end_res}.pdb
             """)
 
 

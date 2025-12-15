@@ -1,0 +1,178 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 8
+Rules claiming more threads will be scaled down.
+Job stats:
+job             count
+------------  -------
+all                 1
+download_pdb        3
+input_pdb           3
+input_txt           3
+mutatex_scan        3
+write_table         3
+total              16
+
+Select jobs to execute...
+
+[Sun Dec 14 14:40:22 2025]
+rule input_txt:
+    output: GJB2/free/stability/mutatex_input_preparation/AFDB_18-221/model_v6/saturation/mutate_runfile.txt, GJB2/free/stability/mutatex_input_preparation/AFDB_18-221/model_v6/saturation/repair_runfile.txt, GJB2/free/stability/mutatex_input_preparation/AFDB_18-221/model_v6/saturation/mutation_list.txt, GJB2/free/stability/mutatex_runs/AFDB_18-221/model_v6/saturation/README.txt
+    jobid: 5
+    reason: Missing output files: GJB2/free/stability/mutatex_runs/AFDB_18-221/model_v6/saturation/README.txt, GJB2/free/stability/mutatex_input_preparation/AFDB_18-221/model_v6/saturation/mutate_runfile.txt, GJB2/free/stability/mutatex_input_preparation/AFDB_18-221/model_v6/saturation/repair_runfile.txt, GJB2/free/stability/mutatex_input_preparation/AFDB_18-221/model_v6/saturation/mutation_list.txt
+    wildcards: gene=GJB2, database=AFDB, start_res=18, end_res=221, version=v6
+    resources: tmpdir=/tmp
+
+[Sun Dec 14 14:40:22 2025]
+rule download_pdb:
+    output: structure_selection/AFDB/O00329_19_1026.pdb
+    jobid: 9
+    reason: Missing output files: structure_selection/AFDB/O00329_19_1026.pdb
+    wildcards: database=AFDB, start_res=19, end_res=1026, prot_id=O00329
+    resources: tmpdir=/tmp
+
+[Sun Dec 14 14:40:22 2025]
+rule input_txt:
+    output: PPM1D/free/stability/mutatex_input_preparation/AFDB_5-378/model_v6/saturation/mutate_runfile.txt, PPM1D/free/stability/mutatex_input_preparation/AFDB_5-378/model_v6/saturation/repair_runfile.txt, PPM1D/free/stability/mutatex_input_preparation/AFDB_5-378/model_v6/saturation/mutation_list.txt, PPM1D/free/stability/mutatex_runs/AFDB_5-378/model_v6/saturation/README.txt
+    jobid: 15
+    reason: Missing output files: PPM1D/free/stability/mutatex_input_preparation/AFDB_5-378/model_v6/saturation/mutate_runfile.txt, PPM1D/free/stability/mutatex_input_preparation/AFDB_5-378/model_v6/saturation/mutation_list.txt, PPM1D/free/stability/mutatex_runs/AFDB_5-378/model_v6/saturation/README.txt, PPM1D/free/stability/mutatex_input_preparation/AFDB_5-378/model_v6/saturation/repair_runfile.txt
+    wildcards: gene=PPM1D, database=AFDB, start_res=5, end_res=378, version=v6
+    resources: tmpdir=/tmp
+
+[Sun Dec 14 14:40:22 2025]
+rule download_pdb:
+    output: structure_selection/AFDB/P29033_18_221.pdb
+    jobid: 4
+    reason: Missing output files: structure_selection/AFDB/P29033_18_221.pdb
+    wildcards: database=AFDB, start_res=18, end_res=221, prot_id=P29033
+    resources: tmpdir=/tmp
+
+[Sun Dec 14 14:40:22 2025]
+rule input_txt:
+    output: PIK3CD/free/stability/mutatex_input_preparation/AFDB_19-1026/model_v6/saturation/mutate_runfile.txt, PIK3CD/free/stability/mutatex_input_preparation/AFDB_19-1026/model_v6/saturation/repair_runfile.txt, PIK3CD/free/stability/mutatex_input_preparation/AFDB_19-1026/model_v6/saturation/mutation_list.txt, PIK3CD/free/stability/mutatex_runs/AFDB_19-1026/model_v6/saturation/README.txt
+    jobid: 10
+    reason: Missing output files: PIK3CD/free/stability/mutatex_input_preparation/AFDB_19-1026/model_v6/saturation/repair_runfile.txt, PIK3CD/free/stability/mutatex_input_preparation/AFDB_19-1026/model_v6/saturation/mutation_list.txt, PIK3CD/free/stability/mutatex_input_preparation/AFDB_19-1026/model_v6/saturation/mutate_runfile.txt, PIK3CD/free/stability/mutatex_runs/AFDB_19-1026/model_v6/saturation/README.txt
+    wildcards: gene=PIK3CD, database=AFDB, start_res=19, end_res=1026, version=v6
+    resources: tmpdir=/tmp
+
+[Sun Dec 14 14:40:22 2025]
+rule download_pdb:
+    output: structure_selection/AFDB/O15297_5_378.pdb
+    jobid: 14
+    reason: Missing output files: structure_selection/AFDB/O15297_5_378.pdb
+    wildcards: database=AFDB, start_res=5, end_res=378, prot_id=O15297
+    resources: tmpdir=/tmp
+
+[Sun Dec 14 14:40:22 2025]
+Finished job 10.
+1 of 16 steps (6%) done
+[Sun Dec 14 14:40:22 2025]
+Finished job 15.
+2 of 16 steps (12%) done
+[Sun Dec 14 14:40:22 2025]
+Finished job 5.
+3 of 16 steps (19%) done
+[Sun Dec 14 14:40:23 2025]
+Finished job 4.
+4 of 16 steps (25%) done
+Select jobs to execute...
+
+[Sun Dec 14 14:40:23 2025]
+rule input_pdb:
+    input: structure_selection/AFDB/P29033_18_221.pdb, GJB2/free/stability/mutatex_input_preparation/AFDB_18-221/model_v6/saturation/mutate_runfile.txt, GJB2/free/stability/mutatex_input_preparation/AFDB_18-221/model_v6/saturation/repair_runfile.txt, GJB2/free/stability/mutatex_input_preparation/AFDB_18-221/model_v6/saturation/mutation_list.txt, GJB2/free/stability/mutatex_runs/AFDB_18-221/model_v6/saturation/README.txt
+    output: GJB2/free/stability/mutatex_input_preparation/AFDB_18-221/model_v6/saturation/P29033_trimmed.pdb
+    jobid: 3
+    reason: Missing output files: GJB2/free/stability/mutatex_input_preparation/AFDB_18-221/model_v6/saturation/P29033_trimmed.pdb; Input files updated by another job: GJB2/free/stability/mutatex_input_preparation/AFDB_18-221/model_v6/saturation/mutate_runfile.txt, GJB2/free/stability/mutatex_input_preparation/AFDB_18-221/model_v6/saturation/repair_runfile.txt, structure_selection/AFDB/P29033_18_221.pdb, GJB2/free/stability/mutatex_input_preparation/AFDB_18-221/model_v6/saturation/mutation_list.txt, GJB2/free/stability/mutatex_runs/AFDB_18-221/model_v6/saturation/README.txt
+    wildcards: gene=GJB2, database=AFDB, start_res=18, end_res=221, version=v6, prot_id=P29033
+    resources: tmpdir=/tmp
+
+[Sun Dec 14 14:40:23 2025]
+Finished job 14.
+5 of 16 steps (31%) done
+Select jobs to execute...
+
+[Sun Dec 14 14:40:23 2025]
+rule input_pdb:
+    input: structure_selection/AFDB/O15297_5_378.pdb, PPM1D/free/stability/mutatex_input_preparation/AFDB_5-378/model_v6/saturation/mutate_runfile.txt, PPM1D/free/stability/mutatex_input_preparation/AFDB_5-378/model_v6/saturation/repair_runfile.txt, PPM1D/free/stability/mutatex_input_preparation/AFDB_5-378/model_v6/saturation/mutation_list.txt, PPM1D/free/stability/mutatex_runs/AFDB_5-378/model_v6/saturation/README.txt
+    output: PPM1D/free/stability/mutatex_input_preparation/AFDB_5-378/model_v6/saturation/O15297_trimmed.pdb
+    jobid: 13
+    reason: Missing output files: PPM1D/free/stability/mutatex_input_preparation/AFDB_5-378/model_v6/saturation/O15297_trimmed.pdb; Input files updated by another job: structure_selection/AFDB/O15297_5_378.pdb, PPM1D/free/stability/mutatex_input_preparation/AFDB_5-378/model_v6/saturation/mutation_list.txt, PPM1D/free/stability/mutatex_input_preparation/AFDB_5-378/model_v6/saturation/repair_runfile.txt, PPM1D/free/stability/mutatex_runs/AFDB_5-378/model_v6/saturation/README.txt, PPM1D/free/stability/mutatex_input_preparation/AFDB_5-378/model_v6/saturation/mutate_runfile.txt
+    wildcards: gene=PPM1D, database=AFDB, start_res=5, end_res=378, version=v6, prot_id=O15297
+    resources: tmpdir=/tmp
+
+[Sun Dec 14 14:40:23 2025]
+Finished job 3.
+6 of 16 steps (38%) done
+Select jobs to execute...
+
+[Sun Dec 14 14:40:23 2025]
+rule mutatex_scan:
+    input: GJB2/free/stability/mutatex_input_preparation/AFDB_18-221/model_v6/saturation/P29033_trimmed.pdb
+    output: GJB2/free/stability/mutatex_runs/AFDB_18-221/model_v6/saturation/P29033_scan
+    jobid: 2
+    reason: Missing output files: GJB2/free/stability/mutatex_runs/AFDB_18-221/model_v6/saturation/P29033_scan; Input files updated by another job: GJB2/free/stability/mutatex_input_preparation/AFDB_18-221/model_v6/saturation/P29033_trimmed.pdb
+    wildcards: gene=GJB2, database=AFDB, start_res=18, end_res=221, version=v6, prot_id=P29033
+    threads: 2
+    resources: tmpdir=/tmp
+
+[Sun Dec 14 14:40:23 2025]
+Finished job 9.
+7 of 16 steps (44%) done
+Select jobs to execute...
+
+[Sun Dec 14 14:40:23 2025]
+rule input_pdb:
+    input: structure_selection/AFDB/O00329_19_1026.pdb, PIK3CD/free/stability/mutatex_input_preparation/AFDB_19-1026/model_v6/saturation/mutate_runfile.txt, PIK3CD/free/stability/mutatex_input_preparation/AFDB_19-1026/model_v6/saturation/repair_runfile.txt, PIK3CD/free/stability/mutatex_input_preparation/AFDB_19-1026/model_v6/saturation/mutation_list.txt, PIK3CD/free/stability/mutatex_runs/AFDB_19-1026/model_v6/saturation/README.txt
+    output: PIK3CD/free/stability/mutatex_input_preparation/AFDB_19-1026/model_v6/saturation/O00329_trimmed.pdb
+    jobid: 8
+    reason: Missing output files: PIK3CD/free/stability/mutatex_input_preparation/AFDB_19-1026/model_v6/saturation/O00329_trimmed.pdb; Input files updated by another job: PIK3CD/free/stability/mutatex_input_preparation/AFDB_19-1026/model_v6/saturation/repair_runfile.txt, PIK3CD/free/stability/mutatex_input_preparation/AFDB_19-1026/model_v6/saturation/mutate_runfile.txt, structure_selection/AFDB/O00329_19_1026.pdb, PIK3CD/free/stability/mutatex_input_preparation/AFDB_19-1026/model_v6/saturation/mutation_list.txt, PIK3CD/free/stability/mutatex_runs/AFDB_19-1026/model_v6/saturation/README.txt
+    wildcards: gene=PIK3CD, database=AFDB, start_res=19, end_res=1026, version=v6, prot_id=O00329
+    resources: tmpdir=/tmp
+
+[Sun Dec 14 14:40:23 2025]
+Finished job 13.
+8 of 16 steps (50%) done
+Select jobs to execute...
+
+[Sun Dec 14 14:40:23 2025]
+rule mutatex_scan:
+    input: PPM1D/free/stability/mutatex_input_preparation/AFDB_5-378/model_v6/saturation/O15297_trimmed.pdb
+    output: PPM1D/free/stability/mutatex_runs/AFDB_5-378/model_v6/saturation/O15297_scan
+    jobid: 12
+    reason: Missing output files: PPM1D/free/stability/mutatex_runs/AFDB_5-378/model_v6/saturation/O15297_scan; Input files updated by another job: PPM1D/free/stability/mutatex_input_preparation/AFDB_5-378/model_v6/saturation/O15297_trimmed.pdb
+    wildcards: gene=PPM1D, database=AFDB, start_res=5, end_res=378, version=v6, prot_id=O15297
+    threads: 2
+    resources: tmpdir=/tmp
+
+[Sun Dec 14 14:40:23 2025]
+Finished job 8.
+9 of 16 steps (56%) done
+Select jobs to execute...
+
+[Sun Dec 14 14:40:23 2025]
+rule mutatex_scan:
+    input: PIK3CD/free/stability/mutatex_input_preparation/AFDB_19-1026/model_v6/saturation/O00329_trimmed.pdb
+    output: PIK3CD/free/stability/mutatex_runs/AFDB_19-1026/model_v6/saturation/O00329_scan
+    jobid: 7
+    reason: Missing output files: PIK3CD/free/stability/mutatex_runs/AFDB_19-1026/model_v6/saturation/O00329_scan; Input files updated by another job: PIK3CD/free/stability/mutatex_input_preparation/AFDB_19-1026/model_v6/saturation/O00329_trimmed.pdb
+    wildcards: gene=PIK3CD, database=AFDB, start_res=19, end_res=1026, version=v6, prot_id=O00329
+    threads: 2
+    resources: tmpdir=/tmp
+
+[Mon Dec 15 09:01:50 2025]
+Finished job 2.
+10 of 16 steps (62%) done
+Select jobs to execute...
+
+[Mon Dec 15 09:01:50 2025]
+rule write_table:
+    input: GJB2/free/stability/mutatex_runs/AFDB_18-221/model_v6/saturation/P29033_scan
+    output: GJB2/free/stability/mutatex_runs/AFDB_18-221/model_v6/saturation/P29033_table/energies.csv
+    jobid: 1
+    reason: Missing output files: GJB2/free/stability/mutatex_runs/AFDB_18-221/model_v6/saturation/P29033_table/energies.csv; Input files updated by another job: GJB2/free/stability/mutatex_runs/AFDB_18-221/model_v6/saturation/P29033_scan
+    wildcards: gene=GJB2, database=AFDB, start_res=18, end_res=221, version=v6, prot_id=P29033
+    resources: tmpdir=/tmp
+
+[Mon Dec 15 09:01:51 2025]
+Finished job 1.
+11 of 16 steps (69%) done

@@ -1,0 +1,204 @@
+   ********************************************
+   ***                                      ***
+   ***             FoldX 5 (c)            ***
+   ***                                      ***
+   ***     code by the FoldX Consortium     ***
+   ***                                      ***
+   ***     Jesper Borg, Frederic Rousseau   ***
+   ***    Joost Schymkowitz, Luis Serrano   ***
+   ***    Peter Vanhee, Erik Verschueren    ***
+   ***     Lies Baeten, Javier Delgado      ***
+   ***       and Francois Stricher          ***
+   *** and any other of the 9! permutations ***
+   ***   based on an original concept by    ***
+   ***   Raphael Guerois and Luis Serrano   ***
+   ********************************************
+
+Reading config file 'runfile.txt'
+1 models read: O15297_trimmed_model0_checked_Repair.pdb
+1 models read: O15297_trimmed_model0_checked_Repair.pdb
+Output: ./O15297_trimmed_model0_checked_Repair.log
+
+BackHbond       =               -250.86
+SideHbond       =               -112.56
+Energy_VdW      =               -366.22
+Electro         =               -12.84
+Energy_SolvP    =               485.17
+Energy_SolvH    =               -477.90
+Energy_vdwclash =               14.86
+energy_torsion  =               9.85
+backbone_vdwclash=              155.00
+Entropy_sidec   =               209.14
+Entropy_mainc   =               563.54
+water bonds     =               0.00
+helix dipole    =               -1.77
+loop_entropy    =               0.00
+cis_bond        =               0.10
+disulfide       =               0.00
+kn electrostatic=               0.00
+partial covalent interactions = 0.00
+Energy_Ionisation =             1.31
+Entropy Complex =               0.00
+-----------------------------------------------------------
+Total          = 				  61.81
+
+
+BackHbond       =               -250.86
+SideHbond       =               -112.56
+Energy_VdW      =               -366.22
+Electro         =               -12.84
+Energy_SolvP    =               485.17
+Energy_SolvH    =               -477.90
+Energy_vdwclash =               14.86
+energy_torsion  =               9.85
+backbone_vdwclash=              155.00
+Entropy_sidec   =               209.14
+Entropy_mainc   =               563.54
+water bonds     =               0.00
+helix dipole    =               -1.77
+loop_entropy    =               0.00
+cis_bond        =               0.10
+disulfide       =               0.00
+kn electrostatic=               0.00
+partial covalent interactions = 0.00
+Energy_Ionisation =             1.31
+Entropy Complex =               0.00
+-----------------------------------------------------------
+Total          = 				  61.81
+
+Starting BuildModel
+Reading RA227G;
+Reading RA227A;
+Reading RA227V;
+Reading RA227L;
+Reading RA227I;
+Reading RA227M;
+Reading RA227F;
+Reading RA227W;
+Reading RA227P;
+Reading RA227S;
+Reading RA227T;
+Reading RA227C;
+Reading RA227Y;
+Reading RA227N;
+Reading RA227Q;
+Reading RA227D;
+Reading RA227E;
+Reading RA227K;
+Reading RA227R;
+Reading RA227H;
+Reading RA227s;
+Reading RA227p;
+Reading RA227y;
+Residue to Mutate ARGA227 has residue index 222
+Residue to Mutate ARGA227 has residue index 222
+Residue to Mutate ARGA227 has residue index 222
+Residue to Mutate ARGA227 has residue index 222
+Residue to Mutate ARGA227 has residue index 222
+Residue to Mutate ARGA227 has residue index 222
+Residue to Mutate ARGA227 has residue index 222
+Residue to Mutate ARGA227 has residue index 222
+Residue to Mutate ARGA227 has residue index 222
+Residue to Mutate ARGA227 has residue index 222
+Residue to Mutate ARGA227 has residue index 222
+Residue to Mutate ARGA227 has residue index 222
+Residue to Mutate ARGA227 has residue index 222
+Residue to Mutate ARGA227 has residue index 222
+Residue to Mutate ARGA227 has residue index 222
+Residue to Mutate ARGA227 has residue index 222
+Residue to Mutate ARGA227 has residue index 222
+Residue to Mutate ARGA227 has residue index 222
+Residue to Mutate ARGA227 has residue index 222
+Residue to Mutate ARGA227 has residue index 222
+Residue to Mutate ARGA227 has residue index 222
+Residue to Mutate ARGA227 has residue index 222
+Residue to Mutate ARGA227 has residue index 222
+Mutating residue = ARGA227 into GLY
+Mutating residue = ARGA227 into GLY
+Mutating residue = ARGA227 into GLY
+Mutating residue = ARGA227 into GLY
+Mutating residue = ARGA227 into GLY
+Mutating residue = ARGA227 into ALA
+Mutating residue = ARGA227 into ALA
+Mutating residue = ARGA227 into ALA
+Mutating residue = ARGA227 into ALA
+Mutating residue = ARGA227 into ALA
+Mutating residue = ARGA227 into VAL
+Mutating residue = ARGA227 into VAL
+Mutating residue = ARGA227 into VAL
+Mutating residue = ARGA227 into VAL
+Mutating residue = ARGA227 into VAL
+Mutating residue = ARGA227 into LEU
+Mutating residue = ARGA227 into LEU
+Mutating residue = ARGA227 into LEU
+Mutating residue = ARGA227 into LEU
+Mutating residue = ARGA227 into LEU
+Mutating residue = ARGA227 into ILE
+Mutating residue = ARGA227 into ILE
+Mutating residue = ARGA227 into ILE
+Mutating residue = ARGA227 into ILE
+Mutating residue = ARGA227 into ILE
+Mutating residue = ARGA227 into MET
+Mutating residue = ARGA227 into MET
+Mutating residue = ARGA227 into MET
+Mutating residue = ARGA227 into MET
+Mutating residue = ARGA227 into MET
+Mutating residue = ARGA227 into PHE
+Mutating residue = ARGA227 into PHE
+Mutating residue = ARGA227 into PHE
+Mutating residue = ARGA227 into PHE
+Mutating residue = ARGA227 into PHE
+Mutating residue = ARGA227 into TRP
+Mutating residue = ARGA227 into TRP
+Mutating residue = ARGA227 into TRP
+Mutating residue = ARGA227 into TRP
+Mutating residue = ARGA227 into TRP
+Mutating residue = ARGA227 into PRO
+Mutating residue = ARGA227 into PRO
+Mutating residue = ARGA227 into PRO
+Mutating residue = ARGA227 into PRO
+Mutating residue = ARGA227 into PRO
+Mutating residue = ARGA227 into SER
+Mutating residue = ARGA227 into SER
+Mutating residue = ARGA227 into SER
+Mutating residue = ARGA227 into SER
+Mutating residue = ARGA227 into SER
+Mutating residue = ARGA227 into THR
+Mutating residue = ARGA227 into THR
+Mutating residue = ARGA227 into THR
+Mutating residue = ARGA227 into THR
+Mutating residue = ARGA227 into THR
+Mutating residue = ARGA227 into CYS
+Mutating residue = ARGA227 into CYS
+Mutating residue = ARGA227 into CYS
+Mutating residue = ARGA227 into CYS
+Mutating residue = ARGA227 into CYS
+Mutating residue = ARGA227 into TYR
+Mutating residue = ARGA227 into TYR
+Mutating residue = ARGA227 into TYR
+Mutating residue = ARGA227 into TYR
+Mutating residue = ARGA227 into TYR
+Mutating residue = ARGA227 into ASN
+Mutating residue = ARGA227 into ASN
+Mutating residue = ARGA227 into ASN
+Mutating residue = ARGA227 into ASN
+Mutating residue = ARGA227 into ASN
+Mutating residue = ARGA227 into GLN
+Mutating residue = ARGA227 into GLN
+Mutating residue = ARGA227 into GLN
+Mutating residue = ARGA227 into GLN
+Mutating residue = ARGA227 into GLN
+Mutating residue = ARGA227 into ASP
+Mutating residue = ARGA227 into ASP
+Mutating residue = ARGA227 into ASP
+Mutating residue = ARGA227 into ASP
+Mutating residue = ARGA227 into ASP
+Mutating residue = ARGA227 into GLU
+Mutating residue = ARGA227 into GLU
+Mutating residue = ARGA227 into GLU
+Mutating residue = ARGA227 into GLU
+Mutating residue = ARGA227 into GLU
+Mutating residue = ARGA227 into LYS
+Mutating residue = ARGA227 into LYS
+Mutating residue = ARGA227 into LYS
+Mutating residue = ARGA227 into LYS

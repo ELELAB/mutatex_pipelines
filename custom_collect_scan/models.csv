@@ -1,3 +1,4 @@
 coding_gene,prot_id,database,start_res,end_res,version,pdb_file
-APC,P25054,EXPR,1,5,v1,APC_1-238.pdb
-HSPB1,P14602,AF,88,177,v3,
+GJB2,P29033,AFDB,18,221,v6,
+PIK3CD,O00329,AFDB,19,1026,v6,
+PPM1D,O15297,AFDB,5,378,v6,

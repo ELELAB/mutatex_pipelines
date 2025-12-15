@@ -1,0 +1,349 @@
+   ********************************************
+   ***                                      ***
+   ***             FoldX 5 (c)            ***
+   ***                                      ***
+   ***     code by the FoldX Consortium     ***
+   ***                                      ***
+   ***     Jesper Borg, Frederic Rousseau   ***
+   ***    Joost Schymkowitz, Luis Serrano   ***
+   ***    Peter Vanhee, Erik Verschueren    ***
+   ***     Lies Baeten, Javier Delgado      ***
+   ***       and Francois Stricher          ***
+   *** and any other of the 9! permutations ***
+   ***   based on an original concept by    ***
+   ***   Raphael Guerois and Luis Serrano   ***
+   ********************************************
+
+Reading config file 'runfile.txt'
+1 models read: O15297_trimmed_model0_checked_Repair.pdb
+1 models read: O15297_trimmed_model0_checked_Repair.pdb
+Output: ./O15297_trimmed_model0_checked_Repair.log
+
+BackHbond       =               -250.86
+SideHbond       =               -112.56
+Energy_VdW      =               -366.22
+Electro         =               -12.84
+Energy_SolvP    =               485.17
+Energy_SolvH    =               -477.90
+Energy_vdwclash =               14.86
+energy_torsion  =               9.85
+backbone_vdwclash=              155.00
+Entropy_sidec   =               209.14
+Entropy_mainc   =               563.54
+water bonds     =               0.00
+helix dipole    =               -1.77
+loop_entropy    =               0.00
+cis_bond        =               0.10
+disulfide       =               0.00
+kn electrostatic=               0.00
+partial covalent interactions = 0.00
+Energy_Ionisation =             1.31
+Entropy Complex =               0.00
+-----------------------------------------------------------
+Total          = 				  61.81
+
+
+BackHbond       =               -250.86
+SideHbond       =               -112.56
+Energy_VdW      =               -366.22
+Electro         =               -12.84
+Energy_SolvP    =               485.17
+Energy_SolvH    =               -477.90
+Energy_vdwclash =               14.86
+energy_torsion  =               9.85
+backbone_vdwclash=              155.00
+Entropy_sidec   =               209.14
+Entropy_mainc   =               563.54
+water bonds     =               0.00
+helix dipole    =               -1.77
+loop_entropy    =               0.00
+cis_bond        =               0.10
+disulfide       =               0.00
+kn electrostatic=               0.00
+partial covalent interactions = 0.00
+Energy_Ionisation =             1.31
+Entropy Complex =               0.00
+-----------------------------------------------------------
+Total          = 				  61.81
+
+Starting BuildModel
+Reading VA211G;
+Reading VA211A;
+Reading VA211V;
+Reading VA211L;
+Reading VA211I;
+Reading VA211M;
+Reading VA211F;
+Reading VA211W;
+Reading VA211P;
+Reading VA211S;
+Reading VA211T;
+Reading VA211C;
+Reading VA211Y;
+Reading VA211N;
+Reading VA211Q;
+Reading VA211D;
+Reading VA211E;
+Reading VA211K;
+Reading VA211R;
+Reading VA211H;
+Reading VA211s;
+Reading VA211p;
+Reading VA211y;
+Residue to Mutate VALA211 has residue index 206
+Residue to Mutate VALA211 has residue index 206
+Residue to Mutate VALA211 has residue index 206
+Residue to Mutate VALA211 has residue index 206
+Residue to Mutate VALA211 has residue index 206
+Residue to Mutate VALA211 has residue index 206
+Residue to Mutate VALA211 has residue index 206
+Residue to Mutate VALA211 has residue index 206
+Residue to Mutate VALA211 has residue index 206
+Residue to Mutate VALA211 has residue index 206
+Residue to Mutate VALA211 has residue index 206
+Residue to Mutate VALA211 has residue index 206
+Residue to Mutate VALA211 has residue index 206
+Residue to Mutate VALA211 has residue index 206
+Residue to Mutate VALA211 has residue index 206
+Residue to Mutate VALA211 has residue index 206
+Residue to Mutate VALA211 has residue index 206
+Residue to Mutate VALA211 has residue index 206
+Residue to Mutate VALA211 has residue index 206
+Residue to Mutate VALA211 has residue index 206
+Residue to Mutate VALA211 has residue index 206
+Residue to Mutate VALA211 has residue index 206
+Residue to Mutate VALA211 has residue index 206
+Mutating residue = VALA211 into GLY
+Mutating residue = VALA211 into GLY
+Mutating residue = VALA211 into GLY
+Mutating residue = VALA211 into GLY
+Mutating residue = VALA211 into GLY
+Mutating residue = VALA211 into ALA
+Mutating residue = VALA211 into ALA
+Mutating residue = VALA211 into ALA
+Mutating residue = VALA211 into ALA
+Mutating residue = VALA211 into ALA
+Mutating residue = VALA211 into VAL
+Mutating residue = VALA211 into VAL
+Mutating residue = VALA211 into VAL
+Mutating residue = VALA211 into VAL
+Mutating residue = VALA211 into VAL
+Mutating residue = VALA211 into LEU
+Mutating residue = VALA211 into LEU
+Mutating residue = VALA211 into LEU
+Mutating residue = VALA211 into LEU
+Mutating residue = VALA211 into LEU
+Mutating residue = VALA211 into ILE
+Mutating residue = VALA211 into ILE
+Mutating residue = VALA211 into ILE
+Mutating residue = VALA211 into ILE
+Mutating residue = VALA211 into ILE
+Mutating residue = VALA211 into MET
+Mutating residue = VALA211 into MET
+Mutating residue = VALA211 into MET
+Mutating residue = VALA211 into MET
+Mutating residue = VALA211 into MET
+Mutating residue = VALA211 into PHE
+Mutating residue = VALA211 into PHE
+Mutating residue = VALA211 into PHE
+Mutating residue = VALA211 into PHE
+Mutating residue = VALA211 into PHE
+Mutating residue = VALA211 into TRP
+Mutating residue = VALA211 into TRP
+Mutating residue = VALA211 into TRP
+Mutating residue = VALA211 into TRP
+Mutating residue = VALA211 into TRP
+Mutating residue = VALA211 into PRO
+Mutating residue = VALA211 into PRO
+Mutating residue = VALA211 into PRO
+Mutating residue = VALA211 into PRO
+Mutating residue = VALA211 into PRO
+Mutating residue = VALA211 into SER
+Mutating residue = VALA211 into SER
+Mutating residue = VALA211 into SER
+Mutating residue = VALA211 into SER
+Mutating residue = VALA211 into SER
+Mutating residue = VALA211 into THR
+Mutating residue = VALA211 into THR
+Mutating residue = VALA211 into THR
+Mutating residue = VALA211 into THR
+Mutating residue = VALA211 into THR
+Mutating residue = VALA211 into CYS
+Mutating residue = VALA211 into CYS
+Mutating residue = VALA211 into CYS
+Mutating residue = VALA211 into CYS
+Mutating residue = VALA211 into CYS
+Mutating residue = VALA211 into TYR
+Mutating residue = VALA211 into TYR
+Mutating residue = VALA211 into TYR
+Mutating residue = VALA211 into TYR
+Mutating residue = VALA211 into TYR
+Mutating residue = VALA211 into ASN
+Mutating residue = VALA211 into ASN
+Mutating residue = VALA211 into ASN
+Mutating residue = VALA211 into ASN
+Mutating residue = VALA211 into ASN
+Mutating residue = VALA211 into GLN
+Mutating residue = VALA211 into GLN
+Mutating residue = VALA211 into GLN
+Mutating residue = VALA211 into GLN
+Mutating residue = VALA211 into GLN
+Mutating residue = VALA211 into ASP
+Mutating residue = VALA211 into ASP
+Mutating residue = VALA211 into ASP
+Mutating residue = VALA211 into ASP
+Mutating residue = VALA211 into ASP
+Mutating residue = VALA211 into GLU
+Mutating residue = VALA211 into GLU
+Mutating residue = VALA211 into GLU
+Mutating residue = VALA211 into GLU
+Mutating residue = VALA211 into GLU
+Mutating residue = VALA211 into LYS
+Mutating residue = VALA211 into LYS
+Mutating residue = VALA211 into LYS
+Mutating residue = VALA211 into LYS
+Mutating residue = VALA211 into LYS
+Mutating residue = VALA211 into ARG
+Mutating residue = VALA211 into ARG
+Mutating residue = VALA211 into ARG
+Mutating residue = VALA211 into ARG
+Mutating residue = VALA211 into ARG
+Mutating residue = VALA211 into HIS
+Mutating residue = VALA211 into HIS
+Mutating residue = VALA211 into HIS
+Mutating residue = VALA211 into HIS
+Mutating residue = VALA211 into HIS
+Mutating residue = VALA211 into SEP
+Mutating residue = VALA211 into SEP
+Mutating residue = VALA211 into SEP
+Mutating residue = VALA211 into SEP
+Mutating residue = VALA211 into SEP
+Mutating residue = VALA211 into TPO
+Mutating residue = VALA211 into TPO
+Mutating residue = VALA211 into TPO
+Mutating residue = VALA211 into TPO
+Mutating residue = VALA211 into TPO
+Mutating residue = VALA211 into PTR
+Mutating residue = VALA211 into PTR
+Mutating residue = VALA211 into PTR
+Mutating residue = VALA211 into PTR
+Mutating residue = VALA211 into PTR
+Your file run OK
+End time of FoldX: Mon Dec 15 07:22:33 2025
+Total time spend: 287.58 seconds.
+validated file "O15297_trimmed_model0_checked_Repair_1_0.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_1_1.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_1_2.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_1_3.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_1_4.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_2_0.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_2_1.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_2_2.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_2_3.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_2_4.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_3_0.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_3_1.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_3_2.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_3_3.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_3_4.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_4_0.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_4_1.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_4_2.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_4_3.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_4_4.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_5_0.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_5_1.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_5_2.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_5_3.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_5_4.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_6_0.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_6_1.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_6_2.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_6_3.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_6_4.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_7_0.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_7_1.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_7_2.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_7_3.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_7_4.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_8_0.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_8_1.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_8_2.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_8_3.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_8_4.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_9_0.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_9_1.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_9_2.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_9_3.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_9_4.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_10_0.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_10_1.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_10_2.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_10_3.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_10_4.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_11_0.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_11_1.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_11_2.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_11_3.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_11_4.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_12_0.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_12_1.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_12_2.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_12_3.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_12_4.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_13_0.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_13_1.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_13_2.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_13_3.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_13_4.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_14_0.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_14_1.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_14_2.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_14_3.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_14_4.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_15_0.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_15_1.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_15_2.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_15_3.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_15_4.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_16_0.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_16_1.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_16_2.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_16_3.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_16_4.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_17_0.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_17_1.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_17_2.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_17_3.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_17_4.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_18_0.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_18_1.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_18_2.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_18_3.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_18_4.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_19_0.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_19_1.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_19_2.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_19_3.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_19_4.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_20_0.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_20_1.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_20_2.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_20_3.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_20_4.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_21_0.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_21_1.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_21_2.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_21_3.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_21_4.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_22_0.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_22_1.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_22_2.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_22_3.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_22_4.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_23_0.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_23_1.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_23_2.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_23_3.pdb" => successfully finished
+validated file "O15297_trimmed_model0_checked_Repair_23_4.pdb" => successfully finished
+Cleaning BuildModel...DONE

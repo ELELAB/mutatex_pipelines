@@ -1,0 +1,38 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 4
+Rules claiming more threads will be scaled down.
+Job stats:
+job            count
+-----------  -------
+all                1
+write_table        1
+total              2
+
+Select jobs to execute...
+
+[Fri Dec 12 11:16:52 2025]
+rule write_table:
+    input: APC/free/stability/mutatex_runs/EXPR_1-5/model_v1/saturation/P25054_scan
+    output: APC/free/stability/mutatex_runs/EXPR_1-5/model_v1/saturation/P25054_table/energies.csv
+    jobid: 1
+    reason: Missing output files: APC/free/stability/mutatex_runs/EXPR_1-5/model_v1/saturation/P25054_table/energies.csv
+    wildcards: gene=APC, database=EXPR, start_res=1, end_res=5, version=v1, prot_id=P25054
+    resources: tmpdir=/tmp
+
+[Fri Dec 12 11:16:53 2025]
+Finished job 1.
+1 of 2 steps (50%) done
+Select jobs to execute...
+
+[Fri Dec 12 11:16:53 2025]
+localrule all:
+    input: APC/free/stability/mutatex_runs/EXPR_1-5/model_v1/saturation/P25054_table/energies.csv
+    jobid: 0
+    reason: Input files updated by another job: APC/free/stability/mutatex_runs/EXPR_1-5/model_v1/saturation/P25054_table/energies.csv
+    resources: tmpdir=/tmp
+
+[Fri Dec 12 11:16:53 2025]
+Finished job 0.
+2 of 2 steps (100%) done
+Complete log: .snakemake/log/2025-12-12T111652.495826.snakemake.log

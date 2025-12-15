@@ -1,0 +1,197 @@
+   ********************************************
+   ***                                      ***
+   ***             FoldX 5 (c)            ***
+   ***                                      ***
+   ***     code by the FoldX Consortium     ***
+   ***                                      ***
+   ***     Jesper Borg, Frederic Rousseau   ***
+   ***    Joost Schymkowitz, Luis Serrano   ***
+   ***    Peter Vanhee, Erik Verschueren    ***
+   ***     Lies Baeten, Javier Delgado      ***
+   ***       and Francois Stricher          ***
+   *** and any other of the 9! permutations ***
+   ***   based on an original concept by    ***
+   ***   Raphael Guerois and Luis Serrano   ***
+   ********************************************
+
+Reading config file 'runfile.txt'
+1 models read: O00329_trimmed_model0_checked_Repair.pdb
+1 models read: O00329_trimmed_model0_checked_Repair.pdb
+Output: ./O00329_trimmed_model0_checked_Repair.log
+
+BackHbond       =               -750.94
+SideHbond       =               -305.40
+Energy_VdW      =               -1193.78
+Electro         =               -42.13
+Energy_SolvP    =               1527.86
+Energy_SolvH    =               -1601.32
+Energy_vdwclash =               17.16
+energy_torsion  =               11.52
+backbone_vdwclash=              676.43
+Entropy_sidec   =               678.08
+Entropy_mainc   =               1497.52
+water bonds     =               0.00
+helix dipole    =               -28.30
+loop_entropy    =               0.00
+cis_bond        =               0.00
+disulfide       =               0.00
+kn electrostatic=               0.00
+partial covalent interactions = 0.00
+Energy_Ionisation =             3.43
+Entropy Complex =               0.00
+-----------------------------------------------------------
+Total          = 				  -186.30
+
+
+BackHbond       =               -750.94
+SideHbond       =               -305.40
+Energy_VdW      =               -1193.78
+Electro         =               -42.13
+Energy_SolvP    =               1527.86
+Energy_SolvH    =               -1601.32
+Energy_vdwclash =               17.16
+energy_torsion  =               11.52
+backbone_vdwclash=              676.43
+Entropy_sidec   =               678.08
+Entropy_mainc   =               1497.52
+water bonds     =               0.00
+helix dipole    =               -28.30
+loop_entropy    =               0.00
+cis_bond        =               0.00
+disulfide       =               0.00
+kn electrostatic=               0.00
+partial covalent interactions = 0.00
+Energy_Ionisation =             3.43
+Entropy Complex =               0.00
+-----------------------------------------------------------
+Total          = 				  -186.30
+
+Starting BuildModel
+Reading WA178G;
+Reading WA178A;
+Reading WA178V;
+Reading WA178L;
+Reading WA178I;
+Reading WA178M;
+Reading WA178F;
+Reading WA178W;
+Reading WA178P;
+Reading WA178S;
+Reading WA178T;
+Reading WA178C;
+Reading WA178Y;
+Reading WA178N;
+Reading WA178Q;
+Reading WA178D;
+Reading WA178E;
+Reading WA178K;
+Reading WA178R;
+Reading WA178H;
+Reading WA178s;
+Reading WA178p;
+Reading WA178y;
+Residue to Mutate TRPA178 has residue index 159
+Residue to Mutate TRPA178 has residue index 159
+Residue to Mutate TRPA178 has residue index 159
+Residue to Mutate TRPA178 has residue index 159
+Residue to Mutate TRPA178 has residue index 159
+Residue to Mutate TRPA178 has residue index 159
+Residue to Mutate TRPA178 has residue index 159
+Residue to Mutate TRPA178 has residue index 159
+Residue to Mutate TRPA178 has residue index 159
+Residue to Mutate TRPA178 has residue index 159
+Residue to Mutate TRPA178 has residue index 159
+Residue to Mutate TRPA178 has residue index 159
+Residue to Mutate TRPA178 has residue index 159
+Residue to Mutate TRPA178 has residue index 159
+Residue to Mutate TRPA178 has residue index 159
+Residue to Mutate TRPA178 has residue index 159
+Residue to Mutate TRPA178 has residue index 159
+Residue to Mutate TRPA178 has residue index 159
+Residue to Mutate TRPA178 has residue index 159
+Residue to Mutate TRPA178 has residue index 159
+Residue to Mutate TRPA178 has residue index 159
+Residue to Mutate TRPA178 has residue index 159
+Residue to Mutate TRPA178 has residue index 159
+Mutating residue = TRPA178 into GLY
+Mutating residue = TRPA178 into GLY
+Mutating residue = TRPA178 into GLY
+Mutating residue = TRPA178 into GLY
+Mutating residue = TRPA178 into GLY
+Mutating residue = TRPA178 into ALA
+Mutating residue = TRPA178 into ALA
+Mutating residue = TRPA178 into ALA
+Mutating residue = TRPA178 into ALA
+Mutating residue = TRPA178 into ALA
+Mutating residue = TRPA178 into VAL
+Mutating residue = TRPA178 into VAL
+Mutating residue = TRPA178 into VAL
+Mutating residue = TRPA178 into VAL
+Mutating residue = TRPA178 into VAL
+Mutating residue = TRPA178 into LEU
+Mutating residue = TRPA178 into LEU
+Mutating residue = TRPA178 into LEU
+Mutating residue = TRPA178 into LEU
+Mutating residue = TRPA178 into LEU
+Mutating residue = TRPA178 into ILE
+Mutating residue = TRPA178 into ILE
+Mutating residue = TRPA178 into ILE
+Mutating residue = TRPA178 into ILE
+Mutating residue = TRPA178 into ILE
+Mutating residue = TRPA178 into MET
+Mutating residue = TRPA178 into MET
+Mutating residue = TRPA178 into MET
+Mutating residue = TRPA178 into MET
+Mutating residue = TRPA178 into MET
+Mutating residue = TRPA178 into PHE
+Mutating residue = TRPA178 into PHE
+Mutating residue = TRPA178 into PHE
+Mutating residue = TRPA178 into PHE
+Mutating residue = TRPA178 into PHE
+Mutating residue = TRPA178 into TRP
+Mutating residue = TRPA178 into TRP
+Mutating residue = TRPA178 into TRP
+Mutating residue = TRPA178 into TRP
+Mutating residue = TRPA178 into TRP
+Mutating residue = TRPA178 into PRO
+Mutating residue = TRPA178 into PRO
+Mutating residue = TRPA178 into PRO
+Mutating residue = TRPA178 into PRO
+Mutating residue = TRPA178 into PRO
+Mutating residue = TRPA178 into SER
+Mutating residue = TRPA178 into SER
+Mutating residue = TRPA178 into SER
+Mutating residue = TRPA178 into SER
+Mutating residue = TRPA178 into SER
+Mutating residue = TRPA178 into THR
+Mutating residue = TRPA178 into THR
+Mutating residue = TRPA178 into THR
+Mutating residue = TRPA178 into THR
+Mutating residue = TRPA178 into THR
+Mutating residue = TRPA178 into CYS
+Mutating residue = TRPA178 into CYS
+Mutating residue = TRPA178 into CYS
+Mutating residue = TRPA178 into CYS
+Mutating residue = TRPA178 into CYS
+Mutating residue = TRPA178 into TYR
+Mutating residue = TRPA178 into TYR
+Mutating residue = TRPA178 into TYR
+Mutating residue = TRPA178 into TYR
+Mutating residue = TRPA178 into TYR
+Mutating residue = TRPA178 into ASN
+Mutating residue = TRPA178 into ASN
+Mutating residue = TRPA178 into ASN
+Mutating residue = TRPA178 into ASN
+Mutating residue = TRPA178 into ASN
+Mutating residue = TRPA178 into GLN
+Mutating residue = TRPA178 into GLN
+Mutating residue = TRPA178 into GLN
+Mutating residue = TRPA178 into GLN
+Mutating residue = TRPA178 into GLN
+Mutating residue = TRPA178 into ASP
+Mutating residue = TRPA178 into ASP
+Mutating residue = TRPA178 into ASP
+Mutating residue = TRPA178 into ASP
+Mutating residue = TRPA178 into ASP
+Mutating residue = TRPA178 into GLU
+Mutating residue = TRPA178 into GLU

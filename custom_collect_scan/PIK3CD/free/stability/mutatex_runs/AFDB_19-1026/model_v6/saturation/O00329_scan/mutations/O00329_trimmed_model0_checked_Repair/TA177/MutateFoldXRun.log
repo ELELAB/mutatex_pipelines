@@ -1,0 +1,154 @@
+   ********************************************
+   ***                                      ***
+   ***             FoldX 5 (c)            ***
+   ***                                      ***
+   ***     code by the FoldX Consortium     ***
+   ***                                      ***
+   ***     Jesper Borg, Frederic Rousseau   ***
+   ***    Joost Schymkowitz, Luis Serrano   ***
+   ***    Peter Vanhee, Erik Verschueren    ***
+   ***     Lies Baeten, Javier Delgado      ***
+   ***       and Francois Stricher          ***
+   *** and any other of the 9! permutations ***
+   ***   based on an original concept by    ***
+   ***   Raphael Guerois and Luis Serrano   ***
+   ********************************************
+
+Reading config file 'runfile.txt'
+1 models read: O00329_trimmed_model0_checked_Repair.pdb
+1 models read: O00329_trimmed_model0_checked_Repair.pdb
+Output: ./O00329_trimmed_model0_checked_Repair.log
+
+BackHbond       =               -750.94
+SideHbond       =               -305.40
+Energy_VdW      =               -1193.78
+Electro         =               -42.13
+Energy_SolvP    =               1527.86
+Energy_SolvH    =               -1601.32
+Energy_vdwclash =               17.16
+energy_torsion  =               11.52
+backbone_vdwclash=              676.43
+Entropy_sidec   =               678.08
+Entropy_mainc   =               1497.52
+water bonds     =               0.00
+helix dipole    =               -28.30
+loop_entropy    =               0.00
+cis_bond        =               0.00
+disulfide       =               0.00
+kn electrostatic=               0.00
+partial covalent interactions = 0.00
+Energy_Ionisation =             3.43
+Entropy Complex =               0.00
+-----------------------------------------------------------
+Total          = 				  -186.30
+
+
+BackHbond       =               -750.94
+SideHbond       =               -305.40
+Energy_VdW      =               -1193.78
+Electro         =               -42.13
+Energy_SolvP    =               1527.86
+Energy_SolvH    =               -1601.32
+Energy_vdwclash =               17.16
+energy_torsion  =               11.52
+backbone_vdwclash=              676.43
+Entropy_sidec   =               678.08
+Entropy_mainc   =               1497.52
+water bonds     =               0.00
+helix dipole    =               -28.30
+loop_entropy    =               0.00
+cis_bond        =               0.00
+disulfide       =               0.00
+kn electrostatic=               0.00
+partial covalent interactions = 0.00
+Energy_Ionisation =             3.43
+Entropy Complex =               0.00
+-----------------------------------------------------------
+Total          = 				  -186.30
+
+Starting BuildModel
+Reading TA177G;
+Reading TA177A;
+Reading TA177V;
+Reading TA177L;
+Reading TA177I;
+Reading TA177M;
+Reading TA177F;
+Reading TA177W;
+Reading TA177P;
+Reading TA177S;
+Reading TA177T;
+Reading TA177C;
+Reading TA177Y;
+Reading TA177N;
+Reading TA177Q;
+Reading TA177D;
+Reading TA177E;
+Reading TA177K;
+Reading TA177R;
+Reading TA177H;
+Reading TA177s;
+Reading TA177p;
+Reading TA177y;
+Residue to Mutate THRA177 has residue index 158
+Residue to Mutate THRA177 has residue index 158
+Residue to Mutate THRA177 has residue index 158
+Residue to Mutate THRA177 has residue index 158
+Residue to Mutate THRA177 has residue index 158
+Residue to Mutate THRA177 has residue index 158
+Residue to Mutate THRA177 has residue index 158
+Residue to Mutate THRA177 has residue index 158
+Residue to Mutate THRA177 has residue index 158
+Residue to Mutate THRA177 has residue index 158
+Residue to Mutate THRA177 has residue index 158
+Residue to Mutate THRA177 has residue index 158
+Residue to Mutate THRA177 has residue index 158
+Residue to Mutate THRA177 has residue index 158
+Residue to Mutate THRA177 has residue index 158
+Residue to Mutate THRA177 has residue index 158
+Residue to Mutate THRA177 has residue index 158
+Residue to Mutate THRA177 has residue index 158
+Residue to Mutate THRA177 has residue index 158
+Residue to Mutate THRA177 has residue index 158
+Residue to Mutate THRA177 has residue index 158
+Residue to Mutate THRA177 has residue index 158
+Residue to Mutate THRA177 has residue index 158
+Mutating residue = THRA177 into GLY
+Mutating residue = THRA177 into GLY
+Mutating residue = THRA177 into GLY
+Mutating residue = THRA177 into GLY
+Mutating residue = THRA177 into GLY
+Mutating residue = THRA177 into ALA
+Mutating residue = THRA177 into ALA
+Mutating residue = THRA177 into ALA
+Mutating residue = THRA177 into ALA
+Mutating residue = THRA177 into ALA
+Mutating residue = THRA177 into VAL
+Mutating residue = THRA177 into VAL
+Mutating residue = THRA177 into VAL
+Mutating residue = THRA177 into VAL
+Mutating residue = THRA177 into VAL
+Mutating residue = THRA177 into LEU
+Mutating residue = THRA177 into LEU
+Mutating residue = THRA177 into LEU
+Mutating residue = THRA177 into LEU
+Mutating residue = THRA177 into LEU
+Mutating residue = THRA177 into ILE
+Mutating residue = THRA177 into ILE
+Mutating residue = THRA177 into ILE
+Mutating residue = THRA177 into ILE
+Mutating residue = THRA177 into ILE
+Mutating residue = THRA177 into MET
+Mutating residue = THRA177 into MET
+Mutating residue = THRA177 into MET
+Mutating residue = THRA177 into MET
+Mutating residue = THRA177 into MET
+Mutating residue = THRA177 into PHE
+Mutating residue = THRA177 into PHE
+Mutating residue = THRA177 into PHE
+Mutating residue = THRA177 into PHE
+Mutating residue = THRA177 into PHE
+Mutating residue = THRA177 into TRP
+Mutating residue = THRA177 into TRP
+Mutating residue = THRA177 into TRP
+Mutating residue = THRA177 into TRP

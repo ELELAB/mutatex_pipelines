@@ -53,9 +53,10 @@ The user must have `Snakemake` [^Mölder2021] and `python` v3.7 or higher instal
  
 `snakemake --cores 4`
 
-It is possible to change the maximum number of processes that each `MutateX` run is allowed to use (default is 1):
+By default `MutateX` uses all cores assigned to the workflow (`snakemake --cores`).
+It is possible to change the number of cores used by each `MutateX` run with:
 
-`snakemake --cores 4 --set-threads mutatex_scan=4`
+`snakemake --cores 8 --set-threads mutatex_scan=2` 
 
 The maximum number of processes used by each `MutateX` run cannot exceed the number of provided cores.
 

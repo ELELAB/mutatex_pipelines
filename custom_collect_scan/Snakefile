@@ -120,6 +120,7 @@ rule mutatex_scan:
         "{gene}/free/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/saturation/{prot_id}_trimmed.pdb"
     output:
         directory("{gene}/free/stability/mutatex_runs/{database}_{start_res}-{end_res}/model_{version}/saturation/{prot_id}_scan")
+    threads: workflow.cores
     params:
         env=config["mutatex"]["env"],
         foldx_exe=config["mutatex"]["foldx_exe"],
@@ -133,7 +134,7 @@ rule mutatex_scan:
         {params.env}
 
         mutatex ../../../../../mutatex_input_preparation/{wildcards.database}_{wildcards.start_res}-{wildcards.end_res}/model_{wildcards.version}/saturation/{wildcards.prot_id}_trimmed.pdb \
-            -p 4 \
+            -p {threads} \
             -m  ../../../../../mutatex_input_preparation/{wildcards.database}_{wildcards.start_res}-{wildcards.end_res}/model_{wildcards.version}/saturation/mutation_list.txt \
             -x {params.foldx_exe} \
             -f {params.foldx_suite} \

@@ -6,6 +6,7 @@ mutatex:
     env:  "set +u; . /usr/local/envs/mutatex/bin/activate; set -u"
     foldx_exe: "/usr/local/foldx5/foldx"
     foldx_suite: "suite5"
+    cleaning_depth: deep
 
 mutate_runfile: |
         command=BuildModel

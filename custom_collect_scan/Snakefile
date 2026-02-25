@@ -1,10 +1,36 @@
 import pandas as pd
 import os
+from snakemake.exceptions import WorkflowError
 
 configfile: "config.yaml"
 models = pd.read_csv(config["models"], keep_default_na=False)
 models_check = models.drop(columns= "pdb_file")
 models.loc[models["version"].eq(""), "version"] = "v6"
+
+# set up of cleaning level
+cleaning_opt = {"none","partial","deep"}
+
+# handling of cleaning level errors
+try:
+    raw_cleaning = config["mutatex"]["cleaning_depth"]
+except KeyError:
+    raise WorkflowError(
+        "Missing config variable: mutatex.cleaning_depth\n"
+        "Add under mutatex:\n"
+        "   cleaning_depth: none|partial|deep\n"
+        "Example:\n"
+        "   mutatex:\n"
+        "       cleaning_depth: deep")
+
+if not isinstance(raw_cleaning, str):
+    raise WorkflowError(f"mutatex.cleaning_depth must be a string: none, partial, deep (received {raw_cleaning!r}).")
+
+mutatex_cleaning = raw_cleaning.strip().lower()
+
+if mutatex_cleaning not in cleaning_opt:
+    raise WorkflowError(
+        f"Invalid Mutatex cleaning variable (received {raw_cleaning!r}\n"
+        "Allowed options: none|partial|deep")
 
 empty_string_mask = models_check.replace('', None).isna()
 if empty_string_mask.values.any():
@@ -77,10 +103,10 @@ rule download_pdb:
             (models['prot_id'] == wcs.prot_id) &
             (models['start_res'] == int(wcs.start_res)) &
             (models['end_res'] == int(wcs.end_res))]['pdb_file'].values[0],
-	af_version=lambda wcs: models[
-	    (models['prot_id'] == wcs.prot_id) &
-	    (models['start_res'] == int(wcs.start_res)) &
-	    (models['end_res'] == int(wcs.end_res))]['version'].values[0]
+        af_version=lambda wcs: models[
+            (models['prot_id'] == wcs.prot_id) &
+            (models['start_res'] == int(wcs.start_res)) &
+            (models['end_res'] == int(wcs.end_res))]['version'].values[0]
     run:
         if params.pdb:
             shell(f"mkdir -p structure_selection/{wildcards.database}")
@@ -124,7 +150,8 @@ rule mutatex_scan:
     params:
         env=config["mutatex"]["env"],
         foldx_exe=config["mutatex"]["foldx_exe"],
-        foldx_suite=config["mutatex"]["foldx_suite"]
+        foldx_suite=config["mutatex"]["foldx_suite"],
+        cleaning=mutatex_cleaning
     shell:
         """
         working_dir={wildcards.gene}/free/stability/mutatex_runs/{wildcards.database}_{wildcards.start_res}-{wildcards.end_res}/model_{wildcards.version}/saturation/{wildcards.prot_id}_scan
@@ -140,7 +167,7 @@ rule mutatex_scan:
             -f {params.foldx_suite} \
             -R ../../../../../mutatex_input_preparation/{wildcards.database}_{wildcards.start_res}-{wildcards.end_res}/model_{wildcards.version}/saturation/repair_runfile.txt \
             -M ../../../../../mutatex_input_preparation/{wildcards.database}_{wildcards.start_res}-{wildcards.end_res}/model_{wildcards.version}/saturation/mutate_runfile.txt \
-            -C deep \
+            -C {params.cleaning} \
             -l \
             -L \
             -c \
@@ -165,4 +192,3 @@ rule write_table:
                   -d ../{wildcards.prot_id}_scan/results/mutation_ddgs/final_averages\
                   -F csv
         """
-

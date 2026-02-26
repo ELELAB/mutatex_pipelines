@@ -5,33 +5,9 @@ import os
 import logging
 import mutatex
 import shutil
-from snakemake.exceptions import WorkflowError
 
 configfile: 'config.yaml'
 models = pd.read_csv(config['models'], keep_default_na=False)
-
-# set up of cleaning level
-cleaning_opt = {0: "none", 1: "partial", 2: "deep"}
-
-# early validation of cleaning level
-if "mutatex" not in config:
-    raise WorkflowError("Missing 'mutatex' section in config.yaml")
-if "cleaning_depth" not in config["mutatex"]:
-    raise WorkflowError("Missing config for cleaning depth: mutatex.cleaning_depth\n"
-    "Add under mutatex:\n"
-    "   cleaning_depth: 0 | 1 | 2\n"
-    "Where: 0 = none, 1 = partial and 2 = deep."
-    )
-
-depth = config["mutatex"]["cleaning_depth"]
-if isinstance(depth, str) and depth.isdigit():
-    depth = int(depth)
-if not isinstance(depth, int):
-    raise WorkflowError(f"mutatex.cleaning_depth must be an integer: 0, 1 or 2 (received {depth!r}).")
-if depth not in cleaning_opt:
-    raise WorkflowError(f"mutatex.ckeaning_depth must be 0, 1 or 2 (received {depth}).")
-
-mutatex_cleaning = cleaning_opt[depth]
 
 assert all(list(map(os.path.isfile,config["csv_dir"]+"/"+models["protein_name"]+models["chain_protein"]+models["chain_peptide"]+".csv"))), "Each pdb must have a CSV mutations table associated. Its file name must contain the following wildcards: protein_name, chain_protein and chain_peptide (e.g., lc3bab.csv)."
 
@@ -120,15 +96,14 @@ rule mutatex_scan:
     params:
         foldx_exe=config["mutatex"]["foldx_exe"],
         skip_repair="-S" if config["mutatex"]["skip_repair"] == True else "",
-        cleaning = mutatex_cleaning
     threads:
         1
     shell:
         """
         set +u; source /usr/local/envs/mutatex/bin/activate; set -u
         cd {config[out_dir]}/{wildcards.method}_{wildcards.protein_name}_{wildcards.PDB}{wildcards.chain_protein}{wildcards.chain_peptide}_{wildcards.aa_protein}_{wildcards.aa_peptide}/{wildcards.model_name}/{wildcards.restraints}/{wildcards.scan}/
-        echo -e "# mutatex command\nmutatex $(basename {input.link_pdb}) -q $(basename {input.poslist}) {params.skip_repair} -m $(basename {input.mutation_list}) --foldx-version=suite5 --np {threads} -x {params.foldx_exe} -B -C {params.cleaning} -v -L -c -l >& log &" >> $(basename {input.readme})
-        mutatex $(basename {input.link_pdb}) -q $(basename {input.poslist}) {params.skip_repair} -m $(basename {input.mutation_list}) --foldx-version=suite5 --np {threads} -x {params.foldx_exe} -B -C {params.cleaning} -v -L -c -l >& log 
+        echo -e "# mutatex command\nmutatex $(basename {input.link_pdb}) -q $(basename {input.poslist}) {params.skip_repair} -m $(basename {input.mutation_list}) --foldx-version=suite5 --np {threads} -x {params.foldx_exe} -B -C deep -v -L -c -l >& log &" >> $(basename {input.readme})
+        mutatex $(basename {input.link_pdb}) -q $(basename {input.poslist}) {params.skip_repair} -m $(basename {input.mutation_list}) --foldx-version=suite5 --np {threads} -x {params.foldx_exe} -B -C deep -v -L -c -l >& log 
         
         """
 

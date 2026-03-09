@@ -162,7 +162,8 @@ rule write_table:
         {config[mutatex][env]}
         ddg2excel -p ../{wildcards.prot_id}_scan/{wildcards.prot_id}_trimmed_model0_checked.pdb\
                   -l ../../../../../mutatex_input_preparation/{wildcards.database}_{wildcards.start_res}-{wildcards.end_res}/model_{wildcards.version}/saturation/mutation_list.txt \
-                  -d ../{wildcards.prot_id}_scan/results/mutation_ddgs/final_averages\
-                  -F csv
+                  -d ../{wildcards.prot_id}_scan/results/mutation_ddgs/{wildcards.prot_id}_trimmed_model0_checked_Repair\
+                  -F csv\
+		  -s 
         """
 

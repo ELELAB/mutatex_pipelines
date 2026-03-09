@@ -17,7 +17,7 @@ except KeyError:
     raise WorkflowError(
         "Missing config variable: mutatex.cleaning_depth\n"
         "Add under mutatex:\n"
-        "   cleaning_depth: none|partial|deep\n"
+        "   cleaning_depth: none, partial, deep\n"
         "Example:\n"
         "   mutatex:\n"
         "       cleaning_depth: deep")
@@ -30,7 +30,7 @@ mutatex_cleaning = raw_cleaning.strip().lower()
 if mutatex_cleaning not in cleaning_opt:
     raise WorkflowError(
         f"Invalid Mutatex cleaning variable (received {raw_cleaning!r}\n"
-        "Allowed options: none|partial|deep")
+        "Allowed options: none, partial, deep")
 
 empty_string_mask = models_check.replace('', None).isna()
 if empty_string_mask.values.any():

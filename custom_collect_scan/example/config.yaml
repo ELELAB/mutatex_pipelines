@@ -1,0 +1,48 @@
+models: "models.csv"
+
+pdb_selres_env: ". /usr/local/envs/py310/bin/activate"
+
+mutatex:
+    env:  "set +u; . /usr/local/envs/mutatex/bin/activate; set -u"
+    foldx_exe: "/usr/local/foldx5/foldx"
+    foldx_suite: "suite5"
+    cleaning_depth: deep
+
+mutate_runfile: |
+        command=BuildModel
+        pdb=$PDBS$
+        mutant-file=individual_list.txt
+        water=-CRYSTAL
+        numberOfRuns=$NRUNS$
+        complexWithDNA=true
+repair_runfile: |
+        command=RepairPDB
+        pdb=$PDBS$
+        temperature=298
+        water=-CRYSTAL
+        complexWithDNA=true
+mutation_list: |
+        G
+        A
+        V
+        L
+        I
+        M
+        F
+        W
+        P
+        S
+        T
+        C
+        Y
+        N
+        Q
+        D
+        E
+        K
+        R
+        H
+        s
+        p
+        y
+        

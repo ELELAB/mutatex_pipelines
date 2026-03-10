@@ -42,6 +42,9 @@ The `config.yaml` is the configuration file through which is possible to specify
 - the inputs of mutate\_runfile\_.txt;
 - the inputs of repair\_runfile\_.txt;
 - the list of mutations mutation\_list.txt.
+- the MutateX cleaning option
+
+The MutateX cleaning option is specified with "mutatex.cleaning_depth" and accepts the inputs 'none', 'partial', and 'deep'. If the input is invalid or empty, the workflow stops before execuion with an error message.
 
 ## Requirements
 

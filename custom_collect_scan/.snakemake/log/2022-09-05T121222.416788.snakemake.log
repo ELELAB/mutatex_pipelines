@@ -1,5 +1,0 @@
-KeyError in line 15 of /data/user/albertopettenella/stability_scan/Snakefile:
-'protein_id'
-  File "/data/user/albertopettenella/stability_scan/Snakefile", line 15, in <module>
-  File "/usr/local/envs/py37/lib/python3.7/site-packages/pandas/core/frame.py", line 3455, in __getitem__
-  File "/usr/local/envs/py37/lib/python3.7/site-packages/pandas/core/indexes/base.py", line 3363, in get_loc

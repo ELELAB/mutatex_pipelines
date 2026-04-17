@@ -145,6 +145,30 @@ rule input_pdb:
         pdb_selres -{wildcards.start_res}:{wildcards.end_res} {wildcards.prot_id}.pdb > {wildcards.prot_id}_trimmed.pdb
         """
 
+rule run_procheck:
+    input:
+        pdb="{gene}/free/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/saturation/{prot_id}_trimmed.pdb"
+    output:
+        sum_file="{gene}/free/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/procheck/{prot_id}_trimmed.sum"
+    params:
+        env=config["procheck_env"],
+        readme=procheck_readme,
+        chain="A",
+        resolution="2.0"
+    shell:
+        """
+        outdir={wildcards.gene}/free/stability/mutatex_input_preparation/{wildcards.database}_{wildcards.start_res}-{wildcards.end_res}/model_{wildcards.version}/procheck
+        mkdir -p $outdir
+        cp {params.readme} $outdir/
+
+        cd $outdir
+        {params.env}
+        procheck.scr ../saturation/{wildcards.prot_id}_trimmed.pdb {params.chain} {params.resolution}
+
+        test -f {wildcards.prot_id}_trimmed.sum
+        """
+
+
 rule mutatex_scan:
     input:
         "{gene}/free/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/saturation/{prot_id}_trimmed.pdb"

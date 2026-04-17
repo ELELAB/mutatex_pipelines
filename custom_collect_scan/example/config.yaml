@@ -1,6 +1,7 @@
 models: "models.csv"
 
 pdb_selres_env: ". /usr/local/envs/py310/bin/activate"
+procheck_env: "export prodir=/usr/local/procheck && export PATH=$PATH:$prodir"
 
 mutatex:
     env:  "set +u; . /usr/local/envs/mutatex/bin/activate; set -u"

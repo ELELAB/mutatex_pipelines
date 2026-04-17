@@ -231,7 +231,8 @@ rule classify_procheck:
 
 rule mutatex_scan:
     input:
-        "{gene}/free/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/saturation/{prot_id}_trimmed.pdb"
+        pdb="{gene}/free/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/saturation/{prot_id}_trimmed.pdb",
+        procheck="{gene}/free/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/procheck/{prot_id}_procheck.done"
     output:
         directory("{gene}/free/stability/mutatex_runs/{database}_{start_res}-{end_res}/model_{version}/saturation/{prot_id}_scan")
     threads: workflow.cores
@@ -242,15 +243,16 @@ rule mutatex_scan:
         cleaning=mutatex_cleaning
     shell:
         """
+	pdb_path=$(realpath {input.pdb})
         working_dir={wildcards.gene}/free/stability/mutatex_runs/{wildcards.database}_{wildcards.start_res}-{wildcards.end_res}/model_{wildcards.version}/saturation/{wildcards.prot_id}_scan
         mkdir -p $working_dir
         cd $working_dir
 
         {params.env}
 
-        mutatex ../../../../../mutatex_input_preparation/{wildcards.database}_{wildcards.start_res}-{wildcards.end_res}/model_{wildcards.version}/saturation/{wildcards.prot_id}_trimmed.pdb \
+        mutatex "$pdb_path" \
             -p {threads} \
-            -m  ../../../../../mutatex_input_preparation/{wildcards.database}_{wildcards.start_res}-{wildcards.end_res}/model_{wildcards.version}/saturation/mutation_list.txt \
+            -m ../../../../../mutatex_input_preparation/{wildcards.database}_{wildcards.start_res}-{wildcards.end_res}/model_{wildcards.version}/saturation/mutation_list.txt \
             -x {params.foldx_exe} \
             -f {params.foldx_suite} \
             -R ../../../../../mutatex_input_preparation/{wildcards.database}_{wildcards.start_res}-{wildcards.end_res}/model_{wildcards.version}/saturation/repair_runfile.txt \
@@ -260,7 +262,6 @@ rule mutatex_scan:
             -L \
             -c \
             -v
-
         """
 
 rule write_table:

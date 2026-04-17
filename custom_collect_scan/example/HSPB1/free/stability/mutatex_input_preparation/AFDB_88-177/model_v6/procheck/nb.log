@@ -1,0 +1,111 @@
+ 
+Check of non-bonded contacts
+----------------------------
+ 
+
+Neighbouring Contact Locator - By David Jones, August 1990
+
+Program is configured for 100000 atoms and 10000 residues.
+
+Enter the name of original coordinates file
+Input file name P14602_trimmed.new
+Output file name P14602_trimmed.nb
+Processing : P14602_trimmed.new
+Residue     1 is GLY A   88-  
+Residue     2 is VAL A   89-  
+Residue     3 is SER A   90-  
+Residue     4 is GLU A   91-  
+Residue     5 is ILE A   92-  
+Residue     6 is ARG A   93-  
+Residue     7 is GLN A   94-  
+Residue     8 is THR A   95-  
+Residue     9 is ALA A   96-  
+Residue    10 is ASP A   97-  
+Residue    11 is ARG A   98-  
+Residue    12 is TRP A   99-  
+Residue    13 is ARG A  100-  
+Residue    14 is VAL A  101-  
+Residue    15 is SER A  102-  
+Residue    16 is LEU A  103-  
+Residue    17 is ASP A  104-  
+Residue    18 is VAL A  105-  
+Residue    19 is ASN A  106-  
+Residue    20 is HIS A  107-  
+Residue    21 is PHE A  108-  
+Residue    22 is ALA A  109-  
+Residue    23 is PRO A  110-  
+Residue    24 is GLU A  111-  
+Residue    25 is GLU A  112-  
+Residue    26 is LEU A  113-  
+Residue    27 is THR A  114-  
+Residue    28 is VAL A  115-  
+Residue    29 is LYS A  116-  
+Residue    30 is THR A  117-  
+Residue    31 is LYS A  118-  
+Residue    32 is GLU A  119-  
+Residue    33 is GLY A  120-  
+Residue    34 is VAL A  121-  
+Residue    35 is VAL A  122-  
+Residue    36 is GLU A  123-  
+Residue    37 is ILE A  124-  
+Residue    38 is THR A  125-  
+Residue    39 is GLY A  126-  
+Residue    40 is LYS A  127-  
+Residue    41 is HIS A  128-  
+Residue    42 is GLU A  129-  
+Residue    43 is GLU A  130-  
+Residue    44 is ARG A  131-  
+Residue    45 is GLN A  132-  
+Residue    46 is ASP A  133-  
+Residue    47 is GLU A  134-  
+Residue    48 is HIS A  135-  
+Residue    49 is GLY A  136-  
+Residue    50 is TYR A  137-  
+Residue    51 is ILE A  138-  
+Residue    52 is SER A  139-  
+Residue    53 is ARG A  140-  
+Residue    54 is CYS A  141-  
+Residue    55 is PHE A  142-  
+Residue    56 is THR A  143-  
+Residue    57 is ARG A  144-  
+Residue    58 is LYS A  145-  
+Residue    59 is TYR A  146-  
+Residue    60 is THR A  147-  
+Residue    61 is LEU A  148-  
+Residue    62 is PRO A  149-  
+Residue    63 is PRO A  150-  
+Residue    64 is GLY A  151-  
+Residue    65 is VAL A  152-  
+Residue    66 is ASP A  153-  
+Residue    67 is PRO A  154-  
+Residue    68 is THR A  155-  
+Residue    69 is LEU A  156-  
+Residue    70 is VAL A  157-  
+Residue    71 is SER A  158-  
+Residue    72 is SER A  159-  
+Residue    73 is SER A  160-  
+Residue    74 is LEU A  161-  
+Residue    75 is SER A  162-  
+Residue    76 is PRO A  163-  
+Residue    77 is GLU A  164-  
+Residue    78 is GLY A  165-  
+Residue    79 is THR A  166-  
+Residue    80 is LEU A  167-  
+Residue    81 is THR A  168-  
+Residue    82 is VAL A  169-  
+Residue    83 is GLU A  170-  
+Residue    84 is ALA A  171-  
+Residue    85 is PRO A  172-  
+Residue    86 is LEU A  173-  
+Residue    87 is PRO A  174-  
+Residue    88 is LYS A  175-  
+Residue    89 is ALA A  176-  
+Residue    90 is VAL A  177-  
+  703 potential contact atoms selected from    90 residues.
+
+Checking for disulphide bridges . . . done.
+Checking for neighbours . . . 
+Warning: unusual CA-CA distance for contact number   113 : distance =  12.9
+   Residues   GLU  112- A  <->  ARG  131- A   (ri =    24,  rj =    43)
+  290 neighbouring contacts found.
+* Program completed

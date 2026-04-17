@@ -1,0 +1,15 @@
+ 
+Plots and residue-by-residue listing
+------------------------------------
+ 
+ * Unable to find keyword in parameter file: Ramachandran regions
+ Enter filename containing coordinates of structure
+ Enter required chain-ID, or leave blank for all
+ Enter resolution
+ Main-chain parameters           * File: P25054_trimmed_04.ps
+ Side-chain parameters           * File: P25054_trimmed_05.ps
+ Residue properties plot         * File: P25054_trimmed_06.ps
+ *
+ * Detailed listing: P25054_trimmed.out
+ *
+ * Program complete

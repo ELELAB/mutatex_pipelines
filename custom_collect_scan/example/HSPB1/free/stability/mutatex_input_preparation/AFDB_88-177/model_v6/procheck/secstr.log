@@ -1,0 +1,18 @@
+ 
+SECSTR - Secondary structure assignment
+---------------------------------------
+ 
+
+ Secondary structure calculation program - copyright by David Keith Smith, 1989
+
+ Amended by R A Laskowski, 1992
+
+ Enter filename containing coordinates of structure
+   (for file containing ensemble of NMR structures enter @filename;
+    for set of separate PDB files to be processed, enter %filelist,
+    where filelist contains a list of PDB files to be cleaned up)
+ number of hydrogen bonds is    53                                               
+ side chain atoms swapped for                                                    
+ GLU    4  PHE   21  GLU   24  GLU   25  GLU   32  GLU   36  GLU   42  GLU   47  
+ TYR   50  GLU   77  GLU   83                                                    
+ * Program completed

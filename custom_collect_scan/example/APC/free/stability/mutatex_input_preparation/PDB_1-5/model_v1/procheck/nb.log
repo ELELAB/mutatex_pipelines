@@ -1,0 +1,55 @@
+ 
+Check of non-bonded contacts
+----------------------------
+ 
+
+Neighbouring Contact Locator - By David Jones, August 1990
+
+Program is configured for 100000 atoms and 10000 residues.
+
+Enter the name of original coordinates file
+Input file name P25054_trimmed.new
+Output file name P25054_trimmed.nb
+Processing : P25054_trimmed.new
+Residue     1 is MET A    1-  
+Unrecognized atom name  H   from residue MET 
+Unrecognized atom name  H2  from residue MET 
+Unrecognized atom name  H3  from residue MET 
+Unrecognized atom name  HA  from residue MET 
+Unrecognized atom name  HB2 from residue MET 
+Unrecognized atom name  HB3 from residue MET 
+Unrecognized atom name  HG2 from residue MET 
+Unrecognized atom name  HG3 from residue MET 
+Unrecognized atom name  HE1 from residue MET 
+Unrecognized atom name  HE2 from residue MET 
+Unrecognized atom name  HE3 from residue MET 
+Residue     2 is ALA A    2-  
+Unrecognized atom name  H   from residue ALA 
+Unrecognized atom name  HA  from residue ALA 
+Unrecognized atom name  HB1 from residue ALA 
+Unrecognized atom name  HB2 from residue ALA 
+Unrecognized atom name  HB3 from residue ALA 
+Residue     3 is ALA A    3-  
+Unrecognized atom name  H   from residue ALA 
+Unrecognized atom name  HA  from residue ALA 
+Unrecognized atom name  HB1 from residue ALA 
+Unrecognized atom name  HB2 from residue ALA 
+Unrecognized atom name  HB3 from residue ALA 
+Residue     4 is ALA A    4-  
+Unrecognized atom name  H   from residue ALA 
+Unrecognized atom name  HA  from residue ALA 
+Unrecognized atom name  HB1 from residue ALA 
+Unrecognized atom name  HB2 from residue ALA 
+Unrecognized atom name  HB3 from residue ALA 
+Residue     5 is SER A    5-  
+Unrecognized atom name  H   from residue SER 
+Unrecognized atom name  HA  from residue SER 
+Unrecognized atom name  HB2 from residue SER 
+Unrecognized atom name  HB3 from residue SER 
+Unrecognized atom name  HG  from residue SER 
+   29 potential contact atoms selected from     5 residues.
+
+Checking for disulphide bridges . . . done.
+Checking for neighbours . . . 
+    7 neighbouring contacts found.
+* Program completed

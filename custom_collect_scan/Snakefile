@@ -169,6 +169,66 @@ rule run_procheck:
         """
 
 
+rule classify_procheck:
+    input:
+        sum_file="{gene}/free/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/procheck/{prot_id}_trimmed.sum"
+    output:
+        report="{gene}/free/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/procheck/{prot_id}_procheck.csv",
+        flag="{gene}/free/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/procheck/{prot_id}_procheck.done"
+    params:
+        script=procheck_script
+    run:
+        import csv
+        import subprocess
+
+        pdb_file = models[
+            (models["prot_id"] == wildcards.prot_id) &
+            (models["start_res"] == int(wildcards.start_res)) &
+            (models["end_res"] == int(wildcards.end_res))
+        ]["pdb_file"].values[0]
+
+        mode = "exp" if pdb_file else "af"
+
+        subprocess.run(
+            [
+                "python",
+                params.script,
+                "-i", os.path.abspath(input.sum_file),
+                "-o", os.path.abspath(output.report),
+                "--mode", mode
+            ],
+            check=True
+        )
+
+        with open(output.report, newline="") as fh:
+            reader = csv.DictReader(fh)
+            rows = [r for r in reader if r["File"] != "SUMMARY"]
+
+        if len(rows) != 1:
+            raise WorkflowError(
+                f"Expected exactly one PROCHECK classification row in {output.report}, found {len(rows)}"
+            )
+
+        classification = rows[0]["Classification"].strip()
+
+        if classification == "Green":
+            print(f"PASS: PROCHECK classified {wildcards.prot_id}_trimmed.pdb as Green.")
+            with open(output.flag, "w") as fh:
+                fh.write("Green\n")
+        elif classification == "Yellow":
+            print(f"WARNING: PROCHECK classified {wildcards.prot_id}_trimmed.pdb as Yellow. Continuing workflow.")
+            with open(output.flag, "w") as fh:
+                fh.write("Yellow\n")
+        elif classification == "Red":
+            print(f"ERROR: PROCHECK classified {wildcards.prot_id}_trimmed.pdb as Red. Stopping workflow.")
+            raise WorkflowError(
+                f"PROCHECK classified {wildcards.prot_id}_trimmed.pdb as Red. Stopping workflow."
+            )
+        else:
+            raise WorkflowError(
+                f"Unknown PROCHECK classification '{classification}' in {output.report}"
+            )
+
 rule mutatex_scan:
     input:
         "{gene}/free/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/saturation/{prot_id}_trimmed.pdb"

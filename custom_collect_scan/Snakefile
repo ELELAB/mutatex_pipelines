@@ -4,6 +4,10 @@ from snakemake.exceptions import WorkflowError
 
 configfile: "config.yaml"
 models = pd.read_csv(config["models"], keep_default_na=False)
+workflow_dir = os.path.abspath(os.path.dirname(workflow.snakefile))
+procheck_script = os.path.join(workflow_dir, "procheck", "classify_procheck.py")
+procheck_readme = os.path.join(workflow_dir, "procheck", "readme.txt")
+
 models_check = models.drop(columns= "pdb_file")
 models.loc[models["version"].eq(""), "version"] = "v6"
 

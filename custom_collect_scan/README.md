@@ -1,6 +1,8 @@
 ## Overview
 
-This directory contains a snakemake-based pipeline for peptide mutation scanning runs with `MutateX`[^Tiberti]. This protocol predicts changes of folding free energy upon mutation for each residue of a given list of mutations provided as input. Each residue is mutated to a list of residue types depending on the mutations found in the corresponding input dataset.
+This directory contains a snakemake-based pipeline for peptide mutation scanning runs with `MutateX`[^Tiberti]. This protocol predicts changes of folding free energy upon mutation for each residue of a given list of mutations provided as input. Each residue is mutated to a list of residue types depending on the mutations found in the corresponding input dataset. 
+
+Before running `MutateX`, the pipeline performs a PROCHECK quality assessment on the trimmed structure. The PROCHECK summary is classified as Green, Yellow, or Red. Green structures proceed normally, Yellow structures continue with a warning, and Red structures stop before the MutateX scan.
 
 ## Description of the directory content:
 
@@ -43,12 +45,13 @@ The `config.yaml` is the configuration file through which is possible to specify
 - the inputs of repair\_runfile\_.txt;
 - the list of mutations mutation\_list.txt.
 - the MutateX cleaning option
+- the environment where PROCHECK is installed.
 
-The MutateX cleaning option is specified with "mutatex.cleaning_depth" and accepts the inputs 'none', 'partial', and 'deep'. If the input is invalid or empty, the workflow stops before execuion with an error message.
+The MutateX cleaning option is specified with "mutatex.cleaning_depth" and accepts the inputs 'none', 'partial', and 'deep'. If the input is invalid or empty, the workflow stops before execution with an error message.
 
 ## Requirements
 
-The user must have `Snakemake` [^Mölder2021] and `python` v3.7 or higher installed, together with `MutateX`[^Tiberti] and `FoldX`[^Schymkowitz2005]. The pipeline also requires `pdb-tools` [^Rodrigues] package installed.
+The user must have `Snakemake` [^Mölder2021] and `python` v3.7 or higher installed, together with `MutateX`[^Tiberti] and `FoldX`[^Schymkowitz2005]. The pipeline also requires `pdb-tools` [^Rodrigues] package and `PROCHECK` installed.
 
 ## Commands to run the pipeline:
 

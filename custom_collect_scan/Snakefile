@@ -1,12 +1,13 @@
 import pandas as pd
 import os
+import csv
+import subprocess
 from snakemake.exceptions import WorkflowError
 
 configfile: "config.yaml"
 models = pd.read_csv(config["models"], keep_default_na=False)
 workflow_dir = os.path.abspath(os.path.dirname(workflow.snakefile))
-procheck_script = os.path.join(workflow_dir, "procheck", "classify_procheck.py")
-procheck_readme = os.path.join(workflow_dir, "procheck", "readme.txt")
+procheck_script = os.path.join(workflow_dir, "scripts", "classify_procheck.py")
 
 models_check = models.drop(columns= "pdb_file")
 models.loc[models["version"].eq(""), "version"] = "v6"
@@ -46,6 +47,15 @@ if empty_string_mask.values.any():
 rule all:
     input:
         expand("{gene}/free/stability/mutatex_runs/{database}_{start_res}-{end_res}/model_{version}/saturation/{prot_id}_table/energies.csv",
+                    zip,
+                    gene=models["coding_gene"],
+                    database=models["database"],
+                    start_res=models["start_res"],
+                    end_res=models["end_res"],
+                    version=models["version"],
+                    prot_id=models["prot_id"]
+                    ),
+	expand("{gene}/free/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/procheck/{prot_id}_procheck.csv",
                     zip,
                     gene=models["coding_gene"],
                     database=models["database"],
@@ -152,14 +162,12 @@ rule run_procheck:
         sum_file="{gene}/free/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/procheck/{prot_id}_trimmed.sum"
     params:
         env=config["procheck_env"],
-        readme=procheck_readme,
         chain="A",
         resolution="2.0"
     shell:
         """
         outdir={wildcards.gene}/free/stability/mutatex_input_preparation/{wildcards.database}_{wildcards.start_res}-{wildcards.end_res}/model_{wildcards.version}/procheck
         mkdir -p $outdir
-        cp {params.readme} $outdir/
 
         cd $outdir
         {params.env}
@@ -178,16 +186,21 @@ rule classify_procheck:
     params:
         script=procheck_script
     run:
-        import csv
-        import subprocess
+        database_mode = {
+            "AFDB": "af",
+            "AF3": "af",
+            "AF2": "af",
+            "Mod": "af",
+            "PDB": "exp"
+        }
 
-        pdb_file = models[
-            (models["prot_id"] == wildcards.prot_id) &
-            (models["start_res"] == int(wildcards.start_res)) &
-            (models["end_res"] == int(wildcards.end_res))
-        ]["pdb_file"].values[0]
-
-        mode = "exp" if pdb_file else "af"
+        try:
+            mode = database_mode[wildcards.database]
+        except KeyError:
+            raise WorkflowError(
+                f"Unknown database type '{wildcards.database}'. "
+                f"Allowed values: {', '.join(database_mode)}"
+            )
 
         subprocess.run(
             [

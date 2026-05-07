@@ -1,0 +1,3 @@
+File,Residues,Core%,Allow%,Generous%,Disallowed%,BadContacts,BadContacts_per100,CisPeptides,Classification,MissingValues
+P14602_trimmed.sum,90,96.1,3.9,0.0,0.0,0,0.0,0,Green,Yes
+SUMMARY,,,,,,,,,"🟢 Green=1, 🟡 Yellow=0, 🔴 Red=0",

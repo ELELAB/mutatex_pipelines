@@ -21,6 +21,24 @@ aggregate_groups = (
     .drop_duplicates()
 )
 
+def domain_energy_files(wildcards):
+    """
+    Return all per-domain energies.csv files for a protein that has
+    multiple trimmed models/domains in models.csv.
+    """
+    subset = models[
+        (models["coding_gene"] == wildcards.gene) &
+        (models["prot_id"] == wildcards.prot_id) &
+        (models["version"] == wildcards.version)
+    ].sort_values(["start_res", "end_res"])
+
+    return [
+        f"{row.coding_gene}/free/stability/mutatex_runs/"
+        f"{row.database}_{row.start_res}-{row.end_res}/model_{row.version}/"
+        f"saturation/{row.prot_id}_table/energies.csv"
+        for row in subset.itertuples(index=False)
+    ]
+
 # set up of cleaning level
 cleaning_opt = {"none","partial","deep"}
 
@@ -74,12 +92,6 @@ rule all:
                     prot_id=models["prot_id"]
                     ),
         expand("{gene}/free/stability/mutatex_runs/aggregate/model_{version}/saturation/{prot_id}_table/energies.csv",
-                    zip,
-                    gene=aggregate_groups["coding_gene"],
-                    version=aggregate_groups["version"],
-                    prot_id=aggregate_groups["prot_id"]
-                    ),
-        expand("{gene}/free/stability/mutatex_runs/aggregate/model_{version}/saturation/{prot_id}_table/energies_std.csv",
                     zip,
                     gene=aggregate_groups["coding_gene"],
                     version=aggregate_groups["version"],
@@ -316,25 +328,6 @@ rule write_table:
                   -F csv\
 		  -s 
         """
-
-def domain_energy_files(wildcards):
-    """
-    Return all per-domain energies.csv files for a protein that has
-    multiple trimmed models/domains in models.csv.
-    """
-    subset = models[
-        (models["coding_gene"] == wildcards.gene) &
-        (models["prot_id"] == wildcards.prot_id) &
-        (models["version"] == wildcards.version)
-    ].sort_values(["start_res", "end_res"])
-
-    return [
-        f"{row.coding_gene}/free/stability/mutatex_runs/"
-        f"{row.database}_{row.start_res}-{row.end_res}/model_{row.version}/"
-        f"saturation/{row.prot_id}_table/energies.csv"
-        for row in subset.itertuples(index=False)
-    ]
-
 
 rule aggregate_tables:
     input:

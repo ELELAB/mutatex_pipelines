@@ -4,6 +4,8 @@ This directory contains a snakemake-based pipeline for peptide mutation scanning
 
 Before running `MutateX`, the pipeline performs a PROCHECK quality assessment on the trimmed structure. The PROCHECK summary is classified as Green, Yellow, or Red. Green structures proceed normally, Yellow structures continue with a warning, and Red structures stop before the MutateX scan.
 
+If the same protein is provided in multiple rows of `models.csv`, corresponding to different trimmed regions or domains, the pipeline also generates an additional aggregated output table. The domain-specific `MutateX` outputs are kept unchanged, and the aggregated tables are written under `mutatex_runs/aggregate/`.
+
 ## Description of the directory content:
 
 ### {coding_gene} folder

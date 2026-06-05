@@ -3,6 +3,7 @@ import os
 import csv
 import subprocess
 from snakemake.exceptions import WorkflowError
+from pathlib import Path
 
 configfile: "config.yaml"
 models = pd.read_csv(config["models"], keep_default_na=False)
@@ -11,6 +12,32 @@ procheck_script = os.path.join(workflow_dir, "scripts", "classify_procheck.py")
 
 models_check = models.drop(columns= "pdb_file")
 models.loc[models["version"].eq(""), "version"] = "v6"
+
+aggregate_groups = (
+    models
+    .groupby(["coding_gene", "prot_id", "version"], as_index=False)
+    .filter(lambda df: len(df) > 1)
+    [["coding_gene", "prot_id", "version"]]
+    .drop_duplicates()
+)
+
+def domain_energy_files(wildcards):
+    """
+    Return all per-domain energies.csv files for a protein that has
+    multiple trimmed models/domains in models.csv.
+    """
+    subset = models[
+        (models["coding_gene"] == wildcards.gene) &
+        (models["prot_id"] == wildcards.prot_id) &
+        (models["version"] == wildcards.version)
+    ].sort_values(["start_res", "end_res"])
+
+    return [
+        f"{row.coding_gene}/free/stability/mutatex_runs/"
+        f"{row.database}_{row.start_res}-{row.end_res}/model_{row.version}/"
+        f"saturation/{row.prot_id}_table/energies.csv"
+        for row in subset.itertuples(index=False)
+    ]
 
 # set up of cleaning level
 cleaning_opt = {"none","partial","deep"}
@@ -63,6 +90,12 @@ rule all:
                     end_res=models["end_res"],
                     version=models["version"],
                     prot_id=models["prot_id"]
+                    ),
+        expand("{gene}/free/stability/mutatex_runs/aggregate/model_{version}/saturation/{prot_id}_table/energies.csv",
+                    zip,
+                    gene=aggregate_groups["coding_gene"],
+                    version=aggregate_groups["version"],
+                    prot_id=aggregate_groups["prot_id"]
                     )
 
 rule input_txt:
@@ -295,3 +328,32 @@ rule write_table:
                   -F csv\
 		  -s 
         """
+
+rule aggregate_tables:
+    input:
+        energies=domain_energy_files
+    output:
+        energies="{gene}/free/stability/mutatex_runs/aggregate/model_{version}/saturation/{prot_id}_table/energies.csv",
+        energies_std="{gene}/free/stability/mutatex_runs/aggregate/model_{version}/saturation/{prot_id}_table/energies_std.csv"
+    run:
+        outdir = Path(output.energies).parent
+        outdir.mkdir(parents=True, exist_ok=True)
+
+        energy_tables = []
+        std_tables = []
+
+        for energy_file in input.energies:
+            energy_path = Path(energy_file)
+            std_path = energy_path.parent / "energies_std.csv"
+
+            if not std_path.exists():
+                raise WorkflowError(
+                    f"Expected standard-deviation table was not found: {std_path}\n"
+                    f"This file should be created by ddg2excel with the -s option."
+                )
+
+            energy_tables.append(pd.read_csv(energy_path))
+            std_tables.append(pd.read_csv(std_path))
+
+        pd.concat(energy_tables, ignore_index=True).to_csv(output.energies, index=False)
+        pd.concat(std_tables, ignore_index=True).to_csv(output.energies_std, index=False)

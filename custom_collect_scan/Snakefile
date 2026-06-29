@@ -2,7 +2,6 @@ import pandas as pd
 import os
 import csv
 import subprocess
-import urllib.request 
 from snakemake.exceptions import WorkflowError
 from pathlib import Path
 
@@ -40,36 +39,23 @@ def domain_energy_files(wildcards):
         for row in subset.itertuples(index=False)
     ]
 
-def read_uniprot_fasta_sequence(prot_id):
+def read_fasta_sequence(fasta_file):
     """
-    Retrieve the canonical UniProt FASTA sequence for a UniProt accession.
+    Read a FASTA file and return the sequence as a single string.
     """
-
-    url = f"https://rest.uniprot.org/uniprotkb/{prot_id}.fasta"
-
-    try:
-        with urllib.request.urlopen(url) as response:
-            fasta = response.read().decode("utf-8")
-    except Exception as error:
-        raise WorkflowError(
-            f"Could not retrieve UniProt FASTA sequence for {prot_id}.\n"
-            f"URL: {url}\n"
-            f"Original error: {error}"
+    with open(fasta_file) as fh:
+        sequence = "".join(
+            line.strip()
+            for line in fh
+            if line.strip() and not line.startswith(">")
         )
-
-    sequence = "".join(
-        line.strip()
-        for line in fasta.splitlines()
-        if line and not line.startswith(">")
-    )
 
     if not sequence:
         raise WorkflowError(
-            f"Retrieved an empty UniProt FASTA sequence for {prot_id}."
+            f"FASTA file is empty or could not be parsed: {fasta_file}"
         )
 
     return sequence
-
 
 def extract_pdb_sequence_by_residue_number(pdb_file):
     """
@@ -146,6 +132,65 @@ def extract_pdb_sequence_by_residue_number(pdb_file):
         )
 
     return residues
+
+def validate_afdb_sequence(pdb_file, fasta_file, prot_id):
+    """
+    Compare the AFDB PDB residue sequence against the canonical UniProt sequence.
+    The comparison uses residue numbers from the PDB file as UniProt positions.
+    """
+    uniprot_sequence = read_fasta_sequence(fasta_file)
+    pdb_residues = extract_pdb_sequence_by_residue_number(pdb_file)
+
+    mismatches = []
+    out_of_range = []
+
+    for chain_id, residue_number, insertion_code, pdb_aa in pdb_residues:
+        if residue_number < 1 or residue_number > len(uniprot_sequence):
+            out_of_range.append(
+                f"chain {chain_id}, residue {residue_number}{insertion_code}"
+            )
+            continue
+
+        uniprot_aa = uniprot_sequence[residue_number - 1]
+
+        if pdb_aa != uniprot_aa:
+            mismatches.append(
+                f"chain {chain_id}, residue {residue_number}{insertion_code}: "
+                f"UniProt {uniprot_aa}, AFDB {pdb_aa}"
+            )
+
+    if out_of_range:
+        out_of_range_msg = "\n".join(out_of_range[:20])
+        if len(out_of_range) > 20:
+            out_of_range_msg += f"\n... and {len(out_of_range) - 20} more."
+
+        raise WorkflowError(
+            f"AFDB sequence check failed for {prot_id}.\n"
+            f"The AFDB model contains residue numbers outside the UniProt sequence length "
+            f"({len(uniprot_sequence)} residues).\n\n"
+            f"Out-of-range residues:\n"
+            f"{out_of_range_msg}"
+        )
+
+    if mismatches:
+        mismatch_msg = "\n".join(mismatches[:20])
+        if len(mismatches) > 20:
+            mismatch_msg += f"\n... and {len(mismatches) - 20} more."
+
+        raise WorkflowError(
+            f"AFDB sequence check failed for {prot_id}.\n"
+            f"The AFDB model sequence does not match the UniProt canonical sequence.\n\n"
+            f"Mismatches:\n"
+            f"{mismatch_msg}\n\n"
+            f"This AFDB model should not be used for MutateX. "
+            f"Use AF3 or standalone AF2 instead."
+        )
+
+    print(
+        f"AFDB sequence check passed for {prot_id}. "
+        f"Checked {len(pdb_residues)} residues against the UniProt sequence."
+    )
+
 
 # set up of cleaning level
 cleaning_opt = {"none","partial","deep"}
@@ -263,88 +308,54 @@ rule download_pdb:
             (models['start_res'] == int(wcs.start_res)) &
             (models['end_res'] == int(wcs.end_res))]['version'].values[0]
     run:
+        output_path = Path(output.pdb)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+
         if params.pdb:
-            shell(f"mkdir -p structure_selection/{wildcards.database}")
-            shell(f"cp {params.pdb} structure_selection/{wildcards.database}/{wildcards.prot_id}_{wildcards.start_res}_{wildcards.end_res}.pdb")
+            shell(f'cp "{params.pdb}" "{output.pdb}"')
+
         else:
-            shell(f"""
-                mkdir -p structure_selection/{wildcards.database}
-                cd structure_selection/{wildcards.database}
-                wget -q https://alphafold.ebi.ac.uk/files/AF-{wildcards.prot_id}-F1-model_{params.af_version}.pdb -O {wildcards.prot_id}_{wildcards.start_res}_{wildcards.end_res}.pdb
-            """)
+            downloaded_pdb = output_path.with_suffix(".downloaded.pdb")
+            uniprot_fasta = output_path.with_suffix(".fasta")
 
-rule check_afdb_sequence:
-    input:
-        pdb="structure_selection/{database}/{prot_id}_{start_res}_{end_res}.pdb"
-    output:
-        flag="structure_selection/{database}/{prot_id}_{start_res}_{end_res}.seqcheck.done"
-    run:
-        if wildcards.database != "AFDB":
-            with open(output.flag, "w") as fh:
-                fh.write(
-                    f"Sequence check skipped for database '{wildcards.database}'. "
-                    "Only AFDB models are checked against UniProt.\n"
-                )
-            return
+            pdb_url = f"https://alphafold.ebi.ac.uk/files/AF-{wildcards.prot_id}-F1-model_{params.af_version}.pdb"
+            fasta_url = f"https://rest.uniprot.org/uniprotkb/{wildcards.prot_id}.fasta"
 
-        uniprot_sequence = read_uniprot_fasta_sequence(wildcards.prot_id)
-        pdb_residues = extract_pdb_sequence_by_residue_number(input.pdb)
+            for path in [output_path, downloaded_pdb, uniprot_fasta]:
+                if path.exists():
+                    path.unlink()
 
-        mismatches = []
-        out_of_range = []
+            shell(f'wget -q "{pdb_url}" -O "{downloaded_pdb}"')
+            shell(f'wget -q "{fasta_url}" -O "{uniprot_fasta}"')
 
-        for chain_id, residue_number, insertion_code, pdb_aa in pdb_residues:
-            if residue_number < 1 or residue_number > len(uniprot_sequence):
-                out_of_range.append(
-                    f"chain {chain_id}, residue {residue_number}{insertion_code}"
-                )
-                continue
-
-            uniprot_aa = uniprot_sequence[residue_number - 1]
-
-            if pdb_aa != uniprot_aa:
-                mismatches.append(
-                    f"chain {chain_id}, residue {residue_number}{insertion_code}: "
-                    f"UniProt {uniprot_aa}, AFDB {pdb_aa}"
+            if not downloaded_pdb.exists() or downloaded_pdb.stat().st_size == 0:
+                raise WorkflowError(
+                    f"The downloaded AFDB structure for {wildcards.prot_id} is empty or was not created.\n"
+                    f"URL: {pdb_url}"
                 )
 
-        if out_of_range:
-            raise WorkflowError(
-                f"AFDB sequence check failed for {wildcards.prot_id}.\n"
-                f"The AFDB model contains residue numbers outside the UniProt sequence length "
-                f"({len(uniprot_sequence)} residues).\n\n"
-                f"Out-of-range residues:\n"
-                + "\n".join(out_of_range[:20])
-                + (
-                    f"\n... and {len(out_of_range) - 20} more."
-                    if len(out_of_range) > 20 else ""
+            if not uniprot_fasta.exists() or uniprot_fasta.stat().st_size == 0:
+                raise WorkflowError(
+                    f"The downloaded UniProt FASTA for {wildcards.prot_id} is empty or was not created.\n"
+                    f"URL: {fasta_url}"
                 )
+
+            validate_afdb_sequence(
+                pdb_file=downloaded_pdb,
+                fasta_file=uniprot_fasta,
+                prot_id=wildcards.prot_id
             )
 
-        if mismatches:
-            raise WorkflowError(
-                f"AFDB sequence check failed for {wildcards.prot_id}.\n"
-                f"The AFDB model sequence does not match the UniProt canonical sequence.\n\n"
-                f"Mismatches:\n"
-                + "\n".join(mismatches[:20])
-                + (
-                    f"\n... and {len(mismatches) - 20} more."
-                    if len(mismatches) > 20 else ""
-                )
-                + "\n\nThis AFDB model should not be used for MutateX. "
-                  "Use AF3 or standalone AF2 instead."
-            )
+            downloaded_pdb.replace(output_path)
 
-        with open(output.flag, "w") as fh:
-            fh.write(
-                f"AFDB sequence check passed for {wildcards.prot_id}.\n"
-                f"Checked {len(pdb_residues)} residues against the UniProt sequence.\n"
-            )
+            if uniprot_fasta.exists():
+                uniprot_fasta.unlink()
+
+
 
 rule input_pdb:
     input:
         pdb="structure_selection/{database}/{prot_id}_{start_res}_{end_res}.pdb",
-        seqcheck="structure_selection/{database}/{prot_id}_{start_res}_{end_res}.seqcheck.done",
         mutate="{gene}/free/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/saturation/mutate_runfile.txt",
         repair="{gene}/free/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/saturation/repair_runfile.txt",
         mutation_list="{gene}/free/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/saturation/mutation_list.txt",

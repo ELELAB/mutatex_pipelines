@@ -39,6 +39,159 @@ def domain_energy_files(wildcards):
         for row in subset.itertuples(index=False)
     ]
 
+def read_fasta_sequence(fasta_file):
+    """
+    Read a FASTA file and return the sequence as a single string.
+    """
+    with open(fasta_file) as fh:
+        sequence = "".join(
+            line.strip()
+            for line in fh
+            if line.strip() and not line.startswith(">")
+        )
+
+    if not sequence:
+        raise WorkflowError(
+            f"FASTA file is empty or could not be parsed: {fasta_file}"
+        )
+
+    return sequence
+
+def extract_pdb_sequence_by_residue_number(pdb_file):
+    """
+    Extract the amino-acid sequence from ATOM records in a PDB file.
+
+    Returns a list of tuples:
+    (chain_id, residue_number, insertion_code, one_letter_residue)
+    """
+    aa3_to_aa1 = {
+        "ALA": "A",
+        "ARG": "R",
+        "ASN": "N",
+        "ASP": "D",
+        "CYS": "C",
+        "GLN": "Q",
+        "GLU": "E",
+        "GLY": "G",
+        "HIS": "H",
+        "ILE": "I",
+        "LEU": "L",
+        "LYS": "K",
+        "MET": "M",
+        "PHE": "F",
+        "PRO": "P",
+        "SER": "S",
+        "THR": "T",
+        "TRP": "W",
+        "TYR": "Y",
+        "VAL": "V",
+        "MSE": "M",
+    }
+
+    residues = []
+    seen = set()
+
+    with open(pdb_file) as fh:
+        for line in fh:
+            if not line.startswith("ATOM"):
+                continue
+
+            resname = line[17:20].strip()
+            chain_id = line[21].strip() or "_"
+            residue_number_raw = line[22:26].strip()
+            insertion_code = line[26].strip()
+
+            residue_key = (chain_id, residue_number_raw, insertion_code)
+
+            if residue_key in seen:
+                continue
+
+            seen.add(residue_key)
+
+            if resname not in aa3_to_aa1:
+                raise WorkflowError(
+                    f"Cannot convert residue '{resname}' in {pdb_file} "
+                    f"at chain {chain_id}, residue {residue_number_raw}{insertion_code}."
+                )
+
+            try:
+                residue_number = int(residue_number_raw)
+            except ValueError:
+                raise WorkflowError(
+                    f"Could not parse residue number '{residue_number_raw}' "
+                    f"in {pdb_file}."
+                )
+
+            residues.append(
+                (chain_id, residue_number, insertion_code, aa3_to_aa1[resname])
+            )
+
+    if not residues:
+        raise WorkflowError(
+            f"No ATOM residues were found in {pdb_file}."
+        )
+
+    return residues
+
+def validate_afdb_sequence(pdb_file, fasta_file, prot_id):
+    """
+    Compare the AFDB PDB residue sequence against the canonical UniProt sequence.
+    The comparison uses residue numbers from the PDB file as UniProt positions.
+    """
+    uniprot_sequence = read_fasta_sequence(fasta_file)
+    pdb_residues = extract_pdb_sequence_by_residue_number(pdb_file)
+
+    mismatches = []
+    out_of_range = []
+
+    for chain_id, residue_number, insertion_code, pdb_aa in pdb_residues:
+        if residue_number < 1 or residue_number > len(uniprot_sequence):
+            out_of_range.append(
+                f"chain {chain_id}, residue {residue_number}{insertion_code}"
+            )
+            continue
+
+        uniprot_aa = uniprot_sequence[residue_number - 1]
+
+        if pdb_aa != uniprot_aa:
+            mismatches.append(
+                f"chain {chain_id}, residue {residue_number}{insertion_code}: "
+                f"UniProt {uniprot_aa}, AFDB {pdb_aa}"
+            )
+
+    if out_of_range:
+        out_of_range_msg = "\n".join(out_of_range[:20])
+        if len(out_of_range) > 20:
+            out_of_range_msg += f"\n... and {len(out_of_range) - 20} more."
+
+        raise WorkflowError(
+            f"AFDB sequence check failed for {prot_id}.\n"
+            f"The AFDB model contains residue numbers outside the UniProt sequence length "
+            f"({len(uniprot_sequence)} residues).\n\n"
+            f"Out-of-range residues:\n"
+            f"{out_of_range_msg}"
+        )
+
+    if mismatches:
+        mismatch_msg = "\n".join(mismatches[:20])
+        if len(mismatches) > 20:
+            mismatch_msg += f"\n... and {len(mismatches) - 20} more."
+
+        raise WorkflowError(
+            f"AFDB sequence check failed for {prot_id}.\n"
+            f"The AFDB model sequence does not match the UniProt canonical sequence.\n\n"
+            f"Mismatches:\n"
+            f"{mismatch_msg}\n\n"
+            f"This AFDB model should not be used for MutateX. "
+            f"Use AF3 or standalone AF2 instead."
+        )
+
+    print(
+        f"AFDB sequence check passed for {prot_id}. "
+        f"Checked {len(pdb_residues)} residues against the UniProt sequence."
+    )
+
+
 # set up of cleaning level
 cleaning_opt = {"none","partial","deep"}
 
@@ -155,15 +308,49 @@ rule download_pdb:
             (models['start_res'] == int(wcs.start_res)) &
             (models['end_res'] == int(wcs.end_res))]['version'].values[0]
     run:
+        output_path = Path(output.pdb)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+
         if params.pdb:
-            shell(f"mkdir -p structure_selection/{wildcards.database}")
-            shell(f"cp {params.pdb} structure_selection/{wildcards.database}/{wildcards.prot_id}_{wildcards.start_res}_{wildcards.end_res}.pdb")
+            shell(f'cp "{params.pdb}" "{output.pdb}"')
+
         else:
-            shell(f"""
-                mkdir -p structure_selection/{wildcards.database}
-                cd structure_selection/{wildcards.database}
-                wget -q https://alphafold.ebi.ac.uk/files/AF-{wildcards.prot_id}-F1-model_{params.af_version}.pdb -O {wildcards.prot_id}_{wildcards.start_res}_{wildcards.end_res}.pdb
-            """)
+            downloaded_pdb = output_path.with_suffix(".downloaded.pdb")
+            uniprot_fasta = output_path.with_suffix(".fasta")
+
+            pdb_url = f"https://alphafold.ebi.ac.uk/files/AF-{wildcards.prot_id}-F1-model_{params.af_version}.pdb"
+            fasta_url = f"https://rest.uniprot.org/uniprotkb/{wildcards.prot_id}.fasta"
+
+            for path in [output_path, downloaded_pdb, uniprot_fasta]:
+                if path.exists():
+                    path.unlink()
+
+            shell(f'wget -q "{pdb_url}" -O "{downloaded_pdb}"')
+            shell(f'wget -q "{fasta_url}" -O "{uniprot_fasta}"')
+
+            if not downloaded_pdb.exists() or downloaded_pdb.stat().st_size == 0:
+                raise WorkflowError(
+                    f"The downloaded AFDB structure for {wildcards.prot_id} is empty or was not created.\n"
+                    f"URL: {pdb_url}"
+                )
+
+            if not uniprot_fasta.exists() or uniprot_fasta.stat().st_size == 0:
+                raise WorkflowError(
+                    f"The downloaded UniProt FASTA for {wildcards.prot_id} is empty or was not created.\n"
+                    f"URL: {fasta_url}"
+                )
+
+            validate_afdb_sequence(
+                pdb_file=downloaded_pdb,
+                fasta_file=uniprot_fasta,
+                prot_id=wildcards.prot_id
+            )
+
+            downloaded_pdb.replace(output_path)
+
+            if uniprot_fasta.exists():
+                uniprot_fasta.unlink()
+
 
 
 rule input_pdb:

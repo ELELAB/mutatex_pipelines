@@ -1,0 +1,482 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 4
+Rules claiming more threads will be scaled down.
+Job stats:
+job                  count
+-----------------  -------
+aggregate_tables         1
+all                      1
+classify_procheck        5
+download_pdb             2
+input_pdb                5
+input_txt                5
+mutatex_scan             5
+run_procheck             5
+write_table              5
+total                   34
+
+Select jobs to execute...
+
+[Thu Nov  5 13:46:17 2026]
+rule input_txt:
+    output: HSPB1/something/stability/mutatex_input_preparation/AFDB_88-177/model_v6/saturation/mutate_runfile.txt, HSPB1/something/stability/mutatex_input_preparation/AFDB_88-177/model_v6/saturation/repair_runfile.txt, HSPB1/something/stability/mutatex_input_preparation/AFDB_88-177/model_v6/saturation/mutation_list.txt, HSPB1/something/stability/mutatex_runs/AFDB_88-177/model_v6/saturation/README.txt
+    jobid: 32
+    reason: Missing output files: HSPB1/something/stability/mutatex_input_preparation/AFDB_88-177/model_v6/saturation/mutate_runfile.txt, HSPB1/something/stability/mutatex_runs/AFDB_88-177/model_v6/saturation/README.txt, HSPB1/something/stability/mutatex_input_preparation/AFDB_88-177/model_v6/saturation/repair_runfile.txt, HSPB1/something/stability/mutatex_input_preparation/AFDB_88-177/model_v6/saturation/mutation_list.txt
+    wildcards: gene=HSPB1, state=something, database=AFDB, start_res=88, end_res=177, version=v6
+    resources: tmpdir=/tmp
+
+[Thu Nov  5 13:46:17 2026]
+rule download_pdb:
+    output: structure_selection/AFDB/Q3ZCX4_222_241.pdb
+    jobid: 18
+    reason: Missing output files: structure_selection/AFDB/Q3ZCX4_222_241.pdb
+    wildcards: database=AFDB, start_res=222, end_res=241, prot_id=Q3ZCX4
+    resources: tmpdir=/tmp
+
+[Thu Nov  5 13:46:17 2026]
+rule download_pdb:
+    output: structure_selection/AFDB/Q3ZCX4_50_103.pdb
+    jobid: 11
+    reason: Missing output files: structure_selection/AFDB/Q3ZCX4_50_103.pdb
+    wildcards: database=AFDB, start_res=50, end_res=103, prot_id=Q3ZCX4
+    resources: tmpdir=/tmp
+
+[Thu Nov  5 13:46:17 2026]
+rule input_txt:
+    output: APC/free/stability/mutatex_input_preparation/PDB_1-5/model_v1/saturation/mutate_runfile.txt, APC/free/stability/mutatex_input_preparation/PDB_1-5/model_v1/saturation/repair_runfile.txt, APC/free/stability/mutatex_input_preparation/PDB_1-5/model_v1/saturation/mutation_list.txt, APC/free/stability/mutatex_runs/PDB_1-5/model_v1/saturation/README.txt
+    jobid: 5
+    reason: Missing output files: APC/free/stability/mutatex_runs/PDB_1-5/model_v1/saturation/README.txt, APC/free/stability/mutatex_input_preparation/PDB_1-5/model_v1/saturation/repair_runfile.txt, APC/free/stability/mutatex_input_preparation/PDB_1-5/model_v1/saturation/mutation_list.txt, APC/free/stability/mutatex_input_preparation/PDB_1-5/model_v1/saturation/mutate_runfile.txt
+    wildcards: gene=APC, state=free, database=PDB, start_res=1, end_res=5, version=v1
+    resources: tmpdir=/tmp
+
+[Thu Nov  5 13:46:18 2026]
+Finished job 5.
+1 of 34 steps (3%) done
+Select jobs to execute...
+
+[Thu Nov  5 13:46:18 2026]
+rule input_txt:
+    output: ZNF568/free/stability/mutatex_input_preparation/AFDB_50-103/model_v6/saturation/mutate_runfile.txt, ZNF568/free/stability/mutatex_input_preparation/AFDB_50-103/model_v6/saturation/repair_runfile.txt, ZNF568/free/stability/mutatex_input_preparation/AFDB_50-103/model_v6/saturation/mutation_list.txt, ZNF568/free/stability/mutatex_runs/AFDB_50-103/model_v6/saturation/README.txt
+    jobid: 12
+    reason: Missing output files: ZNF568/free/stability/mutatex_input_preparation/AFDB_50-103/model_v6/saturation/mutate_runfile.txt, ZNF568/free/stability/mutatex_runs/AFDB_50-103/model_v6/saturation/README.txt, ZNF568/free/stability/mutatex_input_preparation/AFDB_50-103/model_v6/saturation/repair_runfile.txt, ZNF568/free/stability/mutatex_input_preparation/AFDB_50-103/model_v6/saturation/mutation_list.txt
+    wildcards: gene=ZNF568, state=free, database=AFDB, start_res=50, end_res=103, version=v6
+    resources: tmpdir=/tmp
+
+[Thu Nov  5 13:46:18 2026]
+Finished job 32.
+2 of 34 steps (6%) done
+Select jobs to execute...
+
+[Thu Nov  5 13:46:18 2026]
+rule input_pdb:
+    input: structure_selection/PDB/P25054_1_5.pdb, APC/free/stability/mutatex_input_preparation/PDB_1-5/model_v1/saturation/mutate_runfile.txt, APC/free/stability/mutatex_input_preparation/PDB_1-5/model_v1/saturation/repair_runfile.txt, APC/free/stability/mutatex_input_preparation/PDB_1-5/model_v1/saturation/mutation_list.txt, APC/free/stability/mutatex_runs/PDB_1-5/model_v1/saturation/README.txt
+    output: APC/free/stability/mutatex_input_preparation/PDB_1-5/model_v1/saturation/P25054_trimmed.pdb
+    jobid: 3
+    reason: Missing output files: APC/free/stability/mutatex_input_preparation/PDB_1-5/model_v1/saturation/P25054_trimmed.pdb; Input files updated by another job: APC/free/stability/mutatex_input_preparation/PDB_1-5/model_v1/saturation/mutation_list.txt, APC/free/stability/mutatex_runs/PDB_1-5/model_v1/saturation/README.txt, APC/free/stability/mutatex_input_preparation/PDB_1-5/model_v1/saturation/mutate_runfile.txt, APC/free/stability/mutatex_input_preparation/PDB_1-5/model_v1/saturation/repair_runfile.txt
+    wildcards: gene=APC, state=free, database=PDB, start_res=1, end_res=5, version=v1, prot_id=P25054
+    resources: tmpdir=/tmp
+
+[Thu Nov  5 13:46:18 2026]
+Finished job 3.
+3 of 34 steps (9%) done
+Select jobs to execute...
+
+[Thu Nov  5 13:46:19 2026]
+rule input_txt:
+    output: ZNF568/free/stability/mutatex_input_preparation/AFDB_222-241/model_v6/saturation/mutate_runfile.txt, ZNF568/free/stability/mutatex_input_preparation/AFDB_222-241/model_v6/saturation/repair_runfile.txt, ZNF568/free/stability/mutatex_input_preparation/AFDB_222-241/model_v6/saturation/mutation_list.txt, ZNF568/free/stability/mutatex_runs/AFDB_222-241/model_v6/saturation/README.txt
+    jobid: 19
+    reason: Missing output files: ZNF568/free/stability/mutatex_input_preparation/AFDB_222-241/model_v6/saturation/mutation_list.txt, ZNF568/free/stability/mutatex_runs/AFDB_222-241/model_v6/saturation/README.txt, ZNF568/free/stability/mutatex_input_preparation/AFDB_222-241/model_v6/saturation/mutate_runfile.txt, ZNF568/free/stability/mutatex_input_preparation/AFDB_222-241/model_v6/saturation/repair_runfile.txt
+    wildcards: gene=ZNF568, state=free, database=AFDB, start_res=222, end_res=241, version=v6
+    resources: tmpdir=/tmp
+
+[Thu Nov  5 13:46:19 2026]
+Finished job 11.
+4 of 34 steps (12%) done
+Select jobs to execute...
+
+[Thu Nov  5 13:46:19 2026]
+rule input_txt:
+    output: ZNF568/zn_bound/stability/mutatex_input_preparation/AFDB_50-103/model_v6/saturation/mutate_runfile.txt, ZNF568/zn_bound/stability/mutatex_input_preparation/AFDB_50-103/model_v6/saturation/repair_runfile.txt, ZNF568/zn_bound/stability/mutatex_input_preparation/AFDB_50-103/model_v6/saturation/mutation_list.txt, ZNF568/zn_bound/stability/mutatex_runs/AFDB_50-103/model_v6/saturation/README.txt
+    jobid: 25
+    reason: Missing output files: ZNF568/zn_bound/stability/mutatex_input_preparation/AFDB_50-103/model_v6/saturation/mutate_runfile.txt, ZNF568/zn_bound/stability/mutatex_runs/AFDB_50-103/model_v6/saturation/README.txt, ZNF568/zn_bound/stability/mutatex_input_preparation/AFDB_50-103/model_v6/saturation/repair_runfile.txt, ZNF568/zn_bound/stability/mutatex_input_preparation/AFDB_50-103/model_v6/saturation/mutation_list.txt
+    wildcards: gene=ZNF568, state=zn_bound, database=AFDB, start_res=50, end_res=103, version=v6
+    resources: tmpdir=/tmp
+
+[Thu Nov  5 13:46:19 2026]
+Finished job 18.
+5 of 34 steps (15%) done
+Select jobs to execute...
+
+[Thu Nov  5 13:46:19 2026]
+rule input_pdb:
+    input: structure_selection/AFDB/P14602_88_177.pdb, HSPB1/something/stability/mutatex_input_preparation/AFDB_88-177/model_v6/saturation/mutate_runfile.txt, HSPB1/something/stability/mutatex_input_preparation/AFDB_88-177/model_v6/saturation/repair_runfile.txt, HSPB1/something/stability/mutatex_input_preparation/AFDB_88-177/model_v6/saturation/mutation_list.txt, HSPB1/something/stability/mutatex_runs/AFDB_88-177/model_v6/saturation/README.txt
+    output: HSPB1/something/stability/mutatex_input_preparation/AFDB_88-177/model_v6/saturation/P14602_trimmed.pdb
+    jobid: 30
+    reason: Missing output files: HSPB1/something/stability/mutatex_input_preparation/AFDB_88-177/model_v6/saturation/P14602_trimmed.pdb; Input files updated by another job: HSPB1/something/stability/mutatex_input_preparation/AFDB_88-177/model_v6/saturation/mutate_runfile.txt, HSPB1/something/stability/mutatex_runs/AFDB_88-177/model_v6/saturation/README.txt, HSPB1/something/stability/mutatex_input_preparation/AFDB_88-177/model_v6/saturation/repair_runfile.txt, HSPB1/something/stability/mutatex_input_preparation/AFDB_88-177/model_v6/saturation/mutation_list.txt
+    wildcards: gene=HSPB1, state=something, database=AFDB, start_res=88, end_res=177, version=v6, prot_id=P14602
+    resources: tmpdir=/tmp
+
+[Thu Nov  5 13:46:19 2026]
+Finished job 30.
+6 of 34 steps (18%) done
+Select jobs to execute...
+
+[Thu Nov  5 13:46:19 2026]
+rule run_procheck:
+    input: APC/free/stability/mutatex_input_preparation/PDB_1-5/model_v1/saturation/P25054_trimmed.pdb
+    output: APC/free/stability/mutatex_input_preparation/PDB_1-5/model_v1/procheck/P25054_trimmed.sum
+    jobid: 7
+    reason: Missing output files: APC/free/stability/mutatex_input_preparation/PDB_1-5/model_v1/procheck/P25054_trimmed.sum; Input files updated by another job: APC/free/stability/mutatex_input_preparation/PDB_1-5/model_v1/saturation/P25054_trimmed.pdb
+    wildcards: gene=APC, state=free, database=PDB, start_res=1, end_res=5, version=v1, prot_id=P25054
+    resources: tmpdir=/tmp
+
+[Thu Nov  5 13:46:20 2026]
+Finished job 12.
+7 of 34 steps (21%) done
+Select jobs to execute...
+
+[Thu Nov  5 13:46:20 2026]
+rule input_pdb:
+    input: structure_selection/AFDB/Q3ZCX4_50_103.pdb, ZNF568/free/stability/mutatex_input_preparation/AFDB_50-103/model_v6/saturation/mutate_runfile.txt, ZNF568/free/stability/mutatex_input_preparation/AFDB_50-103/model_v6/saturation/repair_runfile.txt, ZNF568/free/stability/mutatex_input_preparation/AFDB_50-103/model_v6/saturation/mutation_list.txt, ZNF568/free/stability/mutatex_runs/AFDB_50-103/model_v6/saturation/README.txt
+    output: ZNF568/free/stability/mutatex_input_preparation/AFDB_50-103/model_v6/saturation/Q3ZCX4_trimmed.pdb
+    jobid: 10
+    reason: Missing output files: ZNF568/free/stability/mutatex_input_preparation/AFDB_50-103/model_v6/saturation/Q3ZCX4_trimmed.pdb; Input files updated by another job: ZNF568/free/stability/mutatex_input_preparation/AFDB_50-103/model_v6/saturation/mutate_runfile.txt, ZNF568/free/stability/mutatex_input_preparation/AFDB_50-103/model_v6/saturation/mutation_list.txt, structure_selection/AFDB/Q3ZCX4_50_103.pdb, ZNF568/free/stability/mutatex_input_preparation/AFDB_50-103/model_v6/saturation/repair_runfile.txt, ZNF568/free/stability/mutatex_runs/AFDB_50-103/model_v6/saturation/README.txt
+    wildcards: gene=ZNF568, state=free, database=AFDB, start_res=50, end_res=103, version=v6, prot_id=Q3ZCX4
+    resources: tmpdir=/tmp
+
+[Thu Nov  5 13:46:20 2026]
+Finished job 7.
+8 of 34 steps (24%) done
+Select jobs to execute...
+
+[Thu Nov  5 13:46:20 2026]
+rule classify_procheck:
+    input: APC/free/stability/mutatex_input_preparation/PDB_1-5/model_v1/procheck/P25054_trimmed.sum
+    output: APC/free/stability/mutatex_input_preparation/PDB_1-5/model_v1/procheck/P25054_procheck.csv, APC/free/stability/mutatex_input_preparation/PDB_1-5/model_v1/procheck/P25054_procheck.done
+    jobid: 6
+    reason: Missing output files: APC/free/stability/mutatex_input_preparation/PDB_1-5/model_v1/procheck/P25054_procheck.done, APC/free/stability/mutatex_input_preparation/PDB_1-5/model_v1/procheck/P25054_procheck.csv; Input files updated by another job: APC/free/stability/mutatex_input_preparation/PDB_1-5/model_v1/procheck/P25054_trimmed.sum
+    wildcards: gene=APC, state=free, database=PDB, start_res=1, end_res=5, version=v1, prot_id=P25054
+    resources: tmpdir=/tmp
+
+[Thu Nov  5 13:46:20 2026]
+Finished job 10.
+9 of 34 steps (26%) done
+Select jobs to execute...
+
+[Thu Nov  5 13:46:20 2026]
+rule run_procheck:
+    input: ZNF568/free/stability/mutatex_input_preparation/AFDB_50-103/model_v6/saturation/Q3ZCX4_trimmed.pdb
+    output: ZNF568/free/stability/mutatex_input_preparation/AFDB_50-103/model_v6/procheck/Q3ZCX4_trimmed.sum
+    jobid: 14
+    reason: Missing output files: ZNF568/free/stability/mutatex_input_preparation/AFDB_50-103/model_v6/procheck/Q3ZCX4_trimmed.sum; Input files updated by another job: ZNF568/free/stability/mutatex_input_preparation/AFDB_50-103/model_v6/saturation/Q3ZCX4_trimmed.pdb
+    wildcards: gene=ZNF568, state=free, database=AFDB, start_res=50, end_res=103, version=v6, prot_id=Q3ZCX4
+    resources: tmpdir=/tmp
+
+[Thu Nov  5 13:46:20 2026]
+Finished job 19.
+10 of 34 steps (29%) done
+Select jobs to execute...
+
+[Thu Nov  5 13:46:20 2026]
+rule input_pdb:
+    input: structure_selection/AFDB/Q3ZCX4_222_241.pdb, ZNF568/free/stability/mutatex_input_preparation/AFDB_222-241/model_v6/saturation/mutate_runfile.txt, ZNF568/free/stability/mutatex_input_preparation/AFDB_222-241/model_v6/saturation/repair_runfile.txt, ZNF568/free/stability/mutatex_input_preparation/AFDB_222-241/model_v6/saturation/mutation_list.txt, ZNF568/free/stability/mutatex_runs/AFDB_222-241/model_v6/saturation/README.txt
+    output: ZNF568/free/stability/mutatex_input_preparation/AFDB_222-241/model_v6/saturation/Q3ZCX4_trimmed.pdb
+    jobid: 17
+    reason: Missing output files: ZNF568/free/stability/mutatex_input_preparation/AFDB_222-241/model_v6/saturation/Q3ZCX4_trimmed.pdb; Input files updated by another job: structure_selection/AFDB/Q3ZCX4_222_241.pdb, ZNF568/free/stability/mutatex_input_preparation/AFDB_222-241/model_v6/saturation/mutation_list.txt, ZNF568/free/stability/mutatex_runs/AFDB_222-241/model_v6/saturation/README.txt, ZNF568/free/stability/mutatex_input_preparation/AFDB_222-241/model_v6/saturation/mutate_runfile.txt, ZNF568/free/stability/mutatex_input_preparation/AFDB_222-241/model_v6/saturation/repair_runfile.txt
+    wildcards: gene=ZNF568, state=free, database=AFDB, start_res=222, end_res=241, version=v6, prot_id=Q3ZCX4
+    resources: tmpdir=/tmp
+
+[Thu Nov  5 13:46:20 2026]
+Finished job 25.
+11 of 34 steps (32%) done
+Select jobs to execute...
+
+[Thu Nov  5 13:46:20 2026]
+rule input_pdb:
+    input: structure_selection/AFDB/Q3ZCX4_50_103.pdb, ZNF568/zn_bound/stability/mutatex_input_preparation/AFDB_50-103/model_v6/saturation/mutate_runfile.txt, ZNF568/zn_bound/stability/mutatex_input_preparation/AFDB_50-103/model_v6/saturation/repair_runfile.txt, ZNF568/zn_bound/stability/mutatex_input_preparation/AFDB_50-103/model_v6/saturation/mutation_list.txt, ZNF568/zn_bound/stability/mutatex_runs/AFDB_50-103/model_v6/saturation/README.txt
+    output: ZNF568/zn_bound/stability/mutatex_input_preparation/AFDB_50-103/model_v6/saturation/Q3ZCX4_trimmed.pdb
+    jobid: 24
+    reason: Missing output files: ZNF568/zn_bound/stability/mutatex_input_preparation/AFDB_50-103/model_v6/saturation/Q3ZCX4_trimmed.pdb; Input files updated by another job: structure_selection/AFDB/Q3ZCX4_50_103.pdb, ZNF568/zn_bound/stability/mutatex_input_preparation/AFDB_50-103/model_v6/saturation/mutation_list.txt, ZNF568/zn_bound/stability/mutatex_runs/AFDB_50-103/model_v6/saturation/README.txt, ZNF568/zn_bound/stability/mutatex_input_preparation/AFDB_50-103/model_v6/saturation/repair_runfile.txt, ZNF568/zn_bound/stability/mutatex_input_preparation/AFDB_50-103/model_v6/saturation/mutate_runfile.txt
+    wildcards: gene=ZNF568, state=zn_bound, database=AFDB, start_res=50, end_res=103, version=v6, prot_id=Q3ZCX4
+    resources: tmpdir=/tmp
+
+[Thu Nov  5 13:46:20 2026]
+Finished job 17.
+12 of 34 steps (35%) done
+Select jobs to execute...
+
+[Thu Nov  5 13:46:20 2026]
+rule run_procheck:
+    input: HSPB1/something/stability/mutatex_input_preparation/AFDB_88-177/model_v6/saturation/P14602_trimmed.pdb
+    output: HSPB1/something/stability/mutatex_input_preparation/AFDB_88-177/model_v6/procheck/P14602_trimmed.sum
+    jobid: 34
+    reason: Missing output files: HSPB1/something/stability/mutatex_input_preparation/AFDB_88-177/model_v6/procheck/P14602_trimmed.sum; Input files updated by another job: HSPB1/something/stability/mutatex_input_preparation/AFDB_88-177/model_v6/saturation/P14602_trimmed.pdb
+    wildcards: gene=HSPB1, state=something, database=AFDB, start_res=88, end_res=177, version=v6, prot_id=P14602
+    resources: tmpdir=/tmp
+
+[Thu Nov  5 13:46:20 2026]
+Finished job 24.
+13 of 34 steps (38%) done
+Select jobs to execute...
+
+[Thu Nov  5 13:46:20 2026]
+rule run_procheck:
+    input: ZNF568/zn_bound/stability/mutatex_input_preparation/AFDB_50-103/model_v6/saturation/Q3ZCX4_trimmed.pdb
+    output: ZNF568/zn_bound/stability/mutatex_input_preparation/AFDB_50-103/model_v6/procheck/Q3ZCX4_trimmed.sum
+    jobid: 27
+    reason: Missing output files: ZNF568/zn_bound/stability/mutatex_input_preparation/AFDB_50-103/model_v6/procheck/Q3ZCX4_trimmed.sum; Input files updated by another job: ZNF568/zn_bound/stability/mutatex_input_preparation/AFDB_50-103/model_v6/saturation/Q3ZCX4_trimmed.pdb
+    wildcards: gene=ZNF568, state=zn_bound, database=AFDB, start_res=50, end_res=103, version=v6, prot_id=Q3ZCX4
+    resources: tmpdir=/tmp
+
+[Thu Nov  5 13:46:21 2026]
+Finished job 14.
+14 of 34 steps (41%) done
+Select jobs to execute...
+
+[Thu Nov  5 13:46:21 2026]
+rule run_procheck:
+    input: ZNF568/free/stability/mutatex_input_preparation/AFDB_222-241/model_v6/saturation/Q3ZCX4_trimmed.pdb
+    output: ZNF568/free/stability/mutatex_input_preparation/AFDB_222-241/model_v6/procheck/Q3ZCX4_trimmed.sum
+    jobid: 21
+    reason: Missing output files: ZNF568/free/stability/mutatex_input_preparation/AFDB_222-241/model_v6/procheck/Q3ZCX4_trimmed.sum; Input files updated by another job: ZNF568/free/stability/mutatex_input_preparation/AFDB_222-241/model_v6/saturation/Q3ZCX4_trimmed.pdb
+    wildcards: gene=ZNF568, state=free, database=AFDB, start_res=222, end_res=241, version=v6, prot_id=Q3ZCX4
+    resources: tmpdir=/tmp
+
+[Thu Nov  5 13:46:21 2026]
+Finished job 34.
+15 of 34 steps (44%) done
+Select jobs to execute...
+
+[Thu Nov  5 13:46:21 2026]
+rule classify_procheck:
+    input: HSPB1/something/stability/mutatex_input_preparation/AFDB_88-177/model_v6/procheck/P14602_trimmed.sum
+    output: HSPB1/something/stability/mutatex_input_preparation/AFDB_88-177/model_v6/procheck/P14602_procheck.csv, HSPB1/something/stability/mutatex_input_preparation/AFDB_88-177/model_v6/procheck/P14602_procheck.done
+    jobid: 33
+    reason: Missing output files: HSPB1/something/stability/mutatex_input_preparation/AFDB_88-177/model_v6/procheck/P14602_procheck.csv, HSPB1/something/stability/mutatex_input_preparation/AFDB_88-177/model_v6/procheck/P14602_procheck.done; Input files updated by another job: HSPB1/something/stability/mutatex_input_preparation/AFDB_88-177/model_v6/procheck/P14602_trimmed.sum
+    wildcards: gene=HSPB1, state=something, database=AFDB, start_res=88, end_res=177, version=v6, prot_id=P14602
+    resources: tmpdir=/tmp
+
+[Thu Nov  5 13:46:21 2026]
+Finished job 27.
+16 of 34 steps (47%) done
+Select jobs to execute...
+
+[Thu Nov  5 13:46:21 2026]
+rule classify_procheck:
+    input: ZNF568/zn_bound/stability/mutatex_input_preparation/AFDB_50-103/model_v6/procheck/Q3ZCX4_trimmed.sum
+    output: ZNF568/zn_bound/stability/mutatex_input_preparation/AFDB_50-103/model_v6/procheck/Q3ZCX4_procheck.csv, ZNF568/zn_bound/stability/mutatex_input_preparation/AFDB_50-103/model_v6/procheck/Q3ZCX4_procheck.done
+    jobid: 26
+    reason: Missing output files: ZNF568/zn_bound/stability/mutatex_input_preparation/AFDB_50-103/model_v6/procheck/Q3ZCX4_procheck.done, ZNF568/zn_bound/stability/mutatex_input_preparation/AFDB_50-103/model_v6/procheck/Q3ZCX4_procheck.csv; Input files updated by another job: ZNF568/zn_bound/stability/mutatex_input_preparation/AFDB_50-103/model_v6/procheck/Q3ZCX4_trimmed.sum
+    wildcards: gene=ZNF568, state=zn_bound, database=AFDB, start_res=50, end_res=103, version=v6, prot_id=Q3ZCX4
+    resources: tmpdir=/tmp
+
+[Thu Nov  5 13:46:21 2026]
+Finished job 6.
+17 of 34 steps (50%) done
+Select jobs to execute...
+
+[Thu Nov  5 13:46:21 2026]
+rule classify_procheck:
+    input: ZNF568/free/stability/mutatex_input_preparation/AFDB_50-103/model_v6/procheck/Q3ZCX4_trimmed.sum
+    output: ZNF568/free/stability/mutatex_input_preparation/AFDB_50-103/model_v6/procheck/Q3ZCX4_procheck.csv, ZNF568/free/stability/mutatex_input_preparation/AFDB_50-103/model_v6/procheck/Q3ZCX4_procheck.done
+    jobid: 13
+    reason: Missing output files: ZNF568/free/stability/mutatex_input_preparation/AFDB_50-103/model_v6/procheck/Q3ZCX4_procheck.csv, ZNF568/free/stability/mutatex_input_preparation/AFDB_50-103/model_v6/procheck/Q3ZCX4_procheck.done; Input files updated by another job: ZNF568/free/stability/mutatex_input_preparation/AFDB_50-103/model_v6/procheck/Q3ZCX4_trimmed.sum
+    wildcards: gene=ZNF568, state=free, database=AFDB, start_res=50, end_res=103, version=v6, prot_id=Q3ZCX4
+    resources: tmpdir=/tmp
+
+[Thu Nov  5 13:46:21 2026]
+Finished job 21.
+18 of 34 steps (53%) done
+Select jobs to execute...
+
+[Thu Nov  5 13:46:21 2026]
+rule classify_procheck:
+    input: ZNF568/free/stability/mutatex_input_preparation/AFDB_222-241/model_v6/procheck/Q3ZCX4_trimmed.sum
+    output: ZNF568/free/stability/mutatex_input_preparation/AFDB_222-241/model_v6/procheck/Q3ZCX4_procheck.csv, ZNF568/free/stability/mutatex_input_preparation/AFDB_222-241/model_v6/procheck/Q3ZCX4_procheck.done
+    jobid: 20
+    reason: Missing output files: ZNF568/free/stability/mutatex_input_preparation/AFDB_222-241/model_v6/procheck/Q3ZCX4_procheck.done, ZNF568/free/stability/mutatex_input_preparation/AFDB_222-241/model_v6/procheck/Q3ZCX4_procheck.csv; Input files updated by another job: ZNF568/free/stability/mutatex_input_preparation/AFDB_222-241/model_v6/procheck/Q3ZCX4_trimmed.sum
+    wildcards: gene=ZNF568, state=free, database=AFDB, start_res=222, end_res=241, version=v6, prot_id=Q3ZCX4
+    resources: tmpdir=/tmp
+
+[Thu Nov  5 13:46:22 2026]
+Finished job 33.
+19 of 34 steps (56%) done
+Select jobs to execute...
+[Thu Nov  5 13:46:22 2026]
+Finished job 26.
+20 of 34 steps (59%) done
+[Thu Nov  5 13:46:23 2026]
+Finished job 13.
+21 of 34 steps (62%) done
+[Thu Nov  5 13:46:23 2026]
+Finished job 20.
+22 of 34 steps (65%) done
+
+[Thu Nov  5 13:46:23 2026]
+rule mutatex_scan:
+    input: HSPB1/something/stability/mutatex_input_preparation/AFDB_88-177/model_v6/saturation/P14602_trimmed.pdb, HSPB1/something/stability/mutatex_input_preparation/AFDB_88-177/model_v6/procheck/P14602_procheck.done
+    output: HSPB1/something/stability/mutatex_runs/AFDB_88-177/model_v6/saturation/P14602_scan
+    jobid: 29
+    reason: Missing output files: HSPB1/something/stability/mutatex_runs/AFDB_88-177/model_v6/saturation/P14602_scan; Input files updated by another job: HSPB1/something/stability/mutatex_input_preparation/AFDB_88-177/model_v6/saturation/P14602_trimmed.pdb, HSPB1/something/stability/mutatex_input_preparation/AFDB_88-177/model_v6/procheck/P14602_procheck.done
+    wildcards: gene=HSPB1, state=something, database=AFDB, start_res=88, end_res=177, version=v6, prot_id=P14602
+    threads: 4
+    resources: tmpdir=/tmp
+
+[Thu Nov  5 17:16:06 2026]
+Finished job 29.
+23 of 34 steps (68%) done
+Select jobs to execute...
+
+[Thu Nov  5 17:16:08 2026]
+rule mutatex_scan:
+    input: ZNF568/zn_bound/stability/mutatex_input_preparation/AFDB_50-103/model_v6/saturation/Q3ZCX4_trimmed.pdb, ZNF568/zn_bound/stability/mutatex_input_preparation/AFDB_50-103/model_v6/procheck/Q3ZCX4_procheck.done
+    output: ZNF568/zn_bound/stability/mutatex_runs/AFDB_50-103/model_v6/saturation/Q3ZCX4_scan
+    jobid: 23
+    reason: Missing output files: ZNF568/zn_bound/stability/mutatex_runs/AFDB_50-103/model_v6/saturation/Q3ZCX4_scan; Input files updated by another job: ZNF568/zn_bound/stability/mutatex_input_preparation/AFDB_50-103/model_v6/procheck/Q3ZCX4_procheck.done, ZNF568/zn_bound/stability/mutatex_input_preparation/AFDB_50-103/model_v6/saturation/Q3ZCX4_trimmed.pdb
+    wildcards: gene=ZNF568, state=zn_bound, database=AFDB, start_res=50, end_res=103, version=v6, prot_id=Q3ZCX4
+    threads: 4
+    resources: tmpdir=/tmp
+
+[Thu Nov  5 20:14:22 2026]
+Finished job 23.
+24 of 34 steps (71%) done
+Select jobs to execute...
+
+[Thu Nov  5 20:14:23 2026]
+rule mutatex_scan:
+    input: ZNF568/free/stability/mutatex_input_preparation/AFDB_50-103/model_v6/saturation/Q3ZCX4_trimmed.pdb, ZNF568/free/stability/mutatex_input_preparation/AFDB_50-103/model_v6/procheck/Q3ZCX4_procheck.done
+    output: ZNF568/free/stability/mutatex_runs/AFDB_50-103/model_v6/saturation/Q3ZCX4_scan
+    jobid: 9
+    reason: Missing output files: ZNF568/free/stability/mutatex_runs/AFDB_50-103/model_v6/saturation/Q3ZCX4_scan; Input files updated by another job: ZNF568/free/stability/mutatex_input_preparation/AFDB_50-103/model_v6/procheck/Q3ZCX4_procheck.done, ZNF568/free/stability/mutatex_input_preparation/AFDB_50-103/model_v6/saturation/Q3ZCX4_trimmed.pdb
+    wildcards: gene=ZNF568, state=free, database=AFDB, start_res=50, end_res=103, version=v6, prot_id=Q3ZCX4
+    threads: 4
+    resources: tmpdir=/tmp
+
+[Thu Nov  5 23:10:20 2026]
+Finished job 9.
+25 of 34 steps (74%) done
+Select jobs to execute...
+
+[Thu Nov  5 23:10:20 2026]
+rule mutatex_scan:
+    input: ZNF568/free/stability/mutatex_input_preparation/AFDB_222-241/model_v6/saturation/Q3ZCX4_trimmed.pdb, ZNF568/free/stability/mutatex_input_preparation/AFDB_222-241/model_v6/procheck/Q3ZCX4_procheck.done
+    output: ZNF568/free/stability/mutatex_runs/AFDB_222-241/model_v6/saturation/Q3ZCX4_scan
+    jobid: 16
+    reason: Missing output files: ZNF568/free/stability/mutatex_runs/AFDB_222-241/model_v6/saturation/Q3ZCX4_scan; Input files updated by another job: ZNF568/free/stability/mutatex_input_preparation/AFDB_222-241/model_v6/saturation/Q3ZCX4_trimmed.pdb, ZNF568/free/stability/mutatex_input_preparation/AFDB_222-241/model_v6/procheck/Q3ZCX4_procheck.done
+    wildcards: gene=ZNF568, state=free, database=AFDB, start_res=222, end_res=241, version=v6, prot_id=Q3ZCX4
+    threads: 4
+    resources: tmpdir=/tmp
+
+[Fri Nov  6 00:04:56 2026]
+Finished job 16.
+26 of 34 steps (76%) done
+Select jobs to execute...
+
+[Fri Nov  6 00:04:57 2026]
+rule mutatex_scan:
+    input: APC/free/stability/mutatex_input_preparation/PDB_1-5/model_v1/saturation/P25054_trimmed.pdb, APC/free/stability/mutatex_input_preparation/PDB_1-5/model_v1/procheck/P25054_procheck.done
+    output: APC/free/stability/mutatex_runs/PDB_1-5/model_v1/saturation/P25054_scan
+    jobid: 2
+    reason: Missing output files: APC/free/stability/mutatex_runs/PDB_1-5/model_v1/saturation/P25054_scan; Input files updated by another job: APC/free/stability/mutatex_input_preparation/PDB_1-5/model_v1/procheck/P25054_procheck.done, APC/free/stability/mutatex_input_preparation/PDB_1-5/model_v1/saturation/P25054_trimmed.pdb
+    wildcards: gene=APC, state=free, database=PDB, start_res=1, end_res=5, version=v1, prot_id=P25054
+    threads: 4
+    resources: tmpdir=/tmp
+
+[Fri Nov  6 00:06:19 2026]
+Finished job 2.
+27 of 34 steps (79%) done
+Select jobs to execute...
+
+[Fri Nov  6 00:06:20 2026]
+rule write_table:
+    input: ZNF568/zn_bound/stability/mutatex_runs/AFDB_50-103/model_v6/saturation/Q3ZCX4_scan
+    output: ZNF568/zn_bound/stability/mutatex_runs/AFDB_50-103/model_v6/saturation/Q3ZCX4_table/energies.csv
+    jobid: 22
+    reason: Missing output files: ZNF568/zn_bound/stability/mutatex_runs/AFDB_50-103/model_v6/saturation/Q3ZCX4_table/energies.csv; Input files updated by another job: ZNF568/zn_bound/stability/mutatex_runs/AFDB_50-103/model_v6/saturation/Q3ZCX4_scan
+    wildcards: gene=ZNF568, state=zn_bound, database=AFDB, start_res=50, end_res=103, version=v6, prot_id=Q3ZCX4
+    resources: tmpdir=/tmp
+
+
+[Fri Nov  6 00:06:20 2026]
+rule write_table:
+    input: ZNF568/free/stability/mutatex_runs/AFDB_222-241/model_v6/saturation/Q3ZCX4_scan
+    output: ZNF568/free/stability/mutatex_runs/AFDB_222-241/model_v6/saturation/Q3ZCX4_table/energies.csv
+    jobid: 15
+    reason: Missing output files: ZNF568/free/stability/mutatex_runs/AFDB_222-241/model_v6/saturation/Q3ZCX4_table/energies.csv; Input files updated by another job: ZNF568/free/stability/mutatex_runs/AFDB_222-241/model_v6/saturation/Q3ZCX4_scan
+    wildcards: gene=ZNF568, state=free, database=AFDB, start_res=222, end_res=241, version=v6, prot_id=Q3ZCX4
+    resources: tmpdir=/tmp
+
+
+[Fri Nov  6 00:06:20 2026]
+rule write_table:
+    input: APC/free/stability/mutatex_runs/PDB_1-5/model_v1/saturation/P25054_scan
+    output: APC/free/stability/mutatex_runs/PDB_1-5/model_v1/saturation/P25054_table/energies.csv
+    jobid: 1
+    reason: Missing output files: APC/free/stability/mutatex_runs/PDB_1-5/model_v1/saturation/P25054_table/energies.csv; Input files updated by another job: APC/free/stability/mutatex_runs/PDB_1-5/model_v1/saturation/P25054_scan
+    wildcards: gene=APC, state=free, database=PDB, start_res=1, end_res=5, version=v1, prot_id=P25054
+    resources: tmpdir=/tmp
+
+
+[Fri Nov  6 00:06:20 2026]
+rule write_table:
+    input: HSPB1/something/stability/mutatex_runs/AFDB_88-177/model_v6/saturation/P14602_scan
+    output: HSPB1/something/stability/mutatex_runs/AFDB_88-177/model_v6/saturation/P14602_table/energies.csv
+    jobid: 28
+    reason: Missing output files: HSPB1/something/stability/mutatex_runs/AFDB_88-177/model_v6/saturation/P14602_table/energies.csv; Input files updated by another job: HSPB1/something/stability/mutatex_runs/AFDB_88-177/model_v6/saturation/P14602_scan
+    wildcards: gene=HSPB1, state=something, database=AFDB, start_res=88, end_res=177, version=v6, prot_id=P14602
+    resources: tmpdir=/tmp
+
+[Fri Nov  6 00:06:21 2026]
+Finished job 1.
+28 of 34 steps (82%) done
+Select jobs to execute...
+
+[Fri Nov  6 00:06:21 2026]
+rule write_table:
+    input: ZNF568/free/stability/mutatex_runs/AFDB_50-103/model_v6/saturation/Q3ZCX4_scan
+    output: ZNF568/free/stability/mutatex_runs/AFDB_50-103/model_v6/saturation/Q3ZCX4_table/energies.csv
+    jobid: 8
+    reason: Missing output files: ZNF568/free/stability/mutatex_runs/AFDB_50-103/model_v6/saturation/Q3ZCX4_table/energies.csv; Input files updated by another job: ZNF568/free/stability/mutatex_runs/AFDB_50-103/model_v6/saturation/Q3ZCX4_scan
+    wildcards: gene=ZNF568, state=free, database=AFDB, start_res=50, end_res=103, version=v6, prot_id=Q3ZCX4
+    resources: tmpdir=/tmp
+
+[Fri Nov  6 00:06:21 2026]
+Finished job 15.
+29 of 34 steps (85%) done
+[Fri Nov  6 00:06:21 2026]
+Finished job 22.
+30 of 34 steps (88%) done
+[Fri Nov  6 00:06:21 2026]
+Finished job 28.
+31 of 34 steps (91%) done
+[Fri Nov  6 00:06:22 2026]
+Finished job 8.
+32 of 34 steps (94%) done
+Select jobs to execute...
+
+[Fri Nov  6 00:06:22 2026]
+rule aggregate_tables:
+    input: ZNF568/free/stability/mutatex_runs/AFDB_50-103/model_v6/saturation/Q3ZCX4_table/energies.csv, ZNF568/free/stability/mutatex_runs/AFDB_222-241/model_v6/saturation/Q3ZCX4_table/energies.csv
+    output: ZNF568/free/stability/mutatex_runs/aggregate/model_v6/saturation/Q3ZCX4_table/energies.csv, ZNF568/free/stability/mutatex_runs/aggregate/model_v6/saturation/Q3ZCX4_table/energies_std.csv
+    jobid: 35
+    reason: Missing output files: ZNF568/free/stability/mutatex_runs/aggregate/model_v6/saturation/Q3ZCX4_table/energies.csv; Input files updated by another job: ZNF568/free/stability/mutatex_runs/AFDB_222-241/model_v6/saturation/Q3ZCX4_table/energies.csv, ZNF568/free/stability/mutatex_runs/AFDB_50-103/model_v6/saturation/Q3ZCX4_table/energies.csv
+    wildcards: gene=ZNF568, state=free, version=v6, prot_id=Q3ZCX4
+    resources: tmpdir=/tmp
+
+[Fri Nov  6 00:06:25 2026]
+Finished job 35.
+33 of 34 steps (97%) done
+Select jobs to execute...
+
+[Fri Nov  6 00:06:25 2026]
+localrule all:
+    input: APC/free/stability/mutatex_runs/PDB_1-5/model_v1/saturation/P25054_table/energies.csv, ZNF568/free/stability/mutatex_runs/AFDB_50-103/model_v6/saturation/Q3ZCX4_table/energies.csv, ZNF568/free/stability/mutatex_runs/AFDB_222-241/model_v6/saturation/Q3ZCX4_table/energies.csv, ZNF568/zn_bound/stability/mutatex_runs/AFDB_50-103/model_v6/saturation/Q3ZCX4_table/energies.csv, HSPB1/something/stability/mutatex_runs/AFDB_88-177/model_v6/saturation/P14602_table/energies.csv, APC/free/stability/mutatex_input_preparation/PDB_1-5/model_v1/procheck/P25054_procheck.csv, ZNF568/free/stability/mutatex_input_preparation/AFDB_50-103/model_v6/procheck/Q3ZCX4_procheck.csv, ZNF568/free/stability/mutatex_input_preparation/AFDB_222-241/model_v6/procheck/Q3ZCX4_procheck.csv, ZNF568/zn_bound/stability/mutatex_input_preparation/AFDB_50-103/model_v6/procheck/Q3ZCX4_procheck.csv, HSPB1/something/stability/mutatex_input_preparation/AFDB_88-177/model_v6/procheck/P14602_procheck.csv, ZNF568/free/stability/mutatex_runs/aggregate/model_v6/saturation/Q3ZCX4_table/energies.csv
+    jobid: 0
+    reason: Input files updated by another job: ZNF568/zn_bound/stability/mutatex_runs/AFDB_50-103/model_v6/saturation/Q3ZCX4_table/energies.csv, ZNF568/free/stability/mutatex_runs/AFDB_50-103/model_v6/saturation/Q3ZCX4_table/energies.csv, APC/free/stability/mutatex_input_preparation/PDB_1-5/model_v1/procheck/P25054_procheck.csv, ZNF568/free/stability/mutatex_input_preparation/AFDB_50-103/model_v6/procheck/Q3ZCX4_procheck.csv, ZNF568/free/stability/mutatex_input_preparation/AFDB_222-241/model_v6/procheck/Q3ZCX4_procheck.csv, ZNF568/free/stability/mutatex_runs/AFDB_222-241/model_v6/saturation/Q3ZCX4_table/energies.csv, ZNF568/free/stability/mutatex_runs/aggregate/model_v6/saturation/Q3ZCX4_table/energies.csv, APC/free/stability/mutatex_runs/PDB_1-5/model_v1/saturation/P25054_table/energies.csv, HSPB1/something/stability/mutatex_input_preparation/AFDB_88-177/model_v6/procheck/P14602_procheck.csv, ZNF568/zn_bound/stability/mutatex_input_preparation/AFDB_50-103/model_v6/procheck/Q3ZCX4_procheck.csv, HSPB1/something/stability/mutatex_runs/AFDB_88-177/model_v6/saturation/P14602_table/energies.csv
+    resources: tmpdir=/tmp
+
+[Fri Nov  6 00:06:25 2026]
+Finished job 0.
+34 of 34 steps (100%) done
+Complete log: .snakemake/log/2026-11-05T134614.653847.snakemake.log

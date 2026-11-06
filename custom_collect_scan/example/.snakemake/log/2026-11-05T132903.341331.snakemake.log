@@ -1,0 +1,4 @@
+ValueError in file /data/user/martibel/mutatex_pipelines/custom_collect_scan/example/Snakefile, line 226:
+Found empty strings in the following cells of the input: 
+[('HSPB1', 'state')]
+  File "/data/user/martibel/mutatex_pipelines/custom_collect_scan/example/Snakefile", line 226, in <module>

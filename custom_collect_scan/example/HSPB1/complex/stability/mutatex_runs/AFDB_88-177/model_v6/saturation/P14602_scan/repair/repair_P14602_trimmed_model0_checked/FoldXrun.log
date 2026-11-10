@@ -3371,6 +3371,6 @@ Total          = 				  -6.08
 End of Repair
 Output PDB ./P14602_trimmed_model0_checked_Repair.pdb
 Your file run OK
-End time of FoldX: Thu Nov  5 13:47:56 2026
-Total time spend: 89.48 seconds.
+End time of FoldX: Mon Nov  9 13:49:20 2026
+Total time spend: 58.13 seconds.
 Cleaning RepairPDB...DONE

@@ -2429,6 +2429,6 @@ Total          = 				  -0.88
 End of Repair
 Output PDB ./Q3ZCX4_trimmed_model0_checked_Repair.pdb
 Your file run OK
-End time of FoldX: Thu Nov  5 17:17:00 2026
-Total time spend: 48.99 seconds.
+End time of FoldX: Mon Nov  9 16:13:13 2026
+Total time spend: 34.21 seconds.
 Cleaning RepairPDB...DONE

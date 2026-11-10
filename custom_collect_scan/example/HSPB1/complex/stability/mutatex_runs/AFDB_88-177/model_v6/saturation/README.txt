@@ -6,16 +6,16 @@ The scan folder hosts a custom scanning run performed with MutateX and the table
 collects in a .csv file the predicted changes in folding free energy upon mutation for each protein residue.
 
 The following files were provided as input to perform the scan with MutateX:
-- HSPB1/something/stability/mutatex_input_preparation/AFDB_88-177/model_v6/saturation/mutate_runfile.txt
-- HSPB1/something/stability/mutatex_input_preparation/AFDB_88-177/model_v6/saturation/repair_runfile.txt
-- HSPB1/something/stability/mutatex_input_preparation/AFDB_88-177/model_v6/saturation/mutation_list.txt
+- HSPB1/complex/stability/mutatex_input_preparation/AFDB_88-177/model_v6/saturation/mutate_runfile.txt
+- HSPB1/complex/stability/mutatex_input_preparation/AFDB_88-177/model_v6/saturation/repair_runfile.txt
+- HSPB1/complex/stability/mutatex_input_preparation/AFDB_88-177/model_v6/saturation/mutation_list.txt
 The input .pdb file can be found in the folder:
-HSPB1/something/stability/mutatex_input_preparation/AFDB_88-177/model_v6/saturation
+HSPB1/complex/stability/mutatex_input_preparation/AFDB_88-177/model_v6/saturation
 
 The pipeline can be summarized as follows:
 1. Generate input files and create a consistent input directory structure
 2. Copy, if provided by the user, or download from AF Protein Structure Database, the .pdb file
-from HSPB1/structure_selection into HSPB1/something/stability/mutatex_input_preparation/AFDB_88-177/model_v6/saturation
+from HSPB1/structure_selection into HSPB1/complex/stability/mutatex_input_preparation/AFDB_88-177/model_v6/saturation
 3. Trim the .pdb file by using pdb_selres tool to consider only the user-specified residues
 4. Run MutateX and generate a consistent output directory structure
 5. Collect resulting energies in a .csv file

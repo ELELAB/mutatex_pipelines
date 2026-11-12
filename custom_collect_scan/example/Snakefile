@@ -13,22 +13,74 @@ procheck_script = os.path.join(workflow_dir, "scripts", "classify_procheck.py")
 models_check = models.drop(columns= "pdb_file")
 models.loc[models["version"].eq(""), "version"] = "v6"
 
-allowed_binding_states = {"free", "complex", "zn_bound", "ca_bound"}
-invalid_binding_states = models.loc[~models["binding_state"].isin(allowed_binding_states), "binding_state"].unique()
+ALLOWED_BINDING_STATES = {"free"}
+SUPPORTED_COFACTORS = {"zn", "mg", "adp", "atp", "gdp", "gtp", "nadh", "nad", "fadh", "fad", "ca", "mn", "fe2", "fe3"}
 
-if invalid_binding_states.size > 0:
-    raise WorkflowError(
-                f"Invalid 'binding_state' found: {', '.join(invalid_binding_states)}\n"
-                f"Allowed 'binding_state' are: {', '.join(allowed_binding_states)}"
-            )
-   
-aggregate_groups = (
-    models
-    .groupby(["coding_gene", "prot_id", "binding_state", "version"], as_index=False)
-    .filter(lambda df: len(df) > 1)
-    [["coding_gene", "prot_id", "binding_state", "version"]]
-    .drop_duplicates()
-)
+BINDING_STATE_ERR_MSGS = {
+    "format": (
+        "Invalid 'binding_state' found: {invalid_values}.\n"
+        f"Allowed 'binding_state' are: {', '.join(ALLOWED_BINDING_STATES)} "
+        "or a combination of alphabetically sorted cofactors separated by '_' and ending with '_bound' (e.g. atp_zn_bound)."
+    ),
+    "unsupported": (
+        "Unsupported cofactor(s) found: {invalid_values}.\n"
+        f"Supported cofactors are: {', '.join(sorted(SUPPORTED_COFACTORS))} "
+        "to combine alphabetically sorted, separated by '_', and ending with '_bound' (e.g. atp_zn_bound)."
+    ),
+    "unsorted": (
+        "Cofactors must be in ALPHABETICAL order.\n"
+        "Fix the following: {invalid_values}"
+    )
+}
+
+def validate_binding_states(binding_state_series):
+    """
+    Check the 'binding_state' column from models.csv to ensure they match 
+    either the predefined allowed base states or a valid cofactor combination format.
+    """
+    unique_binding_states = binding_state_series.dropna().unique()
+    
+    invalid_format = []
+    unsupported_cofactors = []
+    unsorted_cofactors = []
+
+    for state in unique_binding_states:
+        if state in ALLOWED_BINDING_STATES:
+            continue
+        
+        if not (isinstance(state, str) and state.endswith("_bound")):
+            invalid_format.append(state)
+            continue
+
+        cofactors = state[:-6].split("_")
+        invalid_cofactors = [c for c in cofactors if c not in SUPPORTED_COFACTORS]
+
+        if invalid_cofactors:
+            unsupported_cofactors.append(f"{', '.join(invalid_cofactors)} (in '{state}')")
+            continue
+        
+        if cofactors!= sorted(cofactors):
+            sorted_cofactors = "_".join(sorted(cofactors)) + "_bound"
+            unsorted_cofactors.append(f"'{state}' -> did you mean '{sorted_cofactors}'?")
+            continue
+
+    errors = []
+
+    if invalid_format:
+        errors.append(BINDING_STATE_ERR_MSGS["format"].format(invalid_values=", ".join(invalid_format))
+        )
+        
+    if unsupported_cofactors:
+        errors.append(BINDING_STATE_ERR_MSGS["unsupported"].format(invalid_values=", ".join(unsupported_cofactors))
+        )
+        
+    if unsorted_cofactors:
+        errors.append(BINDING_STATE_ERR_MSGS["unsorted"].format(invalid_values=", ".join(unsorted_cofactors))
+        )
+        
+    if errors:
+        error_block = "\n\n".join(errors)
+        raise WorkflowError(error_block)
 
 def domain_energy_files(wildcards):
     """
@@ -201,7 +253,6 @@ def validate_afdb_sequence(pdb_file, fasta_file, prot_id):
         f"Checked {len(pdb_residues)} residues against the UniProt sequence."
     )
 
-
 # set up of cleaning level
 cleaning_opt = {"none","partial","deep"}
 
@@ -233,6 +284,16 @@ if empty_string_mask.values.any():
 
     error_details = [(models_check.loc[row_idx, 'coding_gene'], col_name) for (row_idx, col_name) in empty_string_loc.index]
     raise ValueError(f"Found empty strings in the following cells of the input: \n{error_details}")
+
+validate_binding_states(models["binding_state"])
+
+aggregate_groups = (
+    models
+    .groupby(["coding_gene", "prot_id", "binding_state", "version"], as_index=False)
+    .filter(lambda df: len(df) > 1)
+    [["coding_gene", "prot_id", "binding_state", "version"]]
+    .drop_duplicates()
+)
 
 rule all:
     input:

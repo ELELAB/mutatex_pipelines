@@ -29,7 +29,7 @@ The `models.csv` file is a comma separated file containing all the information n
 |`database`|Database from which the protein structure was downloaded|AFDB|
 |`start_res`|First residue to consider during the scan|88|
 |`end_res`|Last residue to consider during the scan|177|
-|`state`|State or condition of the protein|free|
+|`state`|State or condition of the protein|fre or atp_mg_bound|
 |`version`|Protein structure release|v6|
 |`pdb_file`|PDB namefile (optional)||
 

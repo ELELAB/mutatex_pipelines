@@ -1,0 +1,17 @@
+ 
+Main-chain bond-lengths and angles, and planar groups
+-----------------------------------------------------
+ 
+ Enter filename containing coordinates of structure
+ Enter required chain-ID, or leave blank for all
+ Main-chain bond lengths         * File: Q3ZCX4_trimmed_07.ps
+ Main-chain bond angles          * File: Q3ZCX4_trimmed_08.ps
+ RMS distances from planarity    * File: Q3ZCX4_trimmed_09.ps
+ Distorted geometry              * File: Q3ZCX4_trimmed_10.ps
+    * Distorted main-chain bonds:            0
+    * Distorted main-chain angles:           0
+    * Distorted planar groups:               1
+ * Program complete
+ *
+ * Summary page: Q3ZCX4_trimmed.sum
+ *

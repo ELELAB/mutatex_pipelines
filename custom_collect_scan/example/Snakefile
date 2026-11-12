@@ -13,13 +13,74 @@ procheck_script = os.path.join(workflow_dir, "scripts", "classify_procheck.py")
 models_check = models.drop(columns= "pdb_file")
 models.loc[models["version"].eq(""), "version"] = "v6"
 
-aggregate_groups = (
-    models
-    .groupby(["coding_gene", "prot_id", "version"], as_index=False)
-    .filter(lambda df: len(df) > 1)
-    [["coding_gene", "prot_id", "version"]]
-    .drop_duplicates()
-)
+ALLOWED_BINDING_STATES = {"free"}
+SUPPORTED_COFACTORS = {"zn", "mg", "adp", "atp", "gdp", "gtp", "nadh", "nad", "fadh", "fad", "ca", "mn", "fe2", "fe3"}
+
+BINDING_STATE_ERR_MSGS = {
+    "format": (
+        "Invalid 'binding_state' found: {invalid_values}.\n"
+        f"Allowed 'binding_state' are: {', '.join(ALLOWED_BINDING_STATES)} "
+        "or a combination of alphabetically sorted cofactors separated by '_' and ending with '_bound' (e.g. atp_zn_bound)."
+    ),
+    "unsupported": (
+        "Unsupported cofactor(s) found: {invalid_values}.\n"
+        f"Supported cofactors are: {', '.join(sorted(SUPPORTED_COFACTORS))} "
+        "to combine alphabetically sorted, separated by '_', and ending with '_bound' (e.g. atp_zn_bound)."
+    ),
+    "unsorted": (
+        "Cofactors must be in ALPHABETICAL order.\n"
+        "Fix the following: {invalid_values}"
+    )
+}
+
+def validate_binding_states(binding_state_series):
+    """
+    Check the 'binding_state' column from models.csv to ensure they match 
+    either the predefined allowed base states or a valid cofactor combination format.
+    """
+    unique_binding_states = binding_state_series.dropna().unique()
+    
+    invalid_format = []
+    unsupported_cofactors = []
+    unsorted_cofactors = []
+
+    for state in unique_binding_states:
+        if state in ALLOWED_BINDING_STATES:
+            continue
+        
+        if not (isinstance(state, str) and state.endswith("_bound")):
+            invalid_format.append(state)
+            continue
+
+        cofactors = state[:-6].split("_")
+        invalid_cofactors = [c for c in cofactors if c not in SUPPORTED_COFACTORS]
+
+        if invalid_cofactors:
+            unsupported_cofactors.append(f"{', '.join(invalid_cofactors)} (in '{state}')")
+            continue
+        
+        if cofactors!= sorted(cofactors):
+            sorted_cofactors = "_".join(sorted(cofactors)) + "_bound"
+            unsorted_cofactors.append(f"'{state}' -> did you mean '{sorted_cofactors}'?")
+            continue
+
+    errors = []
+
+    if invalid_format:
+        errors.append(BINDING_STATE_ERR_MSGS["format"].format(invalid_values=", ".join(invalid_format))
+        )
+        
+    if unsupported_cofactors:
+        errors.append(BINDING_STATE_ERR_MSGS["unsupported"].format(invalid_values=", ".join(unsupported_cofactors))
+        )
+        
+    if unsorted_cofactors:
+        errors.append(BINDING_STATE_ERR_MSGS["unsorted"].format(invalid_values=", ".join(unsorted_cofactors))
+        )
+        
+    if errors:
+        error_block = "\n\n".join(errors)
+        raise WorkflowError(error_block)
 
 def domain_energy_files(wildcards):
     """
@@ -29,11 +90,12 @@ def domain_energy_files(wildcards):
     subset = models[
         (models["coding_gene"] == wildcards.gene) &
         (models["prot_id"] == wildcards.prot_id) &
+        (models["binding_state"] == wildcards.binding_state) &
         (models["version"] == wildcards.version)
     ].sort_values(["start_res", "end_res"])
 
     return [
-        f"{row.coding_gene}/free/stability/mutatex_runs/"
+        f"{row.coding_gene}/{row.binding_state}/stability/mutatex_runs/"
         f"{row.database}_{row.start_res}-{row.end_res}/model_{row.version}/"
         f"saturation/{row.prot_id}_table/energies.csv"
         for row in subset.itertuples(index=False)
@@ -191,7 +253,6 @@ def validate_afdb_sequence(pdb_file, fasta_file, prot_id):
         f"Checked {len(pdb_residues)} residues against the UniProt sequence."
     )
 
-
 # set up of cleaning level
 cleaning_opt = {"none","partial","deep"}
 
@@ -224,29 +285,42 @@ if empty_string_mask.values.any():
     error_details = [(models_check.loc[row_idx, 'coding_gene'], col_name) for (row_idx, col_name) in empty_string_loc.index]
     raise ValueError(f"Found empty strings in the following cells of the input: \n{error_details}")
 
+validate_binding_states(models["binding_state"])
+
+aggregate_groups = (
+    models
+    .groupby(["coding_gene", "prot_id", "binding_state", "version"], as_index=False)
+    .filter(lambda df: len(df) > 1)
+    [["coding_gene", "prot_id", "binding_state", "version"]]
+    .drop_duplicates()
+)
+
 rule all:
     input:
-        expand("{gene}/free/stability/mutatex_runs/{database}_{start_res}-{end_res}/model_{version}/saturation/{prot_id}_table/energies.csv",
+        expand("{gene}/{binding_state}/stability/mutatex_runs/{database}_{start_res}-{end_res}/model_{version}/saturation/{prot_id}_table/energies.csv",
                     zip,
                     gene=models["coding_gene"],
+                    binding_state=models["binding_state"],
                     database=models["database"],
                     start_res=models["start_res"],
                     end_res=models["end_res"],
                     version=models["version"],
                     prot_id=models["prot_id"]
                     ),
-	expand("{gene}/free/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/procheck/{prot_id}_procheck.csv",
+	    expand("{gene}/{binding_state}/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/procheck/{prot_id}_procheck.csv",
                     zip,
                     gene=models["coding_gene"],
+                    binding_state=models["binding_state"],
                     database=models["database"],
                     start_res=models["start_res"],
                     end_res=models["end_res"],
                     version=models["version"],
                     prot_id=models["prot_id"]
                     ),
-        expand("{gene}/free/stability/mutatex_runs/aggregate/model_{version}/saturation/{prot_id}_table/energies.csv",
+        expand("{gene}/{binding_state}/stability/mutatex_runs/aggregate/model_{version}/saturation/{prot_id}_table/energies.csv",
                     zip,
                     gene=aggregate_groups["coding_gene"],
+                    binding_state=aggregate_groups["binding_state"],
                     version=aggregate_groups["version"],
                     prot_id=aggregate_groups["prot_id"]
                     )
@@ -255,10 +329,10 @@ rule input_txt:
     input:
 
     output:
-        mutate="{gene}/free/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/saturation/mutate_runfile.txt",
-        repair="{gene}/free/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/saturation/repair_runfile.txt",
-        mutation_list="{gene}/free/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/saturation/mutation_list.txt",
-        readme="{gene}/free/stability/mutatex_runs/{database}_{start_res}-{end_res}/model_{version}/saturation/README.txt"
+        mutate="{gene}/{binding_state}/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/saturation/mutate_runfile.txt",
+        repair="{gene}/{binding_state}/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/saturation/repair_runfile.txt",
+        mutation_list="{gene}/{binding_state}/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/saturation/mutation_list.txt",
+        readme="{gene}/{binding_state}/stability/mutatex_runs/{database}_{start_res}-{end_res}/model_{version}/saturation/README.txt"
     params:
         workflow_dir=os.path.abspath(os.path.dirname(workflow.snakefile))
     run:
@@ -281,12 +355,12 @@ The following files were provided as input to perform the scan with MutateX:
 - {output.repair}
 - {output.mutation_list}
 The input .pdb file can be found in the folder:
-{wildcards.gene}/free/stability/mutatex_input_preparation/{wildcards.database}_{wildcards.start_res}-{wildcards.end_res}/model_{wildcards.version}/saturation
+{wildcards.gene}/{wildcards.binding_state}/stability/mutatex_input_preparation/{wildcards.database}_{wildcards.start_res}-{wildcards.end_res}/model_{wildcards.version}/saturation
 
 The pipeline can be summarized as follows:
 1. Generate input files and create a consistent input directory structure
 2. Copy, if provided by the user, or download from AF Protein Structure Database, the .pdb file
-from {wildcards.gene}/structure_selection into {wildcards.gene}/free/stability/mutatex_input_preparation/{wildcards.database}_{wildcards.start_res}-{wildcards.end_res}/model_{wildcards.version}/saturation
+from {wildcards.gene}/structure_selection into {wildcards.gene}/{wildcards.binding_state}/stability/mutatex_input_preparation/{wildcards.database}_{wildcards.start_res}-{wildcards.end_res}/model_{wildcards.version}/saturation
 3. Trim the .pdb file by using pdb_selres tool to consider only the user-specified residues
 4. Run MutateX and generate a consistent output directory structure
 5. Collect resulting energies in a .csv file
@@ -356,17 +430,17 @@ rule download_pdb:
 rule input_pdb:
     input:
         pdb="structure_selection/{database}/{prot_id}_{start_res}_{end_res}.pdb",
-        mutate="{gene}/free/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/saturation/mutate_runfile.txt",
-        repair="{gene}/free/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/saturation/repair_runfile.txt",
-        mutation_list="{gene}/free/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/saturation/mutation_list.txt",
-        readme="{gene}/free/stability/mutatex_runs/{database}_{start_res}-{end_res}/model_{version}/saturation/README.txt"
+        mutate="{gene}/{binding_state}/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/saturation/mutate_runfile.txt",
+        repair="{gene}/{binding_state}/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/saturation/repair_runfile.txt",
+        mutation_list="{gene}/{binding_state}/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/saturation/mutation_list.txt",
+        readme="{gene}/{binding_state}/stability/mutatex_runs/{database}_{start_res}-{end_res}/model_{version}/saturation/README.txt"
     output:
-        pdb_out="{gene}/free/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/saturation/{prot_id}_trimmed.pdb"
+        pdb_out="{gene}/{binding_state}/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/saturation/{prot_id}_trimmed.pdb"
     params:
         env=config["pdb_selres_env"]
     shell:
         """
-        input_dir={wildcards.gene}/free/stability/mutatex_input_preparation/{wildcards.database}_{wildcards.start_res}-{wildcards.end_res}/model_{wildcards.version}/saturation
+        input_dir={wildcards.gene}/{wildcards.binding_state}/stability/mutatex_input_preparation/{wildcards.database}_{wildcards.start_res}-{wildcards.end_res}/model_{wildcards.version}/saturation
         mkdir -p $input_dir
         cp {input.pdb} $input_dir/{wildcards.prot_id}.pdb
 
@@ -377,16 +451,16 @@ rule input_pdb:
 
 rule run_procheck:
     input:
-        pdb="{gene}/free/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/saturation/{prot_id}_trimmed.pdb"
+        pdb="{gene}/{binding_state}/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/saturation/{prot_id}_trimmed.pdb"
     output:
-        sum_file="{gene}/free/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/procheck/{prot_id}_trimmed.sum"
+        sum_file="{gene}/{binding_state}/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/procheck/{prot_id}_trimmed.sum"
     params:
         env=config["procheck_env"],
         chain="A",
         resolution="2.0"
     shell:
         """
-        outdir={wildcards.gene}/free/stability/mutatex_input_preparation/{wildcards.database}_{wildcards.start_res}-{wildcards.end_res}/model_{wildcards.version}/procheck
+        outdir={wildcards.gene}/{wildcards.binding_state}/stability/mutatex_input_preparation/{wildcards.database}_{wildcards.start_res}-{wildcards.end_res}/model_{wildcards.version}/procheck
         mkdir -p $outdir
 
         cd $outdir
@@ -399,10 +473,10 @@ rule run_procheck:
 
 rule classify_procheck:
     input:
-        sum_file="{gene}/free/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/procheck/{prot_id}_trimmed.sum"
+        sum_file="{gene}/{binding_state}/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/procheck/{prot_id}_trimmed.sum"
     output:
-        report="{gene}/free/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/procheck/{prot_id}_procheck.csv",
-        flag="{gene}/free/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/procheck/{prot_id}_procheck.done"
+        report="{gene}/{binding_state}/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/procheck/{prot_id}_procheck.csv",
+        flag="{gene}/{binding_state}/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/procheck/{prot_id}_procheck.done"
     params:
         script=procheck_script
     run:
@@ -464,10 +538,10 @@ rule classify_procheck:
 
 rule mutatex_scan:
     input:
-        pdb="{gene}/free/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/saturation/{prot_id}_trimmed.pdb",
-        procheck="{gene}/free/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/procheck/{prot_id}_procheck.done"
+        pdb="{gene}/{binding_state}/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/saturation/{prot_id}_trimmed.pdb",
+        procheck="{gene}/{binding_state}/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/procheck/{prot_id}_procheck.done"
     output:
-        directory("{gene}/free/stability/mutatex_runs/{database}_{start_res}-{end_res}/model_{version}/saturation/{prot_id}_scan")
+        directory("{gene}/{binding_state}/stability/mutatex_runs/{database}_{start_res}-{end_res}/model_{version}/saturation/{prot_id}_scan")
     threads: workflow.cores
     params:
         env=config["mutatex"]["env"],
@@ -477,7 +551,7 @@ rule mutatex_scan:
     shell:
         """
 	pdb_path=$(realpath {input.pdb})
-        working_dir={wildcards.gene}/free/stability/mutatex_runs/{wildcards.database}_{wildcards.start_res}-{wildcards.end_res}/model_{wildcards.version}/saturation/{wildcards.prot_id}_scan
+        working_dir={wildcards.gene}/{wildcards.binding_state}/stability/mutatex_runs/{wildcards.database}_{wildcards.start_res}-{wildcards.end_res}/model_{wildcards.version}/saturation/{wildcards.prot_id}_scan
         mkdir -p $working_dir
         cd $working_dir
 
@@ -499,12 +573,12 @@ rule mutatex_scan:
 
 rule write_table:
     input:
-        "{gene}/free/stability/mutatex_runs/{database}_{start_res}-{end_res}/model_{version}/saturation/{prot_id}_scan"
+        "{gene}/{binding_state}/stability/mutatex_runs/{database}_{start_res}-{end_res}/model_{version}/saturation/{prot_id}_scan"
     output:
-        "{gene}/free/stability/mutatex_runs/{database}_{start_res}-{end_res}/model_{version}/saturation/{prot_id}_table/energies.csv"
+        "{gene}/{binding_state}/stability/mutatex_runs/{database}_{start_res}-{end_res}/model_{version}/saturation/{prot_id}_table/energies.csv"
     shell:
         """
-        working_dir={wildcards.gene}/free/stability/mutatex_runs/{wildcards.database}_{wildcards.start_res}-{wildcards.end_res}/model_{wildcards.version}/saturation/{wildcards.prot_id}_table
+        working_dir={wildcards.gene}/{wildcards.binding_state}/stability/mutatex_runs/{wildcards.database}_{wildcards.start_res}-{wildcards.end_res}/model_{wildcards.version}/saturation/{wildcards.prot_id}_table
         mkdir -p $working_dir
         cd $working_dir
 
@@ -520,8 +594,8 @@ rule aggregate_tables:
     input:
         energies=domain_energy_files
     output:
-        energies="{gene}/free/stability/mutatex_runs/aggregate/model_{version}/saturation/{prot_id}_table/energies.csv",
-        energies_std="{gene}/free/stability/mutatex_runs/aggregate/model_{version}/saturation/{prot_id}_table/energies_std.csv"
+        energies="{gene}/{binding_state}/stability/mutatex_runs/aggregate/model_{version}/saturation/{prot_id}_table/energies.csv",
+        energies_std="{gene}/{binding_state}/stability/mutatex_runs/aggregate/model_{version}/saturation/{prot_id}_table/energies_std.csv"
     run:
         outdir = Path(output.energies).parent
         outdir.mkdir(parents=True, exist_ok=True)

@@ -1,0 +1,73 @@
+ 
+Check of non-bonded contacts
+----------------------------
+ 
+
+Neighbouring Contact Locator - By David Jones, August 1990
+
+Program is configured for 100000 atoms and 10000 residues.
+
+Enter the name of original coordinates file
+Input file name Q3ZCX4_trimmed.new
+Output file name Q3ZCX4_trimmed.nb
+Processing : Q3ZCX4_trimmed.new
+Residue     1 is PHE A   50-  
+Residue     2 is LYS A   51-  
+Residue     3 is ASP A   52-  
+Residue     4 is VAL A   53-  
+Residue     5 is ALA A   54-  
+Residue     6 is VAL A   55-  
+Residue     7 is ASP A   56-  
+Residue     8 is LEU A   57-  
+Residue     9 is THR A   58-  
+Residue    10 is GLN A   59-  
+Residue    11 is GLU A   60-  
+Residue    12 is GLU A   61-  
+Residue    13 is TRP A   62-  
+Residue    14 is GLU A   63-  
+Residue    15 is GLN A   64-  
+Residue    16 is MET A   65-  
+Residue    17 is LYS A   66-  
+Residue    18 is PRO A   67-  
+Residue    19 is ALA A   68-  
+Residue    20 is GLN A   69-  
+Residue    21 is ARG A   70-  
+Residue    22 is ASN A   71-  
+Residue    23 is LEU A   72-  
+Residue    24 is TYR A   73-  
+Residue    25 is ARG A   74-  
+Residue    26 is ASP A   75-  
+Residue    27 is VAL A   76-  
+Residue    28 is MET A   77-  
+Residue    29 is LEU A   78-  
+Residue    30 is GLU A   79-  
+Residue    31 is ASN A   80-  
+Residue    32 is TYR A   81-  
+Residue    33 is SER A   82-  
+Residue    34 is ASN A   83-  
+Residue    35 is LEU A   84-  
+Residue    36 is VAL A   85-  
+Residue    37 is THR A   86-  
+Residue    38 is VAL A   87-  
+Residue    39 is GLY A   88-  
+Residue    40 is CYS A   89-  
+Residue    41 is GLN A   90-  
+Residue    42 is VAL A   91-  
+Residue    43 is THR A   92-  
+Residue    44 is LYS A   93-  
+Residue    45 is PRO A   94-  
+Residue    46 is ASP A   95-  
+Residue    47 is VAL A   96-  
+Residue    48 is ILE A   97-  
+Residue    49 is PHE A   98-  
+Residue    50 is LYS A   99-  
+Residue    51 is LEU A  100-  
+Residue    52 is GLU A  101-  
+Residue    53 is GLN A  102-  
+Residue    54 is GLU A  103-  
+  447 potential contact atoms selected from    54 residues.
+
+Checking for disulphide bridges . . . done.
+Checking for neighbours . . . 
+  194 neighbouring contacts found.
+* Program completed

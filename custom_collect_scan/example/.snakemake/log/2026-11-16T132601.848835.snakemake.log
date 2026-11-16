@@ -1,0 +1,3 @@
+NameError in file /data/user/martibel/mutatex_pipelines/custom_collect_scan/example/Snakefile, line 223:
+name 'binding_state_series' is not defined
+  File "/data/user/martibel/mutatex_pipelines/custom_collect_scan/example/Snakefile", line 223, in <module>

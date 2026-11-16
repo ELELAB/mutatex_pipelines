@@ -1,0 +1,10 @@
+ValueError in file /data/user/martibel/mutatex_pipelines/custom_collect_scan/example/Snakefile, line 272:
+Invalid 'binding_state' found: freee, fre.
+Allowed 'binding_state' are: free or a combination of alphabetically sorted cofactors separated by '_' and ending with '_bound' (e.g. atp_zn_bound).
+
+Unsupported cofactor(s) found: Zn (in 'Zn_bound').
+Supported cofactors are: adp, atp, ca, fad, fadh, fe2, fe3, gdp, gtp, mg, mn, nad, nadh, zn to combine alphabetically sorted, separated by '_', and ending with '_bound' (e.g. atp_zn_bound).
+
+Cofactors must be in ALPHABETICAL order.
+Fix the following: 'mg_atp_bound' -> did you mean 'atp_mg_bound'?
+  File "/data/user/martibel/mutatex_pipelines/custom_collect_scan/example/Snakefile", line 272, in <module>

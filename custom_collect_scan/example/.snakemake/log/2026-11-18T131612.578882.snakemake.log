@@ -1,0 +1,4 @@
+ValueError in file /data/user/martibel/mutatex_pipelines/custom_collect_scan/example/Snakefile, line 287:
+Invalid 'binding_state' found: zn_buond.
+Allowed 'binding_state' are: free or a combination of alphabetically sorted cofactors separated by '_' and ending with '_bound' (e.g. atp_zn_bound).
+  File "/data/user/martibel/mutatex_pipelines/custom_collect_scan/example/Snakefile", line 287, in <module>

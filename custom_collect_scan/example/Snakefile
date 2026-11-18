@@ -221,13 +221,15 @@ if empty_string_mask.values.any():
 
 # Binding state validation
 unique_binding_states = models["binding_state"].dropna().unique()
-    
+
+valid_binding_states = set() 
 invalid_format = []
 unsupported_cofactors = []
 unsorted_cofactors = []
 
 for state in unique_binding_states:
     if state in ALLOWED_BINDING_STATES:
+        valid_binding_states.add(state)
         continue
     
     if not (isinstance(state, str) and state.endswith("_bound")):
@@ -246,7 +248,10 @@ for state in unique_binding_states:
         unsorted_cofactors.append(f"'{state}' -> did you mean '{sorted_cofactors}'?")
         continue
 
-binding_state_counts = models.groupby('coding_gene')['binding_state'].nunique()
+    valid_binding_states.add(state)
+
+models_with_valid_states = models[models["binding_state"].isin(valid_binding_states)]
+binding_state_counts = models_with_valid_states.groupby('coding_gene')['binding_state'].nunique()
 multi_states_proteins = binding_state_counts[binding_state_counts > 1].index.tolist()
 
 errors = []
@@ -275,7 +280,7 @@ if multi_states_proteins:
     errors.append(
         f"Protein(s) with more than one 'binding_state' found: {', '.join(multi_states_proteins)}\n"
         "All domains of the same protein within models.csv must have the same 'binding_state'.\n"
-        "To analyze the same protein in a different state, please set up and run a separate pipeline."
+        "To analyze the same protein in a different state, please set up and run a separate pipeline run."
     )
     
 if errors:

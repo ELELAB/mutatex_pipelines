@@ -1,0 +1,11 @@
+ValueError in file /data/user/martibel/mutatex_pipelines/custom_collect_scan/example/Snakefile, line 282:
+Invalid 'binding_state' found: freee.
+Allowed 'binding_state' are: free or a combination of alphabetically sorted cofactors separated by '_' and ending with '_bound' (e.g. atp_zn_bound).
+
+Unsupported cofactor(s) found: Atp (in 'Atp_mg_bound').
+Supported cofactors are: adp, atp, ca, fad, fadh, fe2, fe3, gdp, gtp, mg, mn, nad, nadh, zn (lowercase) to combine alphabetically sorted, separated by '_', and ending with '_bound' (e.g. atp_zn_bound).
+
+Protein(s) with more than one 'binding_state' found: ZNF568
+All domains of the same protein within models.csv must have the same 'binding_state'.
+To analyze the same protein in a different state, please set up and run a separate pipeline.
+  File "/data/user/martibel/mutatex_pipelines/custom_collect_scan/example/Snakefile", line 282, in <module>

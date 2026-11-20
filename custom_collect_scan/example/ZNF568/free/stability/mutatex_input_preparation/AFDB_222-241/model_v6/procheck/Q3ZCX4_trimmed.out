@@ -1,0 +1,375 @@
+Residue-by-residue listing for Q3ZCX4_trimmed - Chain A                                                                    Page  1
+----------------------------------------
+
+This listing highlights the residues in the structure which may need investigation.
+
+The ideal values and standard deviations against which the structure has been compared are shown in the following table:
+
+
+
+                          <------------------------------- I D E A L   V A L U E S ------------------------------->
+
+                            Chi-1 dihedral         Proline Phi  Helix  Chi-3   Chi-3 Disulph Omega  H-bond Chirality
+                            g(-) trans g(+)  Chi-2   phi  helix  psi  rt-hand lf-hand  bond dihedral  en.   C-alpha
+                          ------------------------------------------------------------------------------------------
+     Ideal value            64.1 183.6 -66.7 177.4 -65.4 -65.3 -39.4   96.8   -85.8    2.0   180.0   -2.0     33.9
+     Standard deviation     15.7  16.8  15.0  18.5  11.2  11.9  11.3   14.8    10.7    0.1     5.8    0.8      3.5
+                          ------------------------------------------------------------------------------------------
+
+
+In the listing below, properties that deviate from these values are highlighted by asterisks and plus-signs. Each asterisk
+represents one standard deviation, and each plus-sign represents half a standard deviation. So, a highlight such as +***, indicates
+that the value of the parameter is between 3.5 and 4.0 standard deviations from the ideal value shown above.
+
+Where the deviation is greater than 4.5 standard deviations its numerical value is shown; for example, *5.5*.
+
+The final column gives the maximum deviation in each row, while the maximum column deviations are shown at the end of the listing.
+Also at the end are the keys to the codes used for the secondary structure and Ramachandran plot assignments.
+
+
+Full print-out.
+
+
+...................................................................................................................................
+ Residue     Kabsch Region
+---------    Sander   of
+No.  Type Seq  sec  Ramch.  Chi-1 dihedral   Chi-2 Proline Phi  Helix  Chi-3   Chi-3 Disulph Omega  H-bond Chirality   Bad      Max
+  Chain   no. struc  plot   g(-) trans g(+)  trans   phi  helix  psi  rt-hand lf-hand  bond dihedral  en.   C-alpha  contacts   dev
+-----------------------------------------------------------------------------------------------------------------------------------
+   1A PHE 222         -       -     -  -67.8    -     -     -     -      -       -      -    183.5     -      34.3      -
+   2A LYS 223   B     B       -     -  -48.4 205.4    -     -     -      -       -      -    169.3     -      33.1      -
+                                           *    +*                                              +*                               +*
+   3A CYS 224   t     B       -  179.1    -     -     -     -     -      -       -      -    181.1   -2.4     33.6      -
+   4A ASN 225   T     A       -     -  -67.3    -     -     -     -      -       -      -    183.2   -0.6     34.2      -
+                                                                                                       +*                        +*
+   5A GLN 226   T     A       -     -  -61.9 191.8    -     -     -      -       -      -    182.4     -      33.8      -
+   6A CYS 227   T     A     71.2    -     -     -     -     -     -      -       -      -    182.0     -      33.5      -
+   7A GLY 228   t     -       -     -     -     -     -     -     -      -       -      -    179.4   -2.3       -       -
+   8A GLN 229         B       -     -  -77.5 190.6    -     -     -      -       -      -    178.6     -      32.6      -
+   9A ASP 230   B     B       -     -  -66.9    -     -     -     -      -       -      -    179.6     -      33.8      -
+  10A PHE 231         B       -     -  -62.1    -     -     -     -      -       -      -    177.6   -2.5     33.7      -
+  11A SER 232   S     A     53.0    -     -     -     -     -     -      -       -      -    178.6     -      34.5      -
+  12A HIS 233   h     B       -     -  -59.3    -     -     -     -      -       -      -    173.8     -      34.0      -
+                                                                                                 *                                *
+  13A LYS 234   H     A       -  189.0    -  178.6    -  -54.6 -37.5     -       -      -    175.3     -      34.2      -
+  14A PHE 235   H     A       -  176.4    -     -     -  -59.8 -39.6     -       -      -    177.9     -      34.4      -
+  15A ASP 236   H     A       -     -  -64.2    -     -  -69.0 -36.5     -       -      -    170.9   -0.7     33.1      -
+                                                                                                +*     +*                        +*
+  16A LEU 237   H     A       -  171.1    -     -     -  -61.6 -54.4     -       -      -    178.3   -1.7     32.7      -
+                                                                   *                                                              *
+  17A ILE 238   H     A       -     -  -66.7 166.7    -  -56.5 -41.2     -       -      -    175.8   -2.9     34.1      -
+                                                                                                        *                         *
+  18A ARG 239   H     A       -  183.4    -  183.8    -  -64.6 -38.2     -       -      -    175.5   -2.3     34.0      -
+  19A HIS 240   H     A       -  167.5    -     -     -  -68.1 -38.7     -       -      -    177.2   -1.7     33.3      -
+  20A GLU 241   h     -       -     -  -72.2 176.1    -     -     -      -       -      -       -    -2.7     33.8      -
+-----------------------------------------------------------------------------------------------------------------------------------
+ 
+Residue-by-residue listing for Q3ZCX4_trimmed - Chain A                                                                    Page  2
+----------------------------------------
+
+...................................................................................................................................
+ Residue     Kabsch Region
+---------    Sander   of
+No.  Type Seq  sec  Ramch.  Chi-1 dihedral   Chi-2 Proline Phi  Helix  Chi-3   Chi-3 Disulph Omega  H-bond Chirality   Bad      Max
+  Chain   no. struc  plot   g(-) trans g(+)  trans   phi  helix  psi  rt-hand lf-hand  bond dihedral  en.   C-alpha  contacts   dev
+-----------------------------------------------------------------------------------------------------------------------------------
+Max deviations:                            *    +*                 *                            +*     +*                        +* 
+-----------------------------------------------------------------------------------------------------------------------------------
+Mean values:                62.1 177.8 -64.9 184.7    -  -62.0 -40.9     -       -      -    177.9   -2.0     33.7
+Standard deviations:        12.9   7.9   7.4  12.6    -    5.5   6.1     -       -      -      3.9    0.8      0.6
+
+Numbers of values:             2     6    11     7     0     7     7      0       0      0      19     10       19      0
+
+
+   KEY TO CODES:
+   ------------
+
+         Regions of the Ramachandran plot                           Secondary structure (extended Kabsch/Sander)   
+         --------------------------------                           --------------------------------------------   
+
+         A  - Core alpha                                            B - residue in isolated beta-bridge             
+         a  - Allowed alpha                                         E - extended strand, participates in beta-ladder
+         ~a - Generous alpha              ** Generous               G - 3-helix (3/10 helix)                        
+         B  - Core beta                                             H - 4-helix (alpha-helix)                       
+         b  - Allowed beta                                          I - 5-helix (pi-helix)                          
+         ~b - Generous beta               ** Generous               S - bend                                        
+         L  - Core left-handed alpha                                T - hydrogen-bonded turn                        
+         l  - Allowed left-handed alpha                                                                             
+         ~l - Generous left-handed alpha  ** Generous               e - extension of beta-strand                    
+         p  - Allowed epsilon                                       g - extension of 3/10 helix                     
+         ~p - Generous epsilon            ** Generous               h - extension of alpha-helix                    
+         XX - Outside major areas       **** Disallowed    
+
+
+
+ 
+Residue-by-residue listing for Q3ZCX4_trimmed - Chain A                                                                    Page  3
+----------------------------------------
+
+
+
+                          M A I N   C H A I N   B O N D   L E N G T H S   A N D   B O N D   A N G L E S
+
+
+                  ..................................... Small molecule data .........................................
+
+                  <---------- Bond lengths ---------->    <---------------------- Bond angles ---------------------->
+
+                  C-N     C-O     CA-C    CA-CB   N-CA    C-N-CA   CA-C-N   CA-C-O  CB-CA-C   N-CA-C  N-CA-CB   O-C-N
+                  ---------------------------------------------------------------------------------------------------
+Any                 -     1.231     -       -       -        -        -        -        -        -        -        -  
+                        ( 0.020)                                                                                       
+Pro               1.341     -       -       -     1.466   122.60   116.90      -        -     111.80   103.00   122.00
+                ( 0.016)                        ( 0.015) (  5.00) (  1.50)                   (  2.50) (  1.10) (  1.40)
+Except Pro        1.329     -       -       -       -        -        -        -        -        -        -     123.00
+                ( 0.014)                                                                                       (  1.60)
+Gly                 -       -     1.516     -     1.451   120.60   116.40   120.80      -     112.50      -        -  
+                                ( 0.018)        ( 0.016) (  1.70) (  2.10) (  2.10)          (  2.90)                  
+Except Gly          -       -     1.525     -       -        -        -     120.80      -        -        -        -  
+                                ( 0.021)                                   (  1.70)                                    
+Ala                 -       -       -     1.521     -        -        -        -     110.50      -     110.40      -  
+                                        ( 0.033)                                    (  1.50)          (  1.50)         
+Ile,Thr,Val         -       -       -     1.540     -        -        -        -     109.10      -     111.50      -  
+                                        ( 0.027)                                    (  2.20)          (  1.70)         
+Except Gly,Pro      -       -       -       -     1.458   121.70   116.20      -        -     111.20      -        -  
+                                                ( 0.019) (  1.80) (  2.00)                   (  2.80)                  
+The rest            -       -       -     1.530     -        -        -        -     110.10      -     110.50      -  
+                                        ( 0.020)                                    (  1.90)          (  1.70)         
+
+Note. The table above shows the mean values obtained from small molecule data by Engh & Huber (1991). The values shown in brackets
+      are standard deviations
+
+
+...................................................................................................................................
+   Residue 
+-------------     <---------- Bond lengths ---------->    <---------------------- Bond angles ---------------------->
+ No.  Type Seq                                                                                                                  Max
+  Chain    no.    C-N     C-O     CA-C    CA-CB   N-CA    C-N-CA   CA-C-N   CA-C-O  CB-CA-C   N-CA-C  N-CA-CB   O-C-N           dev
+-----------------------------------------------------------------------------------------------------------------------------------
+   1A PHE 222       -     1.228   1.528   1.535   1.463      -     118.03   119.74   110.96   109.42   109.98   122.23
+   2A LYS 223     1.332   1.227   1.524   1.535   1.470   123.15   117.76   120.21   110.86   111.58   111.00   121.99
+   3A CYS 224     1.330   1.227   1.529   1.532   1.459   122.11   117.43   120.30   111.36   110.43   110.21   122.10
+   4A ASN 225     1.332   1.225   1.541   1.538   1.464   122.32   119.00   119.36   111.28   113.87   108.30   121.63
+                                                                        *                                   *                     *
+   5A GLN 226     1.339   1.227   1.532   1.532   1.470   122.67   118.47   119.71   109.64   113.77   110.45   121.81
+                                                                        *                                                         *
+   6A CYS 227     1.337   1.229   1.535   1.532   1.470   122.94   118.29   119.53   111.58   114.20   108.75   122.14
+                                                                        *                          *        *                     *
+   7A GLY 228     1.334   1.225   1.531     -     1.462   124.41   120.21   118.37      -     115.20      -     121.41
+                                                              **       +*        *                                               **
+   8A GLN 229     1.343   1.231   1.530   1.539   1.469   121.68   115.69   120.47   110.04   111.77   112.51   123.77
+                      *                                                                                     *                     *
+   9A ASP 230     1.332   1.234   1.539   1.543   1.460   124.60   116.61   121.65   111.53   110.53   109.84   121.71
+                                                              +*                                                                 +*
+  10A PHE 231     1.330   1.231   1.527   1.537   1.460   125.56   116.30   121.81   111.10   110.54   110.43   121.84
+                                                              **                                                                 **
+  11A SER 232     1.333   1.228   1.529   1.530   1.468   122.99   117.88   120.13   110.10   112.94   109.32   121.99
+  12A HIS 233     1.335   1.233   1.526   1.536   1.458   123.83   116.31   121.02   110.47   111.07   110.35   122.39
+                                                               *                                                                  *
+  13A LYS 234     1.338   1.224   1.532   1.536   1.469   123.55   118.30   119.95   111.40   112.37   108.64   121.69
+                                                               *        *                                   *                     *
+ 
+Residue-by-residue listing for Q3ZCX4_trimmed - Chain A                                                                    Page  4
+----------------------------------------
+
+
+
+...................................................................................................................................
+   Residue 
+-------------     <---------- Bond lengths ---------->    <---------------------- Bond angles ---------------------->
+ No.  Type Seq                                                                                                                  Max
+  Chain    no.    C-N     C-O     CA-C    CA-CB   N-CA    C-N-CA   CA-C-N   CA-C-O  CB-CA-C   N-CA-C  N-CA-CB   O-C-N           dev
+-----------------------------------------------------------------------------------------------------------------------------------
+  14A PHE 235     1.336   1.230   1.538   1.533   1.467   122.42   118.22   119.93   110.02   112.74   109.60   121.85
+                                                                        *                                                         *
+  15A ASP 236     1.337   1.233   1.534   1.534   1.462   122.29   117.71   118.25   110.99   111.36   110.93   123.89
+                                                                                 *                                                *
+  16A LEU 237     1.342   1.225   1.538   1.545   1.466   124.13   119.32   118.93   112.36   111.30   110.23   121.55
+                                                               *       +*        *        *                                      +*
+  17A ILE 238     1.339   1.231   1.535   1.551   1.480   123.43   117.55   122.31   110.41   110.51   110.49   120.13
+                                                      *                                                             +*           +*
+  18A ARG 239     1.338   1.230   1.530   1.531   1.467   122.44   118.51   118.65   111.75   111.92   108.73   122.76
+                                                                        *        *                          *                     *
+  19A HIS 240     1.330   1.226   1.535   1.531   1.459   123.75   119.16   118.88   112.32   111.85   109.11   121.72
+                                                               *        *        *        *                                       *
+  20A GLU 241     1.333   1.230   1.536   1.533   1.471   123.97      -     119.94   110.69   112.87   109.77      -  
+                                                               *                                                                  *
+-----------------------------------------------------------------------------------------------------------------------------------
+Max deviations:       *                               *       **       +*        *        *        *        *       +*           ** 
+-----------------------------------------------------------------------------------------------------------------------------------
+ 
+Residue-by-residue listing for Q3ZCX4_trimmed - Chain A                                                                    Page  5
+----------------------------------------
+
+
+
+              A N A L Y S I S   O F   M A I N   C H A I N   B O N D   L E N G T H S   A N D   B O N D   A N G L E S
+
+
+                                                       +------------------+
+                                                       |   BOND LENGTHS   |
+                                                       +------------------+
+
+          -------------------------------------------------------------------------------------------------------------
+                                                 (Small molecule data)   Number of  Min     Max       Mean    Standard 
+          Bond      X-PLOR labelling                  Mean  St. dev       values   value   value      value   deviation
+          -------------------------------------------------------------------------------------------------------------
+          C-N       C-NH1            (except Pro)    1.329   0.014           19    1.330   1.343       1.335     0.004
+                                                                                               *                                   
+                    C-N              (Pro)           1.341   0.016            0     -       -           -         -   
+          C-O       C-O                              1.231   0.020           20    1.224   1.234       1.229     0.003
+          CA-C      CH1E-C           (except Gly)    1.525   0.021           19    1.524   1.541       1.533     0.005
+                    CH2G*-C          (Gly)           1.516   0.018            1    1.531   1.531       1.531     0.000
+          CA-CB     CH1E-CH3E        (Ala)           1.521   0.033            0     -       -           -         -   
+                    CH1E-CH1E        (Ile,Thr,Val)   1.540   0.027            1    1.551   1.551       1.551     0.000
+                    CH1E-CH2E        (the rest)      1.530   0.020           18    1.530   1.545       1.535     0.004
+          N-CA      NH1-CH1E         (except Gly,Pro)1.458   0.019           19    1.458   1.480       1.466     0.005
+                                                                                               *                                   
+                    NH1-CH2G*        (Gly)           1.451   0.016            1    1.462   1.462       1.462     0.000
+                    N-CH1E           (Pro)           1.466   0.015            0     -       -           -         -   
+          -------------------------------------------------------------------------------------------------------------
+
+
+                                                       +-----------------+
+                                                       |   BOND ANGLES   |
+                                                       +-----------------+
+
+          -------------------------------------------------------------------------------------------------------------
+                                                 (Small molecule data)   Number of  Min     Max       Mean    Standard 
+          Angle     X-PLOR labelling                  Mean  St. dev       values   value   value      value   deviation
+          -------------------------------------------------------------------------------------------------------------
+          CA-C-N    CH1E-C-NH1       (except Gly,Pro)116.2     2.0           18   115.69  119.32      117.81      1.00
+                                                                                              +*                                   
+                    CH2G*-C-NH1      (Gly)           116.4     2.1            1   120.21  120.21      120.21      0.00
+                                                                                      +*      +*         +*                        
+                    CH1E-C-N         (Pro)           116.9     1.5            0     -       -           -         -   
+          O-C-N     O-C-NH1          (except Pro)    123.0     1.6           19   120.13  123.89      122.03      0.80
+                                                                                      +*                                           
+                    O-C-N            (Pro)           122.0     1.4            0     -       -           -         -   
+          C-N-CA    C-NH1-CH1E       (except Gly,Pro)121.7     1.8           18   121.68  125.56      123.21      0.96
+                                                                                              **                                   
+                    C-NH1-CH2G*      (Gly)           120.6     1.7            1   124.41  124.41      124.41      0.00
+                                                                                      **      **         **                        
+                    C-N-CH1E         (Pro)           122.6     5.0            0     -       -           -         -   
+          CA-C-O    CH1E-C-O         (except Gly)    120.8     1.7           19   118.25  122.31      120.04      1.05
+                                                                                       *                                           
+                    CH2G*-C-O        (Gly)           120.8     2.1            1   118.37  118.37      118.37      0.00
+                                                                                       *       *          *                        
+          CB-CA-C   CH3E-CH1E-C      (Ala)           110.5     1.5            0     -       -           -         -   
+                    CH1E-CH1E-C      (Ile,Thr,Val)   109.1     2.2            1   110.41  110.41      110.41      0.00
+                    CH2E-CH1E-C      (the rest)      110.1     1.9           18   109.64  112.36      111.03      0.75
+                                                                                               *                                   
+          N-CA-C    NH1-CH1E-C       (except Gly,Pro)111.2     2.8           19   109.42  114.20      111.84      1.28
+                                                                                               *                                   
+                    NH1-CH2G*-C      (Gly)           112.5     2.9            1   115.20  115.20      115.20      0.00
+                    N-CH1E-C         (Pro)           111.8     2.5            0     -       -           -         -   
+ 
+Residue-by-residue listing for Q3ZCX4_trimmed - Chain A                                                                    Page  6
+----------------------------------------
+
+
+          -------------------------------------------------------------------------------------------------------------
+                                                 (Small molecule data)   Number of  Min     Max       Mean    Standard 
+          Angle     X-PLOR labelling                  Mean  St. dev       values   value   value      value   deviation
+          -------------------------------------------------------------------------------------------------------------
+          N-CA-CB   NH1-CH1E-CH3E    (Ala)           110.4     1.5            0     -       -           -         -   
+                    NH1-CH1E-CH1E    (Ile,Thr,Val)   111.5     1.7            1   110.49  110.49      110.49      0.00
+                    N-CH1E-CH2E      (Pro)           103.0     1.1            0     -       -           -         -   
+                    NH1-CH1E-CH2E    (the rest)      110.5     1.7           18   108.30  112.51      109.90      1.00
+                                                                                       *       *                                   
+          -------------------------------------------------------------------------------------------------------------
+
+The small molecule data used in the above analysis is from Engh & Huber (1991). The atom labelling follows that used in the
+X-PLOR dictionary, with some additional atoms (marked with an asterisk) as defined by Engh & Huber.
+ 
+Residue-by-residue listing for Q3ZCX4_trimmed - Chain A                                                                    Page  7
+----------------------------------------
+
+
+
+                                     R A M A C H A N D R A N   P L O T   S T A T I S T I C S
+
+                             Residues in most favoured regions      [A,B,L]           17      100.0%
+                             Residues in additional allowed regions [a,b,l,p]          0        0.0%
+                             Residues in generously allowed regions [~a,~b,~l,~p]      0        0.0%
+                             Residues in disallowed regions         [XX]               0        0.0%
+                                                                                    ----      ------
+                             Number of non-glycine and non-proline residues           17      100.0%
+
+                             Number of end-residues (excl. Gly and Pro)                2
+
+                             Number of glycine residues                                1
+                             Number of proline residues                                0
+                                                                                    ----
+                             Total number of residues                                 20
+
+
+   Based on the analysis of 118 structures of resolution of at least 2.0 Angstroms and R-factor no greater than 20%, a good
+   quality model would be expected to have over 90% in the most favoured regions [E,H,L].
+
+
+                                S T E R E O C H E M I S T R Y   O F   M A I N - C H A I N
+
+                                                                      Comparison values    No. of   
+                                                   No. of   Parameter  Typical   Band    band widths
+                      Stereochemical parameter    data pts    value     value    width    from mean 
+                      ------------------------    --------    -----     -----    -----    --------- 
+                   a. %-tage residues in A, B, L     17       100.0      83.8    10.0        1.6   BETTER 
+                   b. Omega angle st dev             19         3.9       6.0     3.0       -0.7   Inside 
+                   c. Bad contacts / 100 residues     0         0.0       4.2    10.0       -0.4   Inside 
+                   d. Zeta angle st dev              19         0.6       3.1     1.6       -1.6   BETTER 
+                   e. H-bond energy st dev           10         0.8       0.8     0.2       -0.0   Inside 
+                   f. Overall G-factor               20         0.4      -0.4     0.3        2.5   BETTER 
+
+
+                                S T E R E O C H E M I S T R Y   O F   S I D E - C H A I N
+
+                                                                      Comparison values    No. of   
+                                                   No. of   Parameter  Typical   Band    band widths
+                      Stereochemical parameter    data pts    value     value    width    from mean 
+                      ------------------------    --------    -----     -----    -----    --------- 
+                   a. Chi-1 gauche minus st dev       2        12.9      18.1     6.5       -0.8   Inside 
+                   b. Chi-1 trans st dev              6         7.9      19.0     5.3       -2.1   BETTER 
+                   c. Chi-1 gauche plus st dev       11         7.4      17.5     4.9       -2.1   BETTER 
+                   d. Chi-1 pooled st dev            19         9.0      18.2     4.8       -1.9   BETTER 
+                   e. Chi-2 trans st dev              7        12.6      20.4     5.0       -1.6   BETTER 
+
+
+                                   M O R R I S   E T   A L .   C L A S S I F I C A T I O N
+
+                                       Mean  St.dev                 Classification
+               Parameter                 m     s           1         2          3        4       Value     Class
+               ---------               ----   ---      ------------------------------------      -----     -----
+               Phi-psi distribution     -      -        >75.0%    >65.0%    >55.0%    <55.0%     100.0       1
+               Chi-1 st.dev.           18.2   6.2       <12.0     <18.2     <24.4     >24.4        7.7       1
+               H-bond energy st dev     0.87  0.24      <0.63     <0.87     <1.11     >1.11       0.81       2
+ 
+Residue-by-residue listing for Q3ZCX4_trimmed - Chain A                                                                    Page  8
+----------------------------------------
+
+
+
+                                                      G - F A C T O R S
+
+                                                                                       Average
+                             Parameter                                 Score            Score
+                             ---------                                 -----            -----
+                             Dihedral angles:-
+                                  Phi-psi distribution                  0.33
+                                  Chi1-chi2 distribution                0.75
+                                  Chi1 only                             0.34
+                                  Chi3 & chi4                           0.82
+                                  Omega                                -0.25
+                                                                      ------             0.33
+                                                                                        =====
+                             Main-chain covalent forces:-
+                                  Main-chain bond lengths               0.58
+                                  Main-chain bond angles                0.25
+                                                                      ------             0.39
+                                                                                        =====
+
+
+                             OVERALL AVERAGE                                             0.36
+                                                                                        =====
+
+                             Ideally, scores should be above -0.5. Values below -1.0 may need investigation.

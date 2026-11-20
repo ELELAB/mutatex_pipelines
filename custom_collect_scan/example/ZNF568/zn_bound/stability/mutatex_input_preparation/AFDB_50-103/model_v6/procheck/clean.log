@@ -1,0 +1,47 @@
+CLEAN - Clean-up program
+------------------------
+ 
+
+
+ Clean-up program CLEAN - Written by David Keith Smith, 1989.
+                          Amended by Roman Laskowski, 1992.
+
+
+ Enter filename containing coordinates of structure
+   (for file containing ensemble of NMR structures enter @filename;
+    for set of separate PDB files to be processed, enter %filelist,
+    where filelist contains a list of PDB files to be cleaned up)
+
+    Processing NMR model           1
+ Average value of CA-N-C-CB angle is  33.79
+ Standard deviation is                 1.08
+ * Side chain atoms should be swapped for the following residues:
+ * As this is an NMR ensemble the swap has not been made
+ * PHE A  50  GLU A  60  GLU A  61  GLU A  63  TYR A  73  GLU A  79  TYR A  81     
+ WARNING: Number of atoms/hetatms in new file differs from old file - 
+           new number =   447
+           old number =     0
+ * PHE A  98  GLU A 101  GLU A 103                                                 
+ Total number of residues that need to be changed and total number of residues:
+     ALA     0     2
+     CYS     0     1
+     ASP     0     4
+     GLU     6     6
+     PHE     2     2
+     GLY     0     1
+     ILE     0     1
+     LYS     0     4
+     LEU     0     5
+     MET     0     2
+     ASN     0     3
+     PRO     0     2
+     GLN     0     5
+     ARG     0     2
+     SER     0     1
+     THR     0     3
+     VAL     0     7
+     TRP     0     1
+     TYR     2     2
+
+ * NMR ensemble comprises           1  model structures
+ * Program completed

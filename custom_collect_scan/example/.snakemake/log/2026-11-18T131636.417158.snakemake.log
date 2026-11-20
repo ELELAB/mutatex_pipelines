@@ -1,8 +1,0 @@
-ValueError in file /data/user/martibel/mutatex_pipelines/custom_collect_scan/example/Snakefile, line 287:
-Invalid 'binding_state' found: zn_buond.
-Allowed 'binding_state' are: free or a combination of alphabetically sorted cofactors separated by '_' and ending with '_bound' (e.g. atp_zn_bound).
-
-Protein(s) with more than one 'binding_state' found: ZNF568
-All domains of the same protein within models.csv must have the same 'binding_state'.
-To analyze the same protein in a different state, please set up and run a separate pipeline.
-  File "/data/user/martibel/mutatex_pipelines/custom_collect_scan/example/Snakefile", line 287, in <module>

@@ -1,6 +1,0 @@
-KeyError in file /data/user/martibel/mutatex_pipelines/custom_collect_scan/example/Snakefile, line 249:
-'protein_name'
-  File "/data/user/martibel/mutatex_pipelines/custom_collect_scan/example/Snakefile", line 249, in <module>
-  File "/usr/local/envs/py310/lib/python3.10/site-packages/pandas/core/frame.py", line 9156, in groupby
-  File "/usr/local/envs/py310/lib/python3.10/site-packages/pandas/core/groupby/groupby.py", line 1329, in __init__
-  File "/usr/local/envs/py310/lib/python3.10/site-packages/pandas/core/groupby/grouper.py", line 1043, in get_grouper

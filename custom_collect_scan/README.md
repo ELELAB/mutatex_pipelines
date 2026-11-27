@@ -41,9 +41,10 @@ Both `database` and `version` are required. Use the source labels exactly as sho
 | `AF2` | Locally generated AlphaFold 2 model | `AF2` |
 | `AF3` | AlphaFold 3 model | `AF3` |
 | `PDB` | Experimental structure from the Protein Data Bank | A four-character PDB ID, such as `3PTB` |
+| `AlphaFill` | Cofactor-bound model prepared using AlphaFill | `v4` for the AlphaFill-provided model, `v6` for a supplied AFDB v6 model, or `AF3` or `AF2` for a supplied AlphaFold model |
 | `Mod` | Homology or other template-based model | The template's PDB ID for an experimental template, or `AFDB`, `AF2`, or `AF3` for a predicted template |
 
-PDB IDs are checked for format only. Set `pdb_file` for every `AF2`, `AF3`, `Mod`, and `PDB` row. For an `AFDB` model with a `binding_state` other than `free`, set `pdb_file` to a structure that already contains the cofactors.
+PDB IDs are checked for format only. Set `pdb_file` for every `AF2`, `AF3`, `Mod`, `PDB`, and `AlphaFill` row. For an `AFDB` model with a `binding_state` other than `free`, set `pdb_file` to a structure that already contains the cofactors.
 
 The following examples show the source and version fields together with the trimming range. The TP53 and NPLOC4 structure files are bundled in `example/` and referenced by both example CSVs.
 

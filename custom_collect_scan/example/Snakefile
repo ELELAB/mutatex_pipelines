@@ -306,7 +306,7 @@ rule all:
                     version=models["version"],
                     prot_id=models["prot_id"]
                     ),
-	    expand("{gene}/{binding_state}/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/procheck/{prot_id}_procheck.csv",
+        expand("{gene}/{binding_state}/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/procheck/{prot_id}_procheck.csv",
                     zip,
                     gene=models["coding_gene"],
                     binding_state=models["binding_state"],

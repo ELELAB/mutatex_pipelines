@@ -1,6 +1,7 @@
 import pandas as pd
 import os
 import csv
+import re
 import subprocess
 from snakemake.exceptions import WorkflowError
 from pathlib import Path
@@ -10,8 +11,39 @@ models = pd.read_csv(config["models"], keep_default_na=False)
 workflow_dir = os.path.abspath(os.path.dirname(workflow.snakefile))
 procheck_script = os.path.join(workflow_dir, "scripts", "classify_procheck.py")
 
-models_check = models.drop(columns= "pdb_file")
-models.loc[models["version"].eq(""), "version"] = "v6"
+STRUCTURE_SOURCES = ("AFDB", "AF2", "AF3", "PDB", "Mod")
+PDB_ID_PATTERN = r"[1-9][A-Za-z0-9]{3}"
+STRUCTURE_VERSION_RULES = {
+    "AFDB": (r"v[3-6]", "one of v3, v4, v5, or v6"),
+    "AF2": (r"AF2", "AF2"),
+    "AF3": (r"AF3", "AF3"),
+    "PDB": (PDB_ID_PATTERN, "a four-character PDB ID such as 3PTB"),
+    "Mod": (rf"{PDB_ID_PATTERN}|AFDB|AF2|AF3", "a template PDB ID, AFDB, AF2, or AF3"),
+}
+
+def validate_structure_metadata(models):
+    errors = []
+    for row_number, row in enumerate(models.itertuples(index=False), start=2):
+        context = f"models CSV row {row_number} ({row.coding_gene})"
+        if row.database not in STRUCTURE_VERSION_RULES:
+            errors.append(
+                f"{context}: invalid database {row.database!r}. "
+                f"Expected one of {', '.join(STRUCTURE_SOURCES)}."
+            )
+            continue
+
+        pattern, expected = STRUCTURE_VERSION_RULES[row.database]
+        if re.fullmatch(pattern, str(row.version)) is None:
+            errors.append(
+                f"{context}: invalid version {row.version!r} for {row.database}. "
+                f"Expected {expected}."
+            )
+
+    if errors:
+        raise WorkflowError("\n".join(errors))
+
+validate_structure_metadata(models)
+models_check = models.drop(columns="pdb_file")
 
 ALLOWED_BINDING_STATES = {"free"}
 SUPPORTED_COFACTORS = {"zn", "mg", "adp", "atp", "gdp", "gtp", "nadh", "nad", "fadh", "fad", "ca", "mn", "fe2", "fe3"}

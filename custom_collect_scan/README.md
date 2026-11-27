@@ -56,6 +56,8 @@ The following examples show the source and version fields together with the trim
 
 For bound states, supply a PDB that already contains the declared cofactors as HETATM records. Trimming retains those cofactor residues even when their residue numbers lie outside the protein range. The workflow stops if fewer cofactor residues than declared are present. The workflow also checks the FoldX repaired PDB and the input to BuildModel for all declared cofactors, including metals and nonmetals such as ATP, ADP, NAD, and FAD. It counts distinct cofactor residues in both ATOM and HETATM records and stops before BuildModel if a declared cofactor is missing. The scan’s `*_foldx_cofactor.log` gives the expected and observed counts and the paths to the repair log and any `Unrecognized_molecules.txt` file.
 
+For zinc, use `ZN` in the PDB residue-name field (columns 18–20). The trimmer looks at this field, so `ZN2` is not counted as zinc. Use `zn_bound` for one zinc or `zn_zn_zn_bound` for three.
+
 ### Configuration file
 
 The `config.yaml` is the configuration file through which is possible to specify for:
@@ -73,6 +75,8 @@ The `config.yaml` is the configuration file through which is possible to specify
 
 The MutateX cleaning option is specified with "mutatex.cleaning_depth" and accepts the inputs 'none', 'partial', and 'deep'. If the input is invalid or empty, the workflow stops before execution with an error message.
 
+Both bundled configs set `mutatex.foldx_exe` to `/usr/local/foldx5.1/foldx`. To run with FoldX 5, set `mutatex.foldx_exe` in your working directory’s `config.yaml` to the installed FoldX 5 executable (for example, `/usr/local/foldx5/foldx`) and keep `mutatex.foldx_suite` set to `suite5`.
+
 ## Requirements
 
 The user must have `Snakemake` [^Mölder2021] and `python` v3.7 or higher installed, together with `MutateX`[^Tiberti] and `FoldX`[^Schymkowitz2005]. The pipeline also requires `pdb-tools` [^Rodrigues] package and `PROCHECK` installed.
@@ -81,6 +85,14 @@ The user must have `Snakemake` [^Mölder2021] and `python` v3.7 or higher instal
 
 `module load python/3.10`
  
+To preview the example, run this from its working directory:
+
+```bash
+snakemake --dry-run --cores 1 all
+```
+
+A dry run checks that Snakemake can build the job graph. To check that zinc survives trimming and FoldX repair, run the corresponding jobs.
+
 `snakemake --cores 4`
 
 By default `MutateX` uses all cores assigned to the workflow (`snakemake --cores`) for each MutateX run.

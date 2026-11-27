@@ -252,7 +252,7 @@ if empty_string_mask.values.any():
     raise ValueError(f"Found empty strings in the following cells of the input: \n{error_details}")
 
 # These sources and binding states need a user-supplied structure.
-requires_pdb = models["database"].isin({"AF2", "AF3", "Mod"}) | (
+requires_pdb = models["database"].isin({"AF2", "AF3", "Mod", "PDB"}) | (
     models["database"].eq("AFDB") & models["binding_state"].ne("free")
 )
 missing_pdb = models.index[requires_pdb & models["pdb_file"].astype(str).str.strip().eq("")]
@@ -262,8 +262,9 @@ if len(missing_pdb):
         for index in missing_pdb
     )
     raise WorkflowError(
-        "AF2, AF3, Mod, and AFDB models with a binding_state other than 'free' "
-        f"(for AFDB) require pdb_file. Missing pdb_file in models CSV rows: {rows}."
+        "AF2, AF3, Mod, and PDB models require pdb_file, as do AFDB models "
+        "with a binding_state other than 'free'. "
+        f"Missing pdb_file in models CSV rows: {rows}."
     )
 
 # Binding state validation

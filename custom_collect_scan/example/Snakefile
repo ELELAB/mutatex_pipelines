@@ -1,5 +1,696 @@
-# Use the same rules as the main workflow with the example's working-directory inputs.
-include: "../Snakefile"
+import pandas as pd
+import os
+import csv
+import re
+import subprocess
+from snakemake.exceptions import WorkflowError
+from pathlib import Path
 
-rule example_all:
-    input: rules.all.input
+configfile: "config.yaml"
+models = pd.read_csv(config["models"], keep_default_na=False)
+workflow_dir = workflow.current_basedir.get_path_or_uri(secret_free=True)
+procheck_script = os.path.join(workflow_dir, "scripts", "classify_procheck.py")
+trim_bound_script = os.path.join(workflow_dir, "scripts", "trim_bound_structure.py")
+
+STRUCTURE_SOURCES = ("AFDB", "AF2", "AF3", "PDB", "Mod", "AlphaFill")
+PDB_ID_PATTERN = r"[1-9][A-Za-z0-9]{3}"
+STRUCTURE_VERSION_RULES = {
+    "AFDB": (r"v[3-6]", "one of v3, v4, v5, or v6"),
+    "AF2": (r"AF2", "AF2"),
+    "AF3": (r"AF3", "AF3"),
+    "AlphaFill": (r"v4|v6|AF3|AF2", "one of v4, v6, AF3, or AF2"),
+    "PDB": (PDB_ID_PATTERN, "a four-character PDB ID such as 3PTB"),
+    "Mod": (rf"{PDB_ID_PATTERN}|AFDB|AF2|AF3", "a template PDB ID, AFDB, AF2, or AF3"),
+}
+
+def validate_structure_metadata(models):
+    errors = []
+    for row_number, row in enumerate(models.itertuples(index=False), start=2):
+        context = f"models CSV row {row_number} ({row.coding_gene})"
+        if row.database not in STRUCTURE_VERSION_RULES:
+            errors.append(
+                f"{context}: invalid database {row.database!r}. "
+                f"Expected one of {', '.join(STRUCTURE_SOURCES)}."
+            )
+            continue
+
+        pattern, expected = STRUCTURE_VERSION_RULES[row.database]
+        if re.fullmatch(pattern, str(row.version)) is None:
+            errors.append(
+                f"{context}: invalid version {row.version!r} for {row.database}. "
+                f"Expected {expected}."
+            )
+
+    if errors:
+        raise WorkflowError("\n".join(errors))
+
+validate_structure_metadata(models)
+models_check = models.drop(columns="pdb_file")
+
+ALLOWED_BINDING_STATES = {"free"}
+SUPPORTED_COFACTORS = {"zn", "mg", "adp", "atp", "gdp", "gtp", "nadh", "nad", "fadh", "fad", "ca", "mn", "fe2", "fe3"}
+
+def domain_energy_files(wildcards):
+    """
+    Return all per-domain energies.csv files for a protein that has
+    multiple trimmed models/domains in models.csv.
+    """
+    subset = models[
+        (models["coding_gene"] == wildcards.gene) &
+        (models["prot_id"] == wildcards.prot_id) &
+        (models["binding_state"] == wildcards.binding_state) &
+        (models["version"] == wildcards.version)
+    ].sort_values(["start_res", "end_res"])
+
+    return [
+        f"{row.coding_gene}/{row.binding_state}/stability/mutatex_runs/"
+        f"{row.database}_{row.start_res}-{row.end_res}/model_{row.version}/"
+        f"saturation/{row.prot_id}_table/energies.csv"
+        for row in subset.itertuples(index=False)
+    ]
+
+def read_fasta_sequence(fasta_file):
+    """
+    Read a FASTA file and return the sequence as a single string.
+    """
+    with open(fasta_file) as fh:
+        sequence = "".join(
+            line.strip()
+            for line in fh
+            if line.strip() and not line.startswith(">")
+        )
+
+    if not sequence:
+        raise WorkflowError(
+            f"FASTA file is empty or could not be parsed: {fasta_file}"
+        )
+
+    return sequence
+
+def extract_pdb_sequence_by_residue_number(pdb_file):
+    """
+    Extract the amino-acid sequence from ATOM records in a PDB file.
+
+    Returns a list of tuples:
+    (chain_id, residue_number, insertion_code, one_letter_residue)
+    """
+    aa3_to_aa1 = {
+        "ALA": "A",
+        "ARG": "R",
+        "ASN": "N",
+        "ASP": "D",
+        "CYS": "C",
+        "GLN": "Q",
+        "GLU": "E",
+        "GLY": "G",
+        "HIS": "H",
+        "ILE": "I",
+        "LEU": "L",
+        "LYS": "K",
+        "MET": "M",
+        "PHE": "F",
+        "PRO": "P",
+        "SER": "S",
+        "THR": "T",
+        "TRP": "W",
+        "TYR": "Y",
+        "VAL": "V",
+        "MSE": "M",
+    }
+
+    residues = []
+    seen = set()
+
+    with open(pdb_file) as fh:
+        for line in fh:
+            if not line.startswith("ATOM"):
+                continue
+
+            resname = line[17:20].strip()
+            chain_id = line[21].strip() or "_"
+            residue_number_raw = line[22:26].strip()
+            insertion_code = line[26].strip()
+
+            residue_key = (chain_id, residue_number_raw, insertion_code)
+
+            if residue_key in seen:
+                continue
+
+            seen.add(residue_key)
+
+            if resname not in aa3_to_aa1:
+                raise WorkflowError(
+                    f"Cannot convert residue '{resname}' in {pdb_file} "
+                    f"at chain {chain_id}, residue {residue_number_raw}{insertion_code}."
+                )
+
+            try:
+                residue_number = int(residue_number_raw)
+            except ValueError:
+                raise WorkflowError(
+                    f"Could not parse residue number '{residue_number_raw}' "
+                    f"in {pdb_file}."
+                )
+
+            residues.append(
+                (chain_id, residue_number, insertion_code, aa3_to_aa1[resname])
+            )
+
+    if not residues:
+        raise WorkflowError(
+            f"No ATOM residues were found in {pdb_file}."
+        )
+
+    return residues
+
+def validate_afdb_sequence(pdb_file, fasta_file, prot_id):
+    """
+    Compare the AFDB PDB residue sequence against the canonical UniProt sequence.
+    The comparison uses residue numbers from the PDB file as UniProt positions.
+    """
+    uniprot_sequence = read_fasta_sequence(fasta_file)
+    pdb_residues = extract_pdb_sequence_by_residue_number(pdb_file)
+
+    mismatches = []
+    out_of_range = []
+
+    for chain_id, residue_number, insertion_code, pdb_aa in pdb_residues:
+        if residue_number < 1 or residue_number > len(uniprot_sequence):
+            out_of_range.append(
+                f"chain {chain_id}, residue {residue_number}{insertion_code}"
+            )
+            continue
+
+        uniprot_aa = uniprot_sequence[residue_number - 1]
+
+        if pdb_aa != uniprot_aa:
+            mismatches.append(
+                f"chain {chain_id}, residue {residue_number}{insertion_code}: "
+                f"UniProt {uniprot_aa}, AFDB {pdb_aa}"
+            )
+
+    if out_of_range:
+        out_of_range_msg = "\n".join(out_of_range[:20])
+        if len(out_of_range) > 20:
+            out_of_range_msg += f"\n... and {len(out_of_range) - 20} more."
+
+        raise WorkflowError(
+            f"AFDB sequence check failed for {prot_id}.\n"
+            f"The AFDB model contains residue numbers outside the UniProt sequence length "
+            f"({len(uniprot_sequence)} residues).\n\n"
+            f"Out-of-range residues:\n"
+            f"{out_of_range_msg}"
+        )
+
+    if mismatches:
+        mismatch_msg = "\n".join(mismatches[:20])
+        if len(mismatches) > 20:
+            mismatch_msg += f"\n... and {len(mismatches) - 20} more."
+
+        raise WorkflowError(
+            f"AFDB sequence check failed for {prot_id}.\n"
+            f"The AFDB model sequence does not match the UniProt canonical sequence.\n\n"
+            f"Mismatches:\n"
+            f"{mismatch_msg}\n\n"
+            f"This AFDB model should not be used for MutateX. "
+            f"Use AF3 or standalone AF2 instead."
+        )
+
+    print(
+        f"AFDB sequence check passed for {prot_id}. "
+        f"Checked {len(pdb_residues)} residues against the UniProt sequence."
+    )
+
+# set up of cleaning level
+cleaning_opt = {"none","partial","deep"}
+
+# handling of cleaning level errors
+try:
+    raw_cleaning = config["mutatex"]["cleaning_depth"]
+except KeyError:
+    raise WorkflowError(
+        "Missing config variable: mutatex.cleaning_depth\n"
+        "Add under mutatex:\n"
+        "   cleaning_depth: none, partial, deep\n"
+        "Example:\n"
+        "   mutatex:\n"
+        "       cleaning_depth: deep")
+
+if not isinstance(raw_cleaning, str):
+    raise WorkflowError(f"mutatex.cleaning_depth must be a string: none, partial, deep (received {raw_cleaning!r}).")
+
+mutatex_cleaning = raw_cleaning.strip().lower()
+
+if mutatex_cleaning not in cleaning_opt:
+    raise WorkflowError(
+        f"Invalid Mutatex cleaning variable (received {raw_cleaning!r}\n"
+        "Allowed options: none, partial, deep")
+
+empty_string_mask = models_check.replace('', None).isna()
+if empty_string_mask.values.any():
+    empty_string_loc = empty_string_mask[empty_string_mask].stack()
+
+    error_details = [(models_check.loc[row_idx, 'coding_gene'], col_name) for (row_idx, col_name) in empty_string_loc.index]
+    raise ValueError(f"Found empty strings in the following cells of the input: \n{error_details}")
+
+# These sources and binding states need a user-supplied structure.
+requires_pdb = models["database"].isin({"AF2", "AF3", "Mod", "PDB", "AlphaFill"}) | (
+    models["database"].eq("AFDB") & models["binding_state"].ne("free")
+)
+missing_pdb = models.index[requires_pdb & models["pdb_file"].astype(str).str.strip().eq("")]
+if len(missing_pdb):
+    rows = ", ".join(
+        f"{index + 2} ({models.at[index, 'coding_gene']}, {models.at[index, 'database']})"
+        for index in missing_pdb
+    )
+    raise WorkflowError(
+        "AF2, AF3, Mod, PDB, and AlphaFill models require pdb_file, as do AFDB models "
+        "with a binding_state other than 'free'. "
+        f"Missing pdb_file in models CSV rows: {rows}."
+    )
+
+# Binding state validation
+unique_binding_states = models["binding_state"].dropna().unique()
+
+valid_binding_states = set() 
+invalid_format = []
+unsupported_cofactors = []
+unsorted_cofactors = []
+
+for state in unique_binding_states:
+    if state in ALLOWED_BINDING_STATES:
+        valid_binding_states.add(state)
+        continue
+    
+    if not (isinstance(state, str) and state.endswith("_bound")):
+        invalid_format.append(state)
+        continue
+
+    cofactors = state[:-6].split("_")
+    invalid_cofactors = [c for c in cofactors if c not in SUPPORTED_COFACTORS]
+
+    if invalid_cofactors:
+        unsupported_cofactors.append(f"{', '.join(invalid_cofactors)} (in '{state}')")
+        continue
+    
+    if cofactors != sorted(cofactors):
+        sorted_cofactors = "_".join(sorted(cofactors)) + "_bound"
+        unsorted_cofactors.append(f"'{state}' -> did you mean '{sorted_cofactors}'?")
+        continue
+
+    valid_binding_states.add(state)
+
+models_with_valid_states = models[models["binding_state"].isin(valid_binding_states)]
+binding_state_counts = models_with_valid_states.groupby('coding_gene')['binding_state'].nunique()
+multi_states_proteins = binding_state_counts[binding_state_counts > 1].index.tolist()
+
+errors = []
+
+if invalid_format:
+    errors.append(
+        f"Invalid 'binding_state' found: {', '.join(invalid_format)}.\n"
+        f"Allowed 'binding_state' are: {', '.join(ALLOWED_BINDING_STATES)} "
+        "or a combination of alphabetically sorted cofactors separated by '_' and ending with '_bound' (e.g. atp_zn_bound)."
+    )
+    
+if unsupported_cofactors:
+    errors.append(
+        f"Unsupported cofactor(s) found: {', '.join(unsupported_cofactors)}.\n"
+        f"Supported cofactors are: {', '.join(sorted(SUPPORTED_COFACTORS))} "
+        "(lowercase) to combine alphabetically sorted, separated by '_', and ending with '_bound' (e.g. atp_zn_bound)."
+    )
+    
+if unsorted_cofactors:
+    errors.append(
+        "Cofactors must be in ALPHABETICAL order.\n"
+        f"Fix the following: {', '.join(unsorted_cofactors)}"
+    )
+
+if multi_states_proteins:
+    errors.append(
+        f"Protein(s) with more than one 'binding_state' found: {', '.join(multi_states_proteins)}\n"
+        "All domains of the same protein within models.csv must have the same 'binding_state'.\n"
+        "To analyze the same protein in a different state, please set up and run a separate pipeline run."
+    )
+    
+if errors:
+    raise ValueError("\n\n".join(errors))
+
+aggregate_groups = (
+    models
+    .groupby(["coding_gene", "prot_id", "binding_state", "version"], as_index=False)
+    .filter(lambda df: len(df) > 1)
+    [["coding_gene", "prot_id", "binding_state", "version"]]
+    .drop_duplicates()
+)
+
+rule all:
+    input:
+        expand("{gene}/{binding_state}/stability/mutatex_runs/{database}_{start_res}-{end_res}/model_{version}/saturation/{prot_id}_table/energies.csv",
+                    zip,
+                    gene=models["coding_gene"],
+                    binding_state=models["binding_state"],
+                    database=models["database"],
+                    start_res=models["start_res"],
+                    end_res=models["end_res"],
+                    version=models["version"],
+                    prot_id=models["prot_id"]
+                    ),
+        expand("{gene}/{binding_state}/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/procheck/{prot_id}_procheck.csv",
+                    zip,
+                    gene=models["coding_gene"],
+                    binding_state=models["binding_state"],
+                    database=models["database"],
+                    start_res=models["start_res"],
+                    end_res=models["end_res"],
+                    version=models["version"],
+                    prot_id=models["prot_id"]
+                    ),
+        expand("{gene}/{binding_state}/stability/mutatex_runs/aggregate/model_{version}/saturation/{prot_id}_table/energies.csv",
+                    zip,
+                    gene=aggregate_groups["coding_gene"],
+                    binding_state=aggregate_groups["binding_state"],
+                    version=aggregate_groups["version"],
+                    prot_id=aggregate_groups["prot_id"]
+                    )
+
+rule input_txt:
+    input:
+
+    output:
+        mutate="{gene}/{binding_state}/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/saturation/mutate_runfile.txt",
+        repair="{gene}/{binding_state}/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/saturation/repair_runfile.txt",
+        mutation_list="{gene}/{binding_state}/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/saturation/mutation_list.txt",
+        readme="{gene}/{binding_state}/stability/mutatex_runs/{database}_{start_res}-{end_res}/model_{version}/saturation/README.txt"
+    params:
+        workflow_dir=workflow.current_basedir.get_path_or_uri(secret_free=True)
+    run:
+        with open(output.mutate,'w') as mutate:
+            mutate.write(config["mutate_runfile"])
+        with open(output.repair,'w') as repair:
+            repair.write(config["repair_runfile"])
+        with open(output.mutation_list,'w') as mutation:
+            mutation.write(config["mutation_list"])
+
+        readme_content=f"""The current filetree was generated by running the following Snakemake pipeline:
+
+{params.workflow_dir}
+
+The scan folder hosts a custom scanning run performed with MutateX and the table folder
+collects in a .csv file the predicted changes in folding free energy upon mutation for each protein residue.
+
+The following files were provided as input to perform the scan with MutateX:
+- {output.mutate}
+- {output.repair}
+- {output.mutation_list}
+The input .pdb file can be found in the folder:
+{wildcards.gene}/{wildcards.binding_state}/stability/mutatex_input_preparation/{wildcards.database}_{wildcards.start_res}-{wildcards.end_res}/model_{wildcards.version}/saturation
+
+The pipeline can be summarized as follows:
+1. Generate input files and create a consistent input directory structure
+2. Copy, if provided by the user, or download from AF Protein Structure Database, the .pdb file
+from {wildcards.gene}/structure_selection into {wildcards.gene}/{wildcards.binding_state}/stability/mutatex_input_preparation/{wildcards.database}_{wildcards.start_res}-{wildcards.end_res}/model_{wildcards.version}/saturation
+3. Trim the .pdb file by using pdb_selres tool to consider only the user-specified residues
+4. Run MutateX and generate a consistent output directory structure
+5. Collect resulting energies in a .csv file
+"""
+        with open(output.readme, "w") as readme:
+            readme.write(readme_content)
+
+
+def structure_input(wildcards):
+    matches = models.loc[
+        models["database"].eq(wildcards.database)
+        & models["prot_id"].eq(wildcards.prot_id)
+        & models["start_res"].eq(int(wildcards.start_res))
+        & models["end_res"].eq(int(wildcards.end_res)),
+        ["pdb_file", "version"],
+    ].drop_duplicates()
+    if len(matches) != 1:
+        raise WorkflowError(
+            f"Expected one structure input for {wildcards.database} "
+            f"{wildcards.prot_id} residues {wildcards.start_res}–{wildcards.end_res}, "
+            f"found {len(matches)} distinct inputs."
+        )
+    return matches.iloc[0]
+
+
+rule download_pdb:
+    output:
+        pdb="structure_selection/{database}/{prot_id}_{start_res}_{end_res}.pdb"
+    params:
+        pdb=lambda wcs: structure_input(wcs)["pdb_file"],
+        af_version=lambda wcs: structure_input(wcs)["version"]
+    run:
+        output_path = Path(output.pdb)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+
+        if params.pdb:
+            shell(f'cp "{params.pdb}" "{output.pdb}"')
+
+        else:
+            downloaded_pdb = output_path.with_suffix(".downloaded.pdb")
+            uniprot_fasta = output_path.with_suffix(".fasta")
+
+            pdb_url = f"https://alphafold.ebi.ac.uk/files/AF-{wildcards.prot_id}-F1-model_{params.af_version}.pdb"
+            fasta_url = f"https://rest.uniprot.org/uniprotkb/{wildcards.prot_id}.fasta"
+
+            for path in [output_path, downloaded_pdb, uniprot_fasta]:
+                if path.exists():
+                    path.unlink()
+
+            shell(f'wget -q "{pdb_url}" -O "{downloaded_pdb}"')
+            shell(f'wget -q "{fasta_url}" -O "{uniprot_fasta}"')
+
+            if not downloaded_pdb.exists() or downloaded_pdb.stat().st_size == 0:
+                raise WorkflowError(
+                    f"The downloaded AFDB structure for {wildcards.prot_id} is empty or was not created.\n"
+                    f"URL: {pdb_url}"
+                )
+
+            if not uniprot_fasta.exists() or uniprot_fasta.stat().st_size == 0:
+                raise WorkflowError(
+                    f"The downloaded UniProt FASTA for {wildcards.prot_id} is empty or was not created.\n"
+                    f"URL: {fasta_url}"
+                )
+
+            validate_afdb_sequence(
+                pdb_file=downloaded_pdb,
+                fasta_file=uniprot_fasta,
+                prot_id=wildcards.prot_id
+            )
+
+            downloaded_pdb.replace(output_path)
+
+            if uniprot_fasta.exists():
+                uniprot_fasta.unlink()
+
+
+
+rule input_pdb:
+    input:
+        pdb="structure_selection/{database}/{prot_id}_{start_res}_{end_res}.pdb",
+        mutate="{gene}/{binding_state}/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/saturation/mutate_runfile.txt",
+        repair="{gene}/{binding_state}/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/saturation/repair_runfile.txt",
+        mutation_list="{gene}/{binding_state}/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/saturation/mutation_list.txt",
+        readme="{gene}/{binding_state}/stability/mutatex_runs/{database}_{start_res}-{end_res}/model_{version}/saturation/README.txt"
+    output:
+        pdb_out="{gene}/{binding_state}/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/saturation/{prot_id}_trimmed.pdb"
+    params:
+        env=config["pdb_selres_env"],
+        trim_bound=trim_bound_script
+    shell:
+        """
+        input_dir={wildcards.gene}/{wildcards.binding_state}/stability/mutatex_input_preparation/{wildcards.database}_{wildcards.start_res}-{wildcards.end_res}/model_{wildcards.version}/saturation
+        mkdir -p $input_dir
+        cp {input.pdb:q} "$input_dir/{wildcards.prot_id}.pdb"
+
+        {params.env}
+        if [ {wildcards.binding_state:q} = free ]; then
+            pdb_selres -{wildcards.start_res}:{wildcards.end_res} {input.pdb:q} > {output.pdb_out:q}
+        else
+            python {params.trim_bound:q} {input.pdb:q} {output.pdb_out:q} \
+                {wildcards.start_res} {wildcards.end_res} {wildcards.binding_state:q}
+        fi
+        """
+
+rule run_procheck:
+    input:
+        pdb="{gene}/{binding_state}/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/saturation/{prot_id}_trimmed.pdb"
+    output:
+        sum_file="{gene}/{binding_state}/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/procheck/{prot_id}_trimmed.sum"
+    params:
+        env=config["procheck_env"],
+        chain="A",
+        resolution="2.0"
+    shell:
+        """
+        outdir={wildcards.gene}/{wildcards.binding_state}/stability/mutatex_input_preparation/{wildcards.database}_{wildcards.start_res}-{wildcards.end_res}/model_{wildcards.version}/procheck
+        mkdir -p $outdir
+
+        cd $outdir
+        {params.env}
+        procheck.scr ../saturation/{wildcards.prot_id}_trimmed.pdb {params.chain} {params.resolution}
+
+        test -f {wildcards.prot_id}_trimmed.sum
+        """
+
+
+rule classify_procheck:
+    input:
+        sum_file="{gene}/{binding_state}/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/procheck/{prot_id}_trimmed.sum"
+    output:
+        report="{gene}/{binding_state}/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/procheck/{prot_id}_procheck.csv",
+        flag="{gene}/{binding_state}/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/procheck/{prot_id}_procheck.done"
+    params:
+        script=procheck_script
+    run:
+        database_mode = {source: "exp" if source == "PDB" else "af" for source in STRUCTURE_SOURCES}
+
+        try:
+            mode = database_mode[wildcards.database]
+        except KeyError:
+            raise WorkflowError(
+                f"Unknown database type '{wildcards.database}'. "
+                f"Allowed values: {', '.join(database_mode)}"
+            )
+
+        subprocess.run(
+            [
+                "python",
+                params.script,
+                "-i", os.path.abspath(input.sum_file),
+                "-o", os.path.abspath(output.report),
+                "--mode", mode
+            ],
+            check=True
+        )
+
+        with open(output.report, newline="") as fh:
+            reader = csv.DictReader(fh)
+            rows = [r for r in reader if r["File"] != "SUMMARY"]
+
+        if len(rows) != 1:
+            raise WorkflowError(
+                f"Expected exactly one PROCHECK classification row in {output.report}, found {len(rows)}"
+            )
+
+        classification = rows[0]["Classification"].strip()
+
+        if classification == "Green":
+            print(f"PASS: PROCHECK classified {wildcards.prot_id}_trimmed.pdb as Green.")
+            with open(output.flag, "w") as fh:
+                fh.write("Green\n")
+        elif classification == "Yellow":
+            print(f"WARNING: PROCHECK classified {wildcards.prot_id}_trimmed.pdb as Yellow. Continuing workflow.")
+            with open(output.flag, "w") as fh:
+                fh.write("Yellow\n")
+        elif classification == "Red":
+            print(f"ERROR: PROCHECK classified {wildcards.prot_id}_trimmed.pdb as Red. Stopping workflow.")
+            raise WorkflowError(
+                f"PROCHECK classified {wildcards.prot_id}_trimmed.pdb as Red. Stopping workflow."
+            )
+        else:
+            raise WorkflowError(
+                f"Unknown PROCHECK classification '{classification}' in {output.report}"
+            )
+
+rule mutatex_scan:
+    input:
+        pdb="{gene}/{binding_state}/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/saturation/{prot_id}_trimmed.pdb",
+        procheck="{gene}/{binding_state}/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/procheck/{prot_id}_procheck.done"
+    output:
+        directory("{gene}/{binding_state}/stability/mutatex_runs/{database}_{start_res}-{end_res}/model_{version}/saturation/{prot_id}_scan")
+    log:
+        cofactor="{gene}/{binding_state}/stability/mutatex_runs/{database}_{start_res}-{end_res}/model_{version}/saturation/{prot_id}_foldx_cofactor.log"
+    threads: workflow.cores
+    params:
+        env=config["mutatex"]["env"],
+        foldx_exe=config["mutatex"]["foldx_exe"],
+        foldx_suite=config["mutatex"]["foldx_suite"],
+        cleaning=mutatex_cleaning,
+        cofactor_guard=os.path.join(workflow_dir, "scripts", "check_foldx_cofactors.py")
+    shell:
+        """
+	pdb_path=$(realpath {input.pdb})
+        working_dir={wildcards.gene}/{wildcards.binding_state}/stability/mutatex_runs/{wildcards.database}_{wildcards.start_res}-{wildcards.end_res}/model_{wildcards.version}/saturation/{wildcards.prot_id}_scan
+        mkdir -p "$working_dir"
+        export MUTATEX_COFACTOR_DIAGNOSTIC_LOG="$(realpath "$(dirname {log.cofactor:q})")/$(basename {log.cofactor:q})"
+        cd "$working_dir"
+
+        {params.env}
+        foldx_exe={params.foldx_exe:q}
+        if [ {wildcards.binding_state:q} != free ]; then
+            export MUTATEX_REAL_FOLDX="$foldx_exe"
+            export MUTATEX_BINDING_STATE={wildcards.binding_state:q}
+            export MUTATEX_SCAN_DIR="$PWD"
+            export MUTATEX_COFACTOR_GUARD={params.cofactor_guard:q}
+            cat > foldx-cofactor-guard <<'EOF'
+#!/bin/sh
+exec python "$MUTATEX_COFACTOR_GUARD" "$@"
+EOF
+            chmod +x foldx-cofactor-guard
+            foldx_exe="$PWD/foldx-cofactor-guard"
+        fi
+
+        mutatex "$pdb_path" \
+            -p {threads} \
+            -m ../../../../../mutatex_input_preparation/{wildcards.database}_{wildcards.start_res}-{wildcards.end_res}/model_{wildcards.version}/saturation/mutation_list.txt \
+            -x "$foldx_exe" \
+            -f {params.foldx_suite} \
+            -R ../../../../../mutatex_input_preparation/{wildcards.database}_{wildcards.start_res}-{wildcards.end_res}/model_{wildcards.version}/saturation/repair_runfile.txt \
+            -M ../../../../../mutatex_input_preparation/{wildcards.database}_{wildcards.start_res}-{wildcards.end_res}/model_{wildcards.version}/saturation/mutate_runfile.txt \
+            -C {params.cleaning} \
+            -l \
+            -L \
+            -c \
+            -v
+        """
+
+rule write_table:
+    input:
+        "{gene}/{binding_state}/stability/mutatex_runs/{database}_{start_res}-{end_res}/model_{version}/saturation/{prot_id}_scan"
+    output:
+        "{gene}/{binding_state}/stability/mutatex_runs/{database}_{start_res}-{end_res}/model_{version}/saturation/{prot_id}_table/energies.csv"
+    shell:
+        """
+        working_dir={wildcards.gene}/{wildcards.binding_state}/stability/mutatex_runs/{wildcards.database}_{wildcards.start_res}-{wildcards.end_res}/model_{wildcards.version}/saturation/{wildcards.prot_id}_table
+        mkdir -p $working_dir
+        cd $working_dir
+
+        {config[mutatex][env]}
+        ddg2excel -p ../{wildcards.prot_id}_scan/{wildcards.prot_id}_trimmed_model0_checked.pdb\
+                  -l ../../../../../mutatex_input_preparation/{wildcards.database}_{wildcards.start_res}-{wildcards.end_res}/model_{wildcards.version}/saturation/mutation_list.txt \
+                  -d ../{wildcards.prot_id}_scan/results/mutation_ddgs/{wildcards.prot_id}_trimmed_model0_checked_Repair\
+                  -F csv\
+		  -s 
+        """
+
+rule aggregate_tables:
+    input:
+        energies=domain_energy_files
+    output:
+        energies="{gene}/{binding_state}/stability/mutatex_runs/aggregate/model_{version}/saturation/{prot_id}_table/energies.csv",
+        energies_std="{gene}/{binding_state}/stability/mutatex_runs/aggregate/model_{version}/saturation/{prot_id}_table/energies_std.csv"
+    run:
+        outdir = Path(output.energies).parent
+        outdir.mkdir(parents=True, exist_ok=True)
+
+        energy_tables = []
+        std_tables = []
+
+        for energy_file in input.energies:
+            energy_path = Path(energy_file)
+            std_path = energy_path.parent / "energies_std.csv"
+
+            if not std_path.exists():
+                raise WorkflowError(
+                    f"Expected standard-deviation table was not found: {std_path}\n"
+                    f"This file should be created by ddg2excel with the -s option."
+                )
+
+            energy_tables.append(pd.read_csv(energy_path))
+            std_tables.append(pd.read_csv(std_path))
+
+        pd.concat(energy_tables, ignore_index=True).to_csv(output.energies, index=False)
+        pd.concat(std_tables, ignore_index=True).to_csv(output.energies_std, index=False)

@@ -14,7 +14,7 @@ These folders hold per-protein pipeline outputs. Set `pdb_file` in the models CS
 
 ### Snakefile
 
-The main `Snakefile` defines the workflow. The `example/Snakefile` includes it and uses the example directory’s configuration and inputs.
+The main and example directories contain identical Snakefiles. To run the example elsewhere, copy the whole `example/` directory so its configuration, structures, and helper scripts stay together.
 
 ### Table
 

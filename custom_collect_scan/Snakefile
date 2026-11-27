@@ -602,20 +602,20 @@ rule mutatex_scan:
     output:
         directory("{gene}/{binding_state}/stability/mutatex_runs/{database}_{start_res}-{end_res}/model_{version}/saturation/{prot_id}_scan")
     log:
-        metal="{gene}/{binding_state}/stability/mutatex_runs/{database}_{start_res}-{end_res}/model_{version}/saturation/{prot_id}_foldx_metal.log"
+        cofactor="{gene}/{binding_state}/stability/mutatex_runs/{database}_{start_res}-{end_res}/model_{version}/saturation/{prot_id}_foldx_cofactor.log"
     threads: workflow.cores
     params:
         env=config["mutatex"]["env"],
         foldx_exe=config["mutatex"]["foldx_exe"],
         foldx_suite=config["mutatex"]["foldx_suite"],
         cleaning=mutatex_cleaning,
-        metal_guard=os.path.join(workflow_dir, "scripts", "check_foldx_metals.py")
+        cofactor_guard=os.path.join(workflow_dir, "scripts", "check_foldx_cofactors.py")
     shell:
         """
 	pdb_path=$(realpath {input.pdb})
         working_dir={wildcards.gene}/{wildcards.binding_state}/stability/mutatex_runs/{wildcards.database}_{wildcards.start_res}-{wildcards.end_res}/model_{wildcards.version}/saturation/{wildcards.prot_id}_scan
         mkdir -p "$working_dir"
-        export MUTATEX_METAL_DIAGNOSTIC_LOG="$(realpath "$(dirname {log.metal:q})")/$(basename {log.metal:q})"
+        export MUTATEX_COFACTOR_DIAGNOSTIC_LOG="$(realpath "$(dirname {log.cofactor:q})")/$(basename {log.cofactor:q})"
         cd "$working_dir"
 
         {params.env}
@@ -624,13 +624,13 @@ rule mutatex_scan:
             export MUTATEX_REAL_FOLDX="$foldx_exe"
             export MUTATEX_BINDING_STATE={wildcards.binding_state:q}
             export MUTATEX_SCAN_DIR="$PWD"
-            export MUTATEX_METAL_GUARD={params.metal_guard:q}
-            cat > foldx-metal-guard <<'EOF'
+            export MUTATEX_COFACTOR_GUARD={params.cofactor_guard:q}
+            cat > foldx-cofactor-guard <<'EOF'
 #!/bin/sh
-exec python "$MUTATEX_METAL_GUARD" "$@"
+exec python "$MUTATEX_COFACTOR_GUARD" "$@"
 EOF
-            chmod +x foldx-metal-guard
-            foldx_exe="$PWD/foldx-metal-guard"
+            chmod +x foldx-cofactor-guard
+            foldx_exe="$PWD/foldx-cofactor-guard"
         fi
 
         mutatex "$pdb_path" \

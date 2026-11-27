@@ -54,7 +54,7 @@ The following examples show the source and version fields together with the trim
 | TP53 | P04637 | PDB | 91 | 289 | 2XWR |
 | NPLOC4 | Q8TAT6 | Mod | 2 | 608 | AFDB |
 
-For bound states, supply a PDB that already contains the declared cofactors as HETATM records. Trimming retains those cofactor residues even when their residue numbers lie outside the protein range. The workflow stops if fewer cofactor residues than declared are present.
+For bound states, supply a PDB that already contains the declared cofactors as HETATM records. Trimming retains those cofactor residues even when their residue numbers lie outside the protein range. The workflow stops if fewer cofactor residues than declared are present. For declared metals, the workflow also checks the FoldX repaired PDB and the input to BuildModel. It counts metal residues in both ATOM and HETATM records and stops before BuildModel if a declared metal is missing. The scan’s `*_foldx_metal.log` gives the expected and observed counts and the paths to the repair log and any `Unrecognized_molecules.txt` file.
 
 ### Configuration file
 

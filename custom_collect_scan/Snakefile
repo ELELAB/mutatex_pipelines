@@ -601,25 +601,42 @@ rule mutatex_scan:
         procheck="{gene}/{binding_state}/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/procheck/{prot_id}_procheck.done"
     output:
         directory("{gene}/{binding_state}/stability/mutatex_runs/{database}_{start_res}-{end_res}/model_{version}/saturation/{prot_id}_scan")
+    log:
+        metal="{gene}/{binding_state}/stability/mutatex_runs/{database}_{start_res}-{end_res}/model_{version}/saturation/{prot_id}_foldx_metal.log"
     threads: workflow.cores
     params:
         env=config["mutatex"]["env"],
         foldx_exe=config["mutatex"]["foldx_exe"],
         foldx_suite=config["mutatex"]["foldx_suite"],
-        cleaning=mutatex_cleaning
+        cleaning=mutatex_cleaning,
+        metal_guard=os.path.join(workflow_dir, "scripts", "check_foldx_metals.py")
     shell:
         """
 	pdb_path=$(realpath {input.pdb})
         working_dir={wildcards.gene}/{wildcards.binding_state}/stability/mutatex_runs/{wildcards.database}_{wildcards.start_res}-{wildcards.end_res}/model_{wildcards.version}/saturation/{wildcards.prot_id}_scan
-        mkdir -p $working_dir
-        cd $working_dir
+        mkdir -p "$working_dir"
+        export MUTATEX_METAL_DIAGNOSTIC_LOG="$(realpath "$(dirname {log.metal:q})")/$(basename {log.metal:q})"
+        cd "$working_dir"
 
         {params.env}
+        foldx_exe={params.foldx_exe:q}
+        if [ {wildcards.binding_state:q} != free ]; then
+            export MUTATEX_REAL_FOLDX="$foldx_exe"
+            export MUTATEX_BINDING_STATE={wildcards.binding_state:q}
+            export MUTATEX_SCAN_DIR="$PWD"
+            export MUTATEX_METAL_GUARD={params.metal_guard:q}
+            cat > foldx-metal-guard <<'EOF'
+#!/bin/sh
+exec python "$MUTATEX_METAL_GUARD" "$@"
+EOF
+            chmod +x foldx-metal-guard
+            foldx_exe="$PWD/foldx-metal-guard"
+        fi
 
         mutatex "$pdb_path" \
             -p {threads} \
             -m ../../../../../mutatex_input_preparation/{wildcards.database}_{wildcards.start_res}-{wildcards.end_res}/model_{wildcards.version}/saturation/mutation_list.txt \
-            -x {params.foldx_exe} \
+            -x "$foldx_exe" \
             -f {params.foldx_suite} \
             -R ../../../../../mutatex_input_preparation/{wildcards.database}_{wildcards.start_res}-{wildcards.end_res}/model_{wildcards.version}/saturation/repair_runfile.txt \
             -M ../../../../../mutatex_input_preparation/{wildcards.database}_{wildcards.start_res}-{wildcards.end_res}/model_{wildcards.version}/saturation/mutate_runfile.txt \

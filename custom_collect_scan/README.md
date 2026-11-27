@@ -26,12 +26,24 @@ The `models.csv` file is a comma separated file containing all the information n
 |---|---|---|
 |`coding_gene`|Name of the gene coding for the peptide of interest|HSPB1|
 |`prot_id`|Protein identifier|P14602|
-|`database`|Database from which the protein structure was downloaded|AFDB|
+|`database`|Structure source (see allowed values below)|AFDB|
 |`start_res`|First residue to consider during the scan|88|
 |`end_res`|Last residue to consider during the scan|177|
 |`binding_state`|State or condition of the protein|fre or atp_mg_bound|
-|`version`|Protein structure release|v6|
+|`version`|Source-specific version or template identifier (see below)|v6|
 |`pdb_file`|PDB namefile (optional)||
+
+Both `database` and `version` are required. Use the source labels exactly as shown.
+
+| `database` | Structure source | Required `version` |
+|---|---|---|
+| `AFDB` | AlphaFold Protein Structure Database | `v3`, `v4`, `v5`, or `v6`, matching the release used |
+| `AF2` | Locally generated AlphaFold 2 model | `AF2` |
+| `AF3` | AlphaFold 3 model | `AF3` |
+| `PDB` | Experimental structure from the Protein Data Bank | A four-character PDB ID, such as `3PTB` |
+| `Mod` | Homology or other template-based model | The template's PDB ID for an experimental template, or `AFDB`, `AF2`, or `AF3` for a predicted template |
+
+PDB IDs are checked for format only.
 
 The example file provided was retrieved from AlphaFold Protein Structure Database. The N and C terminal regions were trimmed in order to consider only the higher-confidence and structured portions of the protein.
 

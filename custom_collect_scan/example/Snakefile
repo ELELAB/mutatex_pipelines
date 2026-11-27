@@ -11,12 +11,13 @@ models = pd.read_csv(config["models"], keep_default_na=False)
 workflow_dir = os.path.abspath(os.path.dirname(workflow.snakefile))
 procheck_script = os.path.join(workflow_dir, "scripts", "classify_procheck.py")
 
-STRUCTURE_SOURCES = ("AFDB", "AF2", "AF3", "PDB", "Mod")
+STRUCTURE_SOURCES = ("AFDB", "AF2", "AF3", "PDB", "Mod", "AlphaFill")
 PDB_ID_PATTERN = r"[1-9][A-Za-z0-9]{3}"
 STRUCTURE_VERSION_RULES = {
     "AFDB": (r"v[3-6]", "one of v3, v4, v5, or v6"),
     "AF2": (r"AF2", "AF2"),
     "AF3": (r"AF3", "AF3"),
+    "AlphaFill": (r"v4|v6|AF3|AF2", "one of v4, v6, AF3, or AF2"),
     "PDB": (PDB_ID_PATTERN, "a four-character PDB ID such as 3PTB"),
     "Mod": (rf"{PDB_ID_PATTERN}|AFDB|AF2|AF3", "a template PDB ID, AFDB, AF2, or AF3"),
 }
@@ -252,7 +253,7 @@ if empty_string_mask.values.any():
     raise ValueError(f"Found empty strings in the following cells of the input: \n{error_details}")
 
 # These sources and binding states need a user-supplied structure.
-requires_pdb = models["database"].isin({"AF2", "AF3", "Mod", "PDB"}) | (
+requires_pdb = models["database"].isin({"AF2", "AF3", "Mod", "PDB", "AlphaFill"}) | (
     models["database"].eq("AFDB") & models["binding_state"].ne("free")
 )
 missing_pdb = models.index[requires_pdb & models["pdb_file"].astype(str).str.strip().eq("")]
@@ -262,7 +263,7 @@ if len(missing_pdb):
         for index in missing_pdb
     )
     raise WorkflowError(
-        "AF2, AF3, Mod, and PDB models require pdb_file, as do AFDB models "
+        "AF2, AF3, Mod, PDB, and AlphaFill models require pdb_file, as do AFDB models "
         "with a binding_state other than 'free'. "
         f"Missing pdb_file in models CSV rows: {rows}."
     )

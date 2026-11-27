@@ -418,18 +418,29 @@ from {wildcards.gene}/structure_selection into {wildcards.gene}/{wildcards.bindi
             readme.write(readme_content)
 
 
+def structure_input(wildcards):
+    matches = models.loc[
+        models["database"].eq(wildcards.database)
+        & models["prot_id"].eq(wildcards.prot_id)
+        & models["start_res"].eq(int(wildcards.start_res))
+        & models["end_res"].eq(int(wildcards.end_res)),
+        ["pdb_file", "version"],
+    ].drop_duplicates()
+    if len(matches) != 1:
+        raise WorkflowError(
+            f"Expected one structure input for {wildcards.database} "
+            f"{wildcards.prot_id} residues {wildcards.start_res}–{wildcards.end_res}, "
+            f"found {len(matches)} distinct inputs."
+        )
+    return matches.iloc[0]
+
+
 rule download_pdb:
     output:
         pdb="structure_selection/{database}/{prot_id}_{start_res}_{end_res}.pdb"
     params:
-        pdb=lambda wcs: models[
-            (models['prot_id'] == wcs.prot_id) &
-            (models['start_res'] == int(wcs.start_res)) &
-            (models['end_res'] == int(wcs.end_res))]['pdb_file'].values[0],
-        af_version=lambda wcs: models[
-            (models['prot_id'] == wcs.prot_id) &
-            (models['start_res'] == int(wcs.start_res)) &
-            (models['end_res'] == int(wcs.end_res))]['version'].values[0]
+        pdb=lambda wcs: structure_input(wcs)["pdb_file"],
+        af_version=lambda wcs: structure_input(wcs)["version"]
     run:
         output_path = Path(output.pdb)
         output_path.parent.mkdir(parents=True, exist_ok=True)

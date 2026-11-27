@@ -8,7 +8,7 @@ from pathlib import Path
 
 configfile: "config.yaml"
 models = pd.read_csv(config["models"], keep_default_na=False)
-workflow_dir = workflow.current_basedir.get_path_or_uri(secret_free=True)
+workflow_dir = os.path.dirname(os.path.abspath(workflow.snakefile))
 procheck_script = os.path.join(workflow_dir, "scripts", "classify_procheck.py")
 trim_bound_script = os.path.join(workflow_dir, "scripts", "trim_bound_structure.py")
 
@@ -383,7 +383,7 @@ rule input_txt:
         mutation_list="{gene}/{binding_state}/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/saturation/mutation_list.txt",
         readme="{gene}/{binding_state}/stability/mutatex_runs/{database}_{start_res}-{end_res}/model_{version}/saturation/README.txt"
     params:
-        workflow_dir=workflow.current_basedir.get_path_or_uri(secret_free=True)
+        workflow_dir=workflow_dir
     run:
         with open(output.mutate,'w') as mutate:
             mutate.write(config["mutate_runfile"])

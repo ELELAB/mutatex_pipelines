@@ -45,7 +45,7 @@ Both `database` and `version` are required. Use the source labels exactly as sho
 
 PDB IDs are checked for format only.
 
-The following examples show the source and version fields together with the trimming range. Supply your own local structure file in `pdb_file` for the TP53 and NPLOC4 examples.
+The following examples show the source and version fields together with the trimming range. The TP53 and NPLOC4 structure files are bundled in `example/` and referenced by both example CSVs.
 
 | `coding_gene` | `prot_id` | `database` | `start_res` | `end_res` | `version` |
 |---|---|---|---:|---:|---|

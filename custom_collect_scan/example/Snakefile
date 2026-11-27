@@ -219,6 +219,21 @@ if empty_string_mask.values.any():
     error_details = [(models_check.loc[row_idx, 'coding_gene'], col_name) for (row_idx, col_name) in empty_string_loc.index]
     raise ValueError(f"Found empty strings in the following cells of the input: \n{error_details}")
 
+# Bound AFDB models must already contain their cofactors in a supplied PDB.
+missing_bound_pdbs = models.index[
+    models["database"].eq("AFDB")
+    & models["binding_state"].ne("free")
+    & models["pdb_file"].astype(str).str.strip().eq("")
+]
+if len(missing_bound_pdbs):
+    rows = ", ".join(
+        f"{index + 2} ({models.at[index, 'coding_gene']})" for index in missing_bound_pdbs
+    )
+    raise WorkflowError(
+        "AFDB models with a binding_state other than 'free' require pdb_file "
+        f"with the cofactors already present. Missing pdb_file in models CSV rows: {rows}."
+    )
+
 # Binding state validation
 unique_binding_states = models["binding_state"].dropna().unique()
 

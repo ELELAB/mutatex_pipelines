@@ -52,7 +52,6 @@ The following examples show the source and version fields together with the trim
 | APC | P25054 | AF3 | 1 | 5 | AF3 |
 | TP53 | P04637 | PDB | 91 | 289 | 2XWR |
 | NPLOC4 | Q8TAT6 | Mod | 2 | 608 | AFDB |
-| ZNF568 | Q3ZCX4 | AFDB | 50 | 103 | v6 |
 
 The example file provided was retrieved from AlphaFold Protein Structure Database. The N and C terminal regions were trimmed in order to consider only the higher-confidence and structured portions of the protein.
 

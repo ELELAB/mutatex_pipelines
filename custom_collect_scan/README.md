@@ -43,7 +43,7 @@ Both `database` and `version` are required. Use the source labels exactly as sho
 | `PDB` | Experimental structure from the Protein Data Bank | A four-character PDB ID, such as `3PTB` |
 | `Mod` | Homology or other template-based model | The template's PDB ID for an experimental template, or `AFDB`, `AF2`, or `AF3` for a predicted template |
 
-PDB IDs are checked for format only.
+PDB IDs are checked for format only. For an `AFDB` model with a `binding_state` other than `free`, set `pdb_file` to a structure that already contains the cofactors.
 
 The following examples show the source and version fields together with the trimming range. The TP53 and NPLOC4 structure files are bundled in `example/` and referenced by both example CSVs.
 

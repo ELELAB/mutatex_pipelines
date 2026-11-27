@@ -10,11 +10,11 @@ If the same protein is provided in multiple rows of `models.csv`, corresponding 
 
 ### {coding_gene} folder
 
-This is an example folder hosting the output of the pipeline. The prerequisite to run the pipeline is to fill the attributes of the template `.csv` file with the instances related to the protein of interest. In case the scan is to be performed on a model from AlphaFold Protein Structure Database, the pipeline will automatically download and prepare the file for the subsequent scan, otherwise, the user is required to provide the input `.pdb` file inside the working directory: `{gene}/structure_selection/{database}`.
+These folders hold per-protein pipeline outputs. Set `pdb_file` in the models CSV to an absolute path or a path relative to the working directory. The workflow copies that file into `structure_selection/{database}/`. Free AFDB rows may leave `pdb_file` blank to download the model.
 
 ### Snakefile
 
-The `Snakefile` is the pipeline. 
+The main `Snakefile` defines the workflow. The `example/Snakefile` includes it and uses the example directory’s configuration and inputs.
 
 ### Table
 
@@ -24,14 +24,14 @@ The `models.csv` file is a comma separated file containing all the information n
 
 |Entry|Meaning|Example|
 |---|---|---|
-|`coding_gene`|Name of the gene coding for the peptide of interest|HSPB1|
-|`prot_id`|Protein identifier|P14602|
-|`database`|Structure source (see allowed values below)|AFDB|
-|`start_res`|First residue to consider during the scan|88|
-|`end_res`|Last residue to consider during the scan|177|
-|`binding_state`|State or condition of the protein|fre or atp_mg_bound|
-|`version`|Source-specific version or template identifier (see below)|v6|
-|`pdb_file`|PDB namefile (optional)||
+|`coding_gene`|Name of the gene coding for the peptide of interest|TP53|
+|`prot_id`|Protein identifier|P04637|
+|`database`|Structure source (see allowed values below)|PDB|
+|`start_res`|First residue to consider during the scan|91|
+|`end_res`|Last residue to consider during the scan|289|
+|`binding_state`|State or condition of the protein|zn_bound|
+|`version`|Source-specific version or template identifier (see below)|2XWR|
+|`pdb_file`|Input structure path (required except for free AFDB models)|P04637.pdb|
 
 Both `database` and `version` are required. Use the source labels exactly as shown.
 
@@ -54,7 +54,7 @@ The following examples show the source and version fields together with the trim
 | TP53 | P04637 | PDB | 91 | 289 | 2XWR |
 | NPLOC4 | Q8TAT6 | Mod | 2 | 608 | AFDB |
 
-The example file provided was retrieved from AlphaFold Protein Structure Database. The N and C terminal regions were trimmed in order to consider only the higher-confidence and structured portions of the protein.
+For bound states, supply a PDB that already contains the declared cofactors as HETATM records. Trimming retains those cofactor residues even when their residue numbers lie outside the protein range. The workflow stops if fewer cofactor residues than declared are present.
 
 ### Configuration file
 

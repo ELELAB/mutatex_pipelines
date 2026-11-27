@@ -8,8 +8,9 @@ from pathlib import Path
 
 configfile: "config.yaml"
 models = pd.read_csv(config["models"], keep_default_na=False)
-workflow_dir = os.path.abspath(os.path.dirname(workflow.snakefile))
+workflow_dir = workflow.current_basedir.get_path_or_uri(secret_free=True)
 procheck_script = os.path.join(workflow_dir, "scripts", "classify_procheck.py")
+trim_bound_script = os.path.join(workflow_dir, "scripts", "trim_bound_structure.py")
 
 STRUCTURE_SOURCES = ("AFDB", "AF2", "AF3", "PDB", "Mod", "AlphaFill")
 PDB_ID_PATTERN = r"[1-9][A-Za-z0-9]{3}"
@@ -382,7 +383,7 @@ rule input_txt:
         mutation_list="{gene}/{binding_state}/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/saturation/mutation_list.txt",
         readme="{gene}/{binding_state}/stability/mutatex_runs/{database}_{start_res}-{end_res}/model_{version}/saturation/README.txt"
     params:
-        workflow_dir=os.path.abspath(os.path.dirname(workflow.snakefile))
+        workflow_dir=workflow.current_basedir.get_path_or_uri(secret_free=True)
     run:
         with open(output.mutate,'w') as mutate:
             mutate.write(config["mutate_runfile"])
@@ -485,16 +486,21 @@ rule input_pdb:
     output:
         pdb_out="{gene}/{binding_state}/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/saturation/{prot_id}_trimmed.pdb"
     params:
-        env=config["pdb_selres_env"]
+        env=config["pdb_selres_env"],
+        trim_bound=trim_bound_script
     shell:
         """
         input_dir={wildcards.gene}/{wildcards.binding_state}/stability/mutatex_input_preparation/{wildcards.database}_{wildcards.start_res}-{wildcards.end_res}/model_{wildcards.version}/saturation
         mkdir -p $input_dir
-        cp {input.pdb} $input_dir/{wildcards.prot_id}.pdb
+        cp {input.pdb:q} "$input_dir/{wildcards.prot_id}.pdb"
 
-        cd $input_dir
         {params.env}
-        pdb_selres -{wildcards.start_res}:{wildcards.end_res} {wildcards.prot_id}.pdb > {wildcards.prot_id}_trimmed.pdb
+        if [ {wildcards.binding_state:q} = free ]; then
+            pdb_selres -{wildcards.start_res}:{wildcards.end_res} {input.pdb:q} > {output.pdb_out:q}
+        else
+            python {params.trim_bound:q} {input.pdb:q} {output.pdb_out:q} \
+                {wildcards.start_res} {wildcards.end_res} {wildcards.binding_state:q}
+        fi
         """
 
 rule run_procheck:
@@ -528,13 +534,7 @@ rule classify_procheck:
     params:
         script=procheck_script
     run:
-        database_mode = {
-            "AFDB": "af",
-            "AF3": "af",
-            "AF2": "af",
-            "Mod": "af",
-            "PDB": "exp"
-        }
+        database_mode = {source: "exp" if source == "PDB" else "af" for source in STRUCTURE_SOURCES}
 
         try:
             mode = database_mode[wildcards.database]

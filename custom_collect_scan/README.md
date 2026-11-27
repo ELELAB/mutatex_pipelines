@@ -45,6 +45,15 @@ Both `database` and `version` are required. Use the source labels exactly as sho
 
 PDB IDs are checked for format only.
 
+The following examples show the source and version fields together with the trimming range. Supply your own local structure file in `pdb_file` for the TP53 and NPLOC4 examples.
+
+| `coding_gene` | `prot_id` | `database` | `start_res` | `end_res` | `version` |
+|---|---|---|---:|---:|---|
+| APC | P25054 | AF3 | 1 | 5 | AF3 |
+| TP53 | P04637 | PDB | 91 | 289 | 2XWR |
+| NPLOC4 | Q8TAT6 | Mod | 2 | 608 | AFDB |
+| ZNF568 | Q3ZCX4 | AFDB | 50 | 103 | v6 |
+
 The example file provided was retrieved from AlphaFold Protein Structure Database. The N and C terminal regions were trimmed in order to consider only the higher-confidence and structured portions of the protein.
 
 ### Configuration file

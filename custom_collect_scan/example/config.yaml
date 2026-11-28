@@ -5,7 +5,7 @@ procheck_env: "export prodir=/usr/local/procheck && export PATH=$PATH:$prodir"
 
 mutatex:
     env:  "set +u; . /usr/local/envs/mutatex/bin/activate; set -u"
-    foldx_exe: "/usr/local/foldx5/foldx"
+    foldx_exe: "/usr/local/foldx5.1/foldx"
     foldx_suite: "suite5"
     cleaning_depth: deep
 

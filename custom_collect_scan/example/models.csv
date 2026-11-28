@@ -1,5 +1,4 @@
 coding_gene,prot_id,database,start_res,end_res,binding_state,version,pdb_file
-APC,P25054,PDB,1,5,free,v1,APC_1-238.pdb
-ZNF568,Q3ZCX4,AFDB,50,103,zn_bound,v6,
-ZNF568,Q3ZCX4,AFDB,222,241,zn_bound,v6,
-HSPB1,P14602,AFDB,88,177,atp_mg_bound,v6,
+APC,P25054,AF3,1,5,free,AF3,APC_1-238.pdb
+TP53,P04637,PDB,91,289,zn_bound,2XWR,P04637.pdb
+NPLOC4,Q8TAT6,Mod,2,608,zn_zn_zn_bound,AFDB,npl4_human.B99990089.pdb

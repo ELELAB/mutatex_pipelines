@@ -10,11 +10,11 @@ If the same protein is provided in multiple rows of `models.csv`, corresponding 
 
 ### {coding_gene} folder
 
-This is an example folder hosting the output of the pipeline. The prerequisite to run the pipeline is to fill the attributes of the template `.csv` file with the instances related to the protein of interest. In case the scan is to be performed on a model from AlphaFold Protein Structure Database, the pipeline will automatically download and prepare the file for the subsequent scan, otherwise, the user is required to provide the input `.pdb` file inside the working directory: `{gene}/structure_selection/{database}`.
+These folders hold per-protein pipeline outputs. Set `pdb_file` in the models CSV to an absolute path or a path relative to the working directory. The workflow copies that file into `structure_selection/{database}/`. Free AFDB rows may leave `pdb_file` blank to download the model.
 
 ### Snakefile
 
-The `Snakefile` is the pipeline. 
+The main and example directories contain identical Snakefiles. To run the example elsewhere, copy the whole `example/` directory so its configuration, structures, and helper scripts stay together.
 
 ### Table
 
@@ -24,16 +24,39 @@ The `models.csv` file is a comma separated file containing all the information n
 
 |Entry|Meaning|Example|
 |---|---|---|
-|`coding_gene`|Name of the gene coding for the peptide of interest|HSPB1|
-|`prot_id`|Protein identifier|P14602|
-|`database`|Database from which the protein structure was downloaded|AFDB|
-|`start_res`|First residue to consider during the scan|88|
-|`end_res`|Last residue to consider during the scan|177|
-|`binding_state`|State or condition of the protein|fre or atp_mg_bound|
-|`version`|Protein structure release|v6|
-|`pdb_file`|PDB namefile (optional)||
+|`coding_gene`|Name of the gene coding for the peptide of interest|TP53|
+|`prot_id`|Protein identifier|P04637|
+|`database`|Structure source (see allowed values below)|PDB|
+|`start_res`|First residue to consider during the scan|91|
+|`end_res`|Last residue to consider during the scan|289|
+|`binding_state`|State or condition of the protein|zn_bound|
+|`version`|Source-specific version or template identifier (see below)|2XWR|
+|`pdb_file`|Input structure path (required except for free AFDB models)|P04637.pdb|
 
-The example file provided was retrieved from AlphaFold Protein Structure Database. The N and C terminal regions were trimmed in order to consider only the higher-confidence and structured portions of the protein.
+Both `database` and `version` are required. Use the source labels exactly as shown.
+
+| `database` | Structure source | Required `version` |
+|---|---|---|
+| `AFDB` | AlphaFold Protein Structure Database | `v3`, `v4`, `v5`, or `v6`, matching the release used |
+| `AF2` | Locally generated AlphaFold 2 model | `AF2` |
+| `AF3` | AlphaFold 3 model | `AF3` |
+| `PDB` | Experimental structure from the Protein Data Bank | A four-character PDB ID, such as `3PTB` |
+| `AlphaFill` | Cofactor-bound model prepared using AlphaFill | `v4` for the AlphaFill-provided model, `v6` for a supplied AFDB v6 model, or `AF3` or `AF2` for a supplied AlphaFold model |
+| `Mod` | Homology or other template-based model | The template's PDB ID for an experimental template, or `AFDB`, `AF2`, or `AF3` for a predicted template |
+
+PDB IDs are checked for format only. Set `pdb_file` for every `AF2`, `AF3`, `Mod`, `PDB`, and `AlphaFill` row. For an `AFDB` model with a `binding_state` other than `free`, set `pdb_file` to a structure that already contains the cofactors.
+
+The following examples show the source and version fields together with the trimming range. The TP53 and NPLOC4 structure files are bundled in `example/` and referenced by both example CSVs.
+
+| `coding_gene` | `prot_id` | `database` | `start_res` | `end_res` | `version` |
+|---|---|---|---:|---:|---|
+| APC | P25054 | AF3 | 1 | 5 | AF3 |
+| TP53 | P04637 | PDB | 91 | 289 | 2XWR |
+| NPLOC4 | Q8TAT6 | Mod | 2 | 608 | AFDB |
+
+For bound states, supply a PDB that already contains the declared cofactors as HETATM records. Trimming retains those cofactor residues even when their residue numbers lie outside the protein range. The workflow stops if fewer cofactor residues than declared are present. The workflow also checks the FoldX repaired PDB and the input to BuildModel for all declared cofactors, including metals and nonmetals such as ATP, ADP, NAD, and FAD. It counts distinct cofactor residues in both ATOM and HETATM records and stops before BuildModel if a declared cofactor is missing. The scan’s `*_foldx_cofactor.log` gives the expected and observed counts and the paths to the repair log and any `Unrecognized_molecules.txt` file.
+
+For zinc, use `ZN` in the PDB residue-name field (columns 18–20). The trimmer looks at this field, so `ZN2` is not counted as zinc. Use `zn_bound` for one zinc or `zn_zn_zn_bound` for three.
 
 ### Configuration file
 
@@ -52,6 +75,8 @@ The `config.yaml` is the configuration file through which is possible to specify
 
 The MutateX cleaning option is specified with "mutatex.cleaning_depth" and accepts the inputs 'none', 'partial', and 'deep'. If the input is invalid or empty, the workflow stops before execution with an error message.
 
+Both bundled configs set `mutatex.foldx_exe` to `/usr/local/foldx5.1/foldx`. To run with FoldX 5, set `mutatex.foldx_exe` in your working directory’s `config.yaml` to the installed FoldX 5 executable (for example, `/usr/local/foldx5/foldx`) and keep `mutatex.foldx_suite` set to `suite5`.
+
 ## Requirements
 
 The user must have `Snakemake` [^Mölder2021] and `python` v3.7 or higher installed, together with `MutateX`[^Tiberti] and `FoldX`[^Schymkowitz2005]. The pipeline also requires `pdb-tools` [^Rodrigues] package and `PROCHECK` installed.
@@ -60,6 +85,14 @@ The user must have `Snakemake` [^Mölder2021] and `python` v3.7 or higher instal
 
 `module load python/3.10`
  
+To preview the example, run this from its working directory:
+
+```bash
+snakemake --dry-run --cores 1 all
+```
+
+A dry run checks that Snakemake can build the job graph. To check that zinc survives trimming and FoldX repair, run the corresponding jobs.
+
 `snakemake --cores 4`
 
 By default `MutateX` uses all cores assigned to the workflow (`snakemake --cores`) for each MutateX run.

@@ -1,17 +1,51 @@
 import pandas as pd
 import os
 import csv
+import re
 import subprocess
 from snakemake.exceptions import WorkflowError
 from pathlib import Path
 
 configfile: "config.yaml"
 models = pd.read_csv(config["models"], keep_default_na=False)
-workflow_dir = os.path.abspath(os.path.dirname(workflow.snakefile))
+workflow_dir = os.path.dirname(os.path.abspath(workflow.snakefile))
 procheck_script = os.path.join(workflow_dir, "scripts", "classify_procheck.py")
+trim_bound_script = os.path.join(workflow_dir, "scripts", "trim_bound_structure.py")
 
-models_check = models.drop(columns= "pdb_file")
-models.loc[models["version"].eq(""), "version"] = "v6"
+STRUCTURE_SOURCES = ("AFDB", "AF2", "AF3", "PDB", "Mod", "AlphaFill")
+PDB_ID_PATTERN = r"[1-9][A-Za-z0-9]{3}"
+STRUCTURE_VERSION_RULES = {
+    "AFDB": (r"v[3-6]", "one of v3, v4, v5, or v6"),
+    "AF2": (r"AF2", "AF2"),
+    "AF3": (r"AF3", "AF3"),
+    "AlphaFill": (r"v4|v6|AF3|AF2", "one of v4, v6, AF3, or AF2"),
+    "PDB": (PDB_ID_PATTERN, "a four-character PDB ID such as 3PTB"),
+    "Mod": (rf"{PDB_ID_PATTERN}|AFDB|AF2|AF3", "a template PDB ID, AFDB, AF2, or AF3"),
+}
+
+def validate_structure_metadata(models):
+    errors = []
+    for row_number, row in enumerate(models.itertuples(index=False), start=2):
+        context = f"models CSV row {row_number} ({row.coding_gene})"
+        if row.database not in STRUCTURE_VERSION_RULES:
+            errors.append(
+                f"{context}: invalid database {row.database!r}. "
+                f"Expected one of {', '.join(STRUCTURE_SOURCES)}."
+            )
+            continue
+
+        pattern, expected = STRUCTURE_VERSION_RULES[row.database]
+        if re.fullmatch(pattern, str(row.version)) is None:
+            errors.append(
+                f"{context}: invalid version {row.version!r} for {row.database}. "
+                f"Expected {expected}."
+            )
+
+    if errors:
+        raise WorkflowError("\n".join(errors))
+
+validate_structure_metadata(models)
+models_check = models.drop(columns="pdb_file")
 
 ALLOWED_BINDING_STATES = {"free"}
 SUPPORTED_COFACTORS = {"zn", "mg", "adp", "atp", "gdp", "gtp", "nadh", "nad", "fadh", "fad", "ca", "mn", "fe2", "fe3"}
@@ -219,6 +253,22 @@ if empty_string_mask.values.any():
     error_details = [(models_check.loc[row_idx, 'coding_gene'], col_name) for (row_idx, col_name) in empty_string_loc.index]
     raise ValueError(f"Found empty strings in the following cells of the input: \n{error_details}")
 
+# These sources and binding states need a user-supplied structure.
+requires_pdb = models["database"].isin({"AF2", "AF3", "Mod", "PDB", "AlphaFill"}) | (
+    models["database"].eq("AFDB") & models["binding_state"].ne("free")
+)
+missing_pdb = models.index[requires_pdb & models["pdb_file"].astype(str).str.strip().eq("")]
+if len(missing_pdb):
+    rows = ", ".join(
+        f"{index + 2} ({models.at[index, 'coding_gene']}, {models.at[index, 'database']})"
+        for index in missing_pdb
+    )
+    raise WorkflowError(
+        "AF2, AF3, Mod, PDB, and AlphaFill models require pdb_file, as do AFDB models "
+        "with a binding_state other than 'free'. "
+        f"Missing pdb_file in models CSV rows: {rows}."
+    )
+
 # Binding state validation
 unique_binding_states = models["binding_state"].dropna().unique()
 
@@ -306,7 +356,7 @@ rule all:
                     version=models["version"],
                     prot_id=models["prot_id"]
                     ),
-	    expand("{gene}/{binding_state}/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/procheck/{prot_id}_procheck.csv",
+        expand("{gene}/{binding_state}/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/procheck/{prot_id}_procheck.csv",
                     zip,
                     gene=models["coding_gene"],
                     binding_state=models["binding_state"],
@@ -333,7 +383,7 @@ rule input_txt:
         mutation_list="{gene}/{binding_state}/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/saturation/mutation_list.txt",
         readme="{gene}/{binding_state}/stability/mutatex_runs/{database}_{start_res}-{end_res}/model_{version}/saturation/README.txt"
     params:
-        workflow_dir=os.path.abspath(os.path.dirname(workflow.snakefile))
+        workflow_dir=workflow_dir
     run:
         with open(output.mutate,'w') as mutate:
             mutate.write(config["mutate_runfile"])
@@ -368,18 +418,29 @@ from {wildcards.gene}/structure_selection into {wildcards.gene}/{wildcards.bindi
             readme.write(readme_content)
 
 
+def structure_input(wildcards):
+    matches = models.loc[
+        models["database"].eq(wildcards.database)
+        & models["prot_id"].eq(wildcards.prot_id)
+        & models["start_res"].eq(int(wildcards.start_res))
+        & models["end_res"].eq(int(wildcards.end_res)),
+        ["pdb_file", "version"],
+    ].drop_duplicates()
+    if len(matches) != 1:
+        raise WorkflowError(
+            f"Expected one structure input for {wildcards.database} "
+            f"{wildcards.prot_id} residues {wildcards.start_res}–{wildcards.end_res}, "
+            f"found {len(matches)} distinct inputs."
+        )
+    return matches.iloc[0]
+
+
 rule download_pdb:
     output:
         pdb="structure_selection/{database}/{prot_id}_{start_res}_{end_res}.pdb"
     params:
-        pdb=lambda wcs: models[
-            (models['prot_id'] == wcs.prot_id) &
-            (models['start_res'] == int(wcs.start_res)) &
-            (models['end_res'] == int(wcs.end_res))]['pdb_file'].values[0],
-        af_version=lambda wcs: models[
-            (models['prot_id'] == wcs.prot_id) &
-            (models['start_res'] == int(wcs.start_res)) &
-            (models['end_res'] == int(wcs.end_res))]['version'].values[0]
+        pdb=lambda wcs: structure_input(wcs)["pdb_file"],
+        af_version=lambda wcs: structure_input(wcs)["version"]
     run:
         output_path = Path(output.pdb)
         output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -436,16 +497,21 @@ rule input_pdb:
     output:
         pdb_out="{gene}/{binding_state}/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/saturation/{prot_id}_trimmed.pdb"
     params:
-        env=config["pdb_selres_env"]
+        env=config["pdb_selres_env"],
+        trim_bound=trim_bound_script
     shell:
         """
         input_dir={wildcards.gene}/{wildcards.binding_state}/stability/mutatex_input_preparation/{wildcards.database}_{wildcards.start_res}-{wildcards.end_res}/model_{wildcards.version}/saturation
         mkdir -p $input_dir
-        cp {input.pdb} $input_dir/{wildcards.prot_id}.pdb
+        cp {input.pdb:q} "$input_dir/{wildcards.prot_id}.pdb"
 
-        cd $input_dir
         {params.env}
-        pdb_selres -{wildcards.start_res}:{wildcards.end_res} {wildcards.prot_id}.pdb > {wildcards.prot_id}_trimmed.pdb
+        if [ {wildcards.binding_state:q} = free ]; then
+            pdb_selres -{wildcards.start_res}:{wildcards.end_res} {input.pdb:q} > {output.pdb_out:q}
+        else
+            python {params.trim_bound:q} {input.pdb:q} {output.pdb_out:q} \
+                {wildcards.start_res} {wildcards.end_res} {wildcards.binding_state:q}
+        fi
         """
 
 rule run_procheck:
@@ -479,13 +545,7 @@ rule classify_procheck:
     params:
         script=procheck_script
     run:
-        database_mode = {
-            "AFDB": "af",
-            "AF3": "af",
-            "AF2": "af",
-            "Mod": "af",
-            "PDB": "exp"
-        }
+        database_mode = {source: "exp" if source == "PDB" else "af" for source in STRUCTURE_SOURCES}
 
         try:
             mode = database_mode[wildcards.database]
@@ -541,25 +601,44 @@ rule mutatex_scan:
         procheck="{gene}/{binding_state}/stability/mutatex_input_preparation/{database}_{start_res}-{end_res}/model_{version}/procheck/{prot_id}_procheck.done"
     output:
         directory("{gene}/{binding_state}/stability/mutatex_runs/{database}_{start_res}-{end_res}/model_{version}/saturation/{prot_id}_scan")
+    log:
+        cofactor="{gene}/{binding_state}/stability/mutatex_runs/{database}_{start_res}-{end_res}/model_{version}/saturation/{prot_id}_foldx_cofactor.log"
     threads: workflow.cores
     params:
         env=config["mutatex"]["env"],
         foldx_exe=config["mutatex"]["foldx_exe"],
         foldx_suite=config["mutatex"]["foldx_suite"],
-        cleaning=mutatex_cleaning
+        cleaning=mutatex_cleaning,
+        cofactor_guard=os.path.join(workflow_dir, "scripts", "check_foldx_cofactors.py")
     shell:
         """
 	pdb_path=$(realpath {input.pdb})
         working_dir={wildcards.gene}/{wildcards.binding_state}/stability/mutatex_runs/{wildcards.database}_{wildcards.start_res}-{wildcards.end_res}/model_{wildcards.version}/saturation/{wildcards.prot_id}_scan
-        mkdir -p $working_dir
-        cd $working_dir
+        mkdir -p "$working_dir"
+        export MUTATEX_COFACTOR_DIAGNOSTIC_LOG="$(realpath "$(dirname {log.cofactor:q})")/$(basename {log.cofactor:q})"
+        : > "$MUTATEX_COFACTOR_DIAGNOSTIC_LOG"
+        cd "$working_dir"
 
         {params.env}
+        foldx_exe={params.foldx_exe:q}
+        if [ {wildcards.binding_state:q} != free ]; then
+            export MUTATEX_REAL_FOLDX="$foldx_exe"
+            export MUTATEX_BINDING_STATE={wildcards.binding_state:q}
+            export MUTATEX_SCAN_DIR="$PWD"
+            export MUTATEX_COFACTOR_GUARD={params.cofactor_guard:q}
+            cat > foldx-cofactor-guard <<'EOF'
+#!/bin/sh
+exec python "$MUTATEX_COFACTOR_GUARD" "$@"
+EOF
+            chmod +x foldx-cofactor-guard
+            foldx_exe="$PWD/foldx-cofactor-guard"
+        fi
 
+        scan_status=0
         mutatex "$pdb_path" \
             -p {threads} \
             -m ../../../../../mutatex_input_preparation/{wildcards.database}_{wildcards.start_res}-{wildcards.end_res}/model_{wildcards.version}/saturation/mutation_list.txt \
-            -x {params.foldx_exe} \
+            -x "$foldx_exe" \
             -f {params.foldx_suite} \
             -R ../../../../../mutatex_input_preparation/{wildcards.database}_{wildcards.start_res}-{wildcards.end_res}/model_{wildcards.version}/saturation/repair_runfile.txt \
             -M ../../../../../mutatex_input_preparation/{wildcards.database}_{wildcards.start_res}-{wildcards.end_res}/model_{wildcards.version}/saturation/mutate_runfile.txt \
@@ -567,7 +646,13 @@ rule mutatex_scan:
             -l \
             -L \
             -c \
-            -v
+            -v || scan_status=$?
+
+        if [ -s "$MUTATEX_COFACTOR_DIAGNOSTIC_LOG" ]; then
+            echo "FoldX cofactor validation failed; see $MUTATEX_COFACTOR_DIAGNOSTIC_LOG" >&2
+            exit 1
+        fi
+        exit "$scan_status"
         """
 
 rule write_table:

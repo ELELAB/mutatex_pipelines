@@ -616,6 +616,7 @@ rule mutatex_scan:
         working_dir={wildcards.gene}/{wildcards.binding_state}/stability/mutatex_runs/{wildcards.database}_{wildcards.start_res}-{wildcards.end_res}/model_{wildcards.version}/saturation/{wildcards.prot_id}_scan
         mkdir -p "$working_dir"
         export MUTATEX_COFACTOR_DIAGNOSTIC_LOG="$(realpath "$(dirname {log.cofactor:q})")/$(basename {log.cofactor:q})"
+        : > "$MUTATEX_COFACTOR_DIAGNOSTIC_LOG"
         cd "$working_dir"
 
         {params.env}
@@ -633,6 +634,7 @@ EOF
             foldx_exe="$PWD/foldx-cofactor-guard"
         fi
 
+        scan_status=0
         mutatex "$pdb_path" \
             -p {threads} \
             -m ../../../../../mutatex_input_preparation/{wildcards.database}_{wildcards.start_res}-{wildcards.end_res}/model_{wildcards.version}/saturation/mutation_list.txt \
@@ -644,7 +646,13 @@ EOF
             -l \
             -L \
             -c \
-            -v
+            -v || scan_status=$?
+
+        if [ -s "$MUTATEX_COFACTOR_DIAGNOSTIC_LOG" ]; then
+            echo "FoldX cofactor validation failed; see $MUTATEX_COFACTOR_DIAGNOSTIC_LOG" >&2
+            exit 1
+        fi
+        exit "$scan_status"
         """
 
 rule write_table:
